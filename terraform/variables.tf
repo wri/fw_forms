@@ -63,17 +63,17 @@ variable "google_sheets_project_email" {
 }
 
 variable "target_sheet_id" {
-  type = "string"
+  type = string
 }
 
 variable "legacy_template_id" {
-  type = "string"
+  type = string
 }
 
 variable "default_template_id" {
-  type = "string"
+  type = string
 }
 
 variable "wri_mail_recipients" {
-  type = "string"
+  type = string
 }

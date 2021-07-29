@@ -66,6 +66,6 @@ def root():
         errors.append(e)
 
     if errors:
-        raise HTTPException(status_code=500, detail=fr"Healthcheck failed\n.{[str(e) for e in errors]}")
+        raise HTTPException(status_code=500, detail=fr"Health check failed\n.{[str(e) for e in errors]}")
     else:
         return {"message": "OK"}
