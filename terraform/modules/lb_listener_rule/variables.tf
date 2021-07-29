@@ -25,3 +25,7 @@ variable "tags" {
 variable "path_pattern" {
   type = list(string)
 }
+
+variable "priority" {
+  type = number
+}

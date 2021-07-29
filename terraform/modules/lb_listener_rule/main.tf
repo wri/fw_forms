@@ -1,6 +1,6 @@
 resource "aws_lb_listener_rule" "static" {
   listener_arn = var.listener_arn
-  priority     = 100
+  priority     = var.priority
 
   action {
     type             = "forward"

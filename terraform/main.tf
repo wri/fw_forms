@@ -26,6 +26,7 @@ module "lb_listener_rule" {
   path_pattern = ["/v1/form*", "/v1/questionnaire*", "/v1/reports*"]
   tags = local.tags
   vpc_id = data.terraform_remote_state.core.outputs.vpc_id
+  priority = 1
 }
 
 module "fargate_autoscaling" {
