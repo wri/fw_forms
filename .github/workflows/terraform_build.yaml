@@ -19,8 +19,11 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_production }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_production }}
         AWS_REGION: ${{ secrets.aws_region_production }}
+        GOOGLE_SHEETS_PRIVATE_KEY: ${{ secrets.google_sheets_private_key }}
+        GOOGLE_SHEETS_PROJECT_EMAIL: ${{ secrets.google_sheets_project_email }}
       run: |
-        ./scripts/infra plan
+        ./scripts/infra plan -var "google_sheets_private_key=${GOOGLE_SHEETS_PRIVATE_KEY}" \
+                             -var "google_sheets_project_email=${GOOGLE_SHEETS_PROJECT_EMAIL}"
         ./scripts/infra apply
     - name: Deploy staging
       if: success() && github.ref == 'refs/heads/staging'
@@ -29,8 +32,11 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_staging }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_staging }}
         AWS_REGION: ${{ secrets.aws_region_staging }}
+        GOOGLE_SHEETS_PRIVATE_KEY: ${{ secrets.google_sheets_private_key }}
+        GOOGLE_SHEETS_PROJECT_EMAIL: ${{ secrets.google_sheets_project_email }}
       run: |
-        ./scripts/infra plan
+        ./scripts/infra plan -var "google_sheets_private_key=${GOOGLE_SHEETS_PRIVATE_KEY}" \
+                             -var "google_sheets_project_email=${GOOGLE_SHEETS_PROJECT_EMAIL}"
         ./scripts/infra apply
     - name: Deploy dev
       if: success() && github.ref == 'refs/heads/dev'
@@ -39,6 +45,9 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_dev }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_dev }}
         AWS_REGION: ${{ secrets.aws_region_dev }}
+        GOOGLE_SHEETS_PRIVATE_KEY: ${{ secrets.google_sheets_private_key }}
+        GOOGLE_SHEETS_PROJECT_EMAIL: ${{ secrets.google_sheets_project_email }}
       run: |
-        ./scripts/infra plan
+        ./scripts/infra plan -var "google_sheets_private_key=${GOOGLE_SHEETS_PRIVATE_KEY}" \
+                             -var "google_sheets_project_email=${GOOGLE_SHEETS_PROJECT_EMAIL}"
         ./scripts/infra apply

@@ -53,3 +53,27 @@ variable "auto_scaling_min_capacity" {
 variable "git_sha" {
   type = string
 }
+
+variable "google_sheets_private_key" {
+  type = string
+}
+
+variable "google_sheets_project_email" {
+  type = string
+}
+
+variable "target_sheet_id" {
+  type = "string"
+}
+
+variable "legacy_template_id" {
+  type = "string"
+}
+
+variable "default_template_id" {
+  type = "string"
+}
+
+variable "wri_mail_recipients" {
+  type = "string"
+}

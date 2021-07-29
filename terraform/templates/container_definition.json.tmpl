@@ -1,0 +1,67 @@
+[{
+  "name": "${container_name}",
+  "image": "${image}",
+  "networkMode": "awsvpc",
+
+  "environment": [
+    {
+      "name": "ENV",
+      "value": "${environment}"
+    },
+    {
+      "name": "LOG_LEVEL",
+      "value": "${log_level}"
+    },
+     {
+      "name": "BUCKET",
+      "value": "${data_bucket}"
+    },
+    {
+      "name": "REDIS_ENDPOINT",
+      "value": "${redis_endpoint}"
+    },
+    {
+      "name": "TARGET_SHEET_ID",
+      "value": "${target_sheet_id}"
+    },
+    {
+      "name": "LEGACY_TEMPLATE_ID",
+      "value": "${legacy_template_id}"
+    },
+    {
+      "name": "DEFAULT_TEMPLATE_ID",
+      "value": "${default_template_id}"
+    },
+    {
+      "name": "WRI_MAIL_RECIPIENTS",
+      "value": "${wri_mail_recipients}"
+    }
+  ],
+  "secrets": [
+    {
+      "name": "DB_SECRET",
+      "valueFrom": "${db_secret_arn}"
+    },{
+      "name": "GOOGLE_PRIVATE_KEY",
+       "valueFrom": "${google_private_key}"
+      },
+      {
+      "name": "GOOGLE_PROJECT_EMAIL",
+       "valueFrom": "${google_project_email}"
+      }
+  ],
+  "portMappings": [
+    {
+      "containerPort": ${container_port},
+      "hostPort": ${container_port}
+    }
+  ],
+  "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${log_group}",
+        "awslogs-region": "${aws_region}",
+        "awslogs-stream-prefix": "${container_name}"
+       }
+  }
+}]
