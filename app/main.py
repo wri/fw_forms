@@ -51,7 +51,7 @@ def root():
             errors.append(e)
 
     mongodb_secret = json.loads(os.getenv("DB_SECRET"))
-    mongodb_name = json.loads(os.getenv("DB_NAME"))
+    mongodb_name = os.getenv("DB_NAME")
     # Provide the mongodb atlas url to connect python to mongodb using pymongo
     connection_str = f"mongodb://{mongodb_secret['username']}:{mongodb_secret['password']}@{mongodb_secret['endpoint']}:{mongodb_secret['endpoint']}/{mongodb_name}?replicaSet=rs0&readPreference=secondaryPreferred&ssl=false"
 
