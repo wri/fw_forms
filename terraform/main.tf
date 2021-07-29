@@ -74,6 +74,7 @@ data "template_file" "container_definition" {
     log_group = aws_cloudwatch_log_group.default.name
     log_level         = var.log_level
     db_secret_arn = data.terraform_remote_state.core.outputs.document_db_secrets_arn
+    db_name = var.db_name
     data_bucket = data.terraform_remote_state.fw_core.outputs.data_bucket
     redis_endpoint = data.terraform_remote_state.core.outputs.redis_replication_group_primary_endpoint_address
     google_private_key = module.google_sheets_private_key.secret_arn

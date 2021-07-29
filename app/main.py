@@ -39,6 +39,7 @@ def root():
             "DEFAULT_TEMPLATE_ID",
             "WRI_MAIL_RECIPIENTS",
             "DB_SECRET",
+            "DB_NAME",
             "GOOGLE_PRIVATE_KEY",
             "GOOGLE_PROJECT_EMAIL"
             ]
@@ -50,9 +51,9 @@ def root():
             errors.append(e)
 
     mongodb_secret = json.loads(os.getenv("DB_SECRET"))
-
+    mongodb_name = json.loads(os.getenv("DB_NAME"))
     # Provide the mongodb atlas url to connect python to mongodb using pymongo
-    connection_str = f"mongodb+srv://{mongodb_secret['username']}:{mongodb_secret['password']}@{mongodb_secret['endpoint']}"
+    connection_str = f"mongodb://{mongodb_secret['username']}:{mongodb_secret['password']}@{mongodb_secret['endpoint']}:{mongodb_secret['endpoint']}/{mongodb_name}?replicaSet=rs0&readPreference=secondaryPreferred&ssl=false"
 
     try:
         client = MongoClient(connection_str)

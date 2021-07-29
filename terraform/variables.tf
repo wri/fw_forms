@@ -77,3 +77,8 @@ variable "default_template_id" {
 variable "wri_mail_recipients" {
   type = string
 }
+
+variable "db_name" {
+  type = string
+  default = "forms"
+}
