@@ -11,7 +11,7 @@ terraform {
 
 # Docker image for FW Template app
 module "app_docker_image" {
-  source     = "git::https://github.com/wri/gfw-terraform-modules.git//terraform/modules/container_registry?ref=v0.5.0"
+  source     = "git::https://github.com/wri/gfw-terraform-modules.git//terraform/modules/container_registry?ref=v0.5.1"
   image_name = lower("${var.project_prefix}-docker-image")
   root_dir   = "${path.root}/../"
   tag        = local.container_tag
@@ -30,7 +30,7 @@ module "lb_listener_rule" {
 }
 
 module "fargate_autoscaling" {
-  source                    = "git::https://github.com/wri/gfw-terraform-modules.git//terraform/modules/fargate_autoscaling?ref=v0.5.0"
+  source                    = "git::https://github.com/wri/gfw-terraform-modules.git//terraform/modules/fargate_autoscaling?ref=v0.5.1"
   project                   = var.project_prefix
   tags                      = local.fargate_tags
   vpc_id                    = data.terraform_remote_state.core.outputs.vpc_id
@@ -103,14 +103,14 @@ resource "aws_cloudwatch_log_group" "default" {
 #
 
 module "google_sheets_private_key" {
-  source        = "git::https://github.com/wri/gfw-terraform-modules.git//terraform/modules/secrets?ref=v0.5.0"
+  source        = "git::https://github.com/wri/gfw-terraform-modules.git//terraform/modules/secrets?ref=v0.5.1"
   project       = var.project_prefix
   name          = "${var.project_prefix}-google_sheets_private_key"
   secret_string = var.google_sheets_private_key
 }
 
 module "google_sheets_project_email" {
-  source        = "git::https://github.com/wri/gfw-terraform-modules.git//terraform/modules/secrets?ref=v0.5.0"
+  source        = "git::https://github.com/wri/gfw-terraform-modules.git//terraform/modules/secrets?ref=v0.5.1"
   project       = var.project_prefix
   name          = "${var.project_prefix}-google_sheets_project_email"
   secret_string = var.google_sheets_project_email
