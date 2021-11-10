@@ -1,0 +1,35 @@
+version: "3"
+services:
+  develop:
+    build: .
+    ports:
+      - "4401:4401"
+    container_name: gfw-forms-develop
+    environment:
+      PORT: 4401
+      NODE_PATH: app/src
+      CT_REGISTER_MODE: auto
+      NODE_ENV: dev
+      MONGO_PORT_27017_TCP_ADDR: mongo
+      CT_URL: http://127.0.0.1:9000
+      LOCAL_URL: http://127.0.0.1:4401
+      WRI_MAIL_RECIPIENTS: <mails>
+      CT_TOKEN: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Im1pY3Jvc2VydmljZSIsImNyZWF0ZWRBdCI6IjIwMTYtMDktMTQifQ.IRCIRm1nfIQTfda_Wb6Pg-341zhV8soAgzw7dd5HxxQ
+      TARGET_SHEET_ID: <sheet>
+      S3_ACCESS_KEY_ID: <key>
+      S3_SECRET_ACCESS_KEY: <key>
+      S3_BUCKET: <key>
+      FASTLY_ENABLED: "false"
+    command: develop
+    volumes:
+      - ./app:/opt/gfw-forms-api/app
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo:3.4
+    container_name: gfw-forms-mongo
+    ports:
+      - "27024:27017"
+    volumes:
+      - $HOME/docker/data/gfw-forms-api/mongodb:/data/db
+    restart: always

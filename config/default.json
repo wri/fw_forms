@@ -1,0 +1,75 @@
+{
+    "logger": {
+        "name": "gfw-forms-DEV",
+        "level": "debug",
+        "toFile": false,
+        "dirLogFile": null
+    },
+    "service": {
+        "id": "gfw-forms-1.0.0",
+        "name": "GFW Forms"
+    },
+    "wriMail": {
+        "recipients": "",
+        "template": "data-contribution"
+    },
+    "userMail": {
+        "template": "data-contribution-confirmation"
+    },
+    "legacyTemplateId": null,
+    "defaultTemplateId": null,
+    "contactEmail": {
+        "template": "contact-form",
+        "templateConfirm": "contact-form-confirmation",
+        "topics": {
+            "report-a-bug-or-error": {
+                "name": "Report a bug or error"
+            },
+            "provide-feedback": {
+                "name": "Provide feedback"
+            },
+            "data-related-inquiry": {
+                "name": "Data related inquiry"
+            },
+            "general-inquiry": {
+                "name": "General inquiry"
+            }
+        },
+        "tools": {
+            "gfw": {
+                "name": "GFW",
+                "emailTo": "gfw2@wri.org"
+            },
+            "gfw-pro": {
+                "name": "GFW Pro",
+                "emailTo": "gfwprosupport@wri.org"
+            },
+            "fw": {
+                "name": "Forest Watcher",
+                "emailTo": "gfw2@wri.org"
+            },
+            "blog": {
+                "name": "GFW Blog",
+                "emailTo": "gfw2@wri.org"
+            },
+            "map-builder": {
+                "name": "GFW MapBuilder",
+                "emailTo": "gfw2@wri.org"
+            },
+            "not-applicable": {
+                "name": "Not applicable",
+                "emailTo": "gfw2@wri.org"
+            }
+        }
+    },
+    "mongodb": {
+        "database": "gfw_forms",
+        "host": "mymachine",
+        "port": 27017
+    },
+    "s3":{
+        "accessKeyId": null,
+        "secretAccessKey": null,
+        "bucket": null
+    }
+}
