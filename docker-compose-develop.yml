@@ -1,4 +1,4 @@
-version: "3"
+version: "3.5"
 services:
   develop:
     build: .
@@ -8,13 +8,13 @@ services:
     environment:
       PORT: 4401
       NODE_PATH: app/src
-      CT_REGISTER_MODE: auto
       NODE_ENV: dev
       MONGO_PORT_27017_TCP_ADDR: mongo
-      CT_URL: http://127.0.0.1:9000
+      CT_URL: https://api.resourcewatch.org
       LOCAL_URL: http://127.0.0.1:4401
+      TEAMS_API_URL: http://fw-teams-develop:3035/api/v1
+      AREAS_API_URL: https://api.resourcewatch.org
       WRI_MAIL_RECIPIENTS: <mails>
-      CT_TOKEN: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Im1pY3Jvc2VydmljZSIsImNyZWF0ZWRBdCI6IjIwMTYtMDktMTQifQ.IRCIRm1nfIQTfda_Wb6Pg-341zhV8soAgzw7dd5HxxQ
       TARGET_SHEET_ID: <sheet>
       S3_ACCESS_KEY_ID: <key>
       S3_SECRET_ACCESS_KEY: <key>
@@ -25,6 +25,9 @@ services:
       - ./app:/opt/gfw-forms-api/app
     depends_on:
       - mongo
+    networks:
+      - gfw-forms-network
+      - gfw-network
   mongo:
     image: mongo:3.4
     container_name: gfw-forms-mongo
@@ -33,3 +36,10 @@ services:
     volumes:
       - $HOME/docker/data/gfw-forms-api/mongodb:/data/db
     restart: always
+    networks:
+      - gfw-forms-network
+networks:
+  gfw-forms-network:
+    name: gfw-forms-network
+  gfw-network:
+    name: gfw-network

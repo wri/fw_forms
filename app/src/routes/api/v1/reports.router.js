@@ -1,3 +1,4 @@
+const axios = require('axios');
 const Router = require('koa-router');
 const logger = require('logger');
 const ReportsSerializer = require('serializers/reportsSerializer');
@@ -9,8 +10,8 @@ const TeamService = require('services/teamService');
 const passThrough = require('stream').PassThrough;
 const { ObjectId } = require('mongoose').Types;
 const config = require('config');
-const { RWAPIMicroservice } = require('rw-api-microservice-node');
 const CSV = require('services/csvService');
+const loggedInUserService = require('services/LoggedInUserService');
 
 const router = new Router({
     prefix: '/reports'
@@ -108,11 +109,15 @@ class ReportsRouter {
         if (request.areaOfInterest) {
             const reportId = report._id.toString();
             try {
-                yield RWAPIMicroservice.requestToMicroservice({
-                    uri: `/area/${request.areaOfInterest}`,
+                let baseURL = process.env.AREAS_API_URL;
+                yield axios.default({
+                    baseURL,
+                    url: `/area/${request.areaOfInterest}`,
                     method: 'PATCH',
-                    json: true,
-                    body: {
+                    headers: {
+                        'authorization': loggedInUserService.token
+                    },
+                    data: {
                         templateId: reportId,
                         userId: this.state.loggedUser.id
                     }
@@ -202,11 +207,15 @@ class ReportsRouter {
             if (request.oldAreaOfInterest) {
                 logger.info(`PATCHing old area of interest ${request.oldAreaOfInterest}...`);
                 try {
-                    yield RWAPIMicroservice.requestToMicroservice({
-                        uri: `/area/${request.oldAreaOfInterest}`,
+                    let baseURL = process.env.AREAS_API_URL;
+                    yield axios.default({
+                        baseURL,
+                        url: `/area/${request.oldAreaOfInterest}`,
                         method: 'PATCH',
-                        json: true,
-                        body: {
+                        headers: {
+                            'authorization': loggedInUserService.token
+                        },
+                        data: {
                             templateId: null,
                             userId: this.state.loggedUser.id
                         }
@@ -222,11 +231,15 @@ class ReportsRouter {
             if (request.areaOfInterest) {
                 logger.info(`PATCHing new area of interest ${request.oldAreaOfInterest}...`);
                 try {
-                    yield RWAPIMicroservice.requestToMicroservice({
-                        uri: `/area/${request.areaOfInterest}`,
+                    let baseURL = process.env.AREAS_API_URL;
+                    yield axios.default({
+                        baseURL,
+                        url: `/area/${request.areaOfInterest}`,
                         method: 'PATCH',
-                        json: true,
-                        body: {
+                        headers: {
+                            'authorization': loggedInUserService.token
+                        },
+                        data: {
                             templateId: this.params.id,
                             userId: this.state.loggedUser.id
                         }
@@ -263,11 +276,15 @@ class ReportsRouter {
             for (let i = 0; i < aoi.length; i++) {
                 logger.info(`PATCHing area ${aoi[i]} to remove template association...`);
                 try {
-                    yield RWAPIMicroservice.requestToMicroservice({
-                        uri: `/area/${aoi[i]}`,
+                    let baseURL = process.env.AREAS_API_URL;
+                    yield axios.default({
+                        baseURL,
+                        url: `/area/${aoi[i]}`,
                         method: 'PATCH',
-                        json: true,
-                        body: {
+                        headers: {
+                            'authorization': loggedInUserService.token
+                        },
+                        data: {
                             templateId: null,
                             userId: this.state.loggedUser.id
                         }
