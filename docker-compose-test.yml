@@ -7,15 +7,18 @@ services:
     container_name: gfw-forms-test
     environment:
       PORT: 4400
+      NODE_PATH: app/src
       NODE_ENV: test
-      CT_URL: http://mymachine:9000
-      API_VERSION: v1
-      CT_REGISTER_MODE: auto
       MONGO_PORT_27017_TCP_ADDR: mongo
-      TARGET_SHEET_ID: TARGET_SHEET_ID
-      LOCAL_URL: http://gfw-forms:4400
-      CT_TOKEN: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Im1pY3Jvc2VydmljZSIsImNyZWF0ZWRBdCI6IjIwMTYtMDktMTQifQ.IRCIRm1nfIQTfda_Wb6Pg-341zhV8soAgzw7dd5HxxQ
-      FASTLY_ENABLED: "false"
+      CT_URL: http://127.0.0.1:9000
+      LOCAL_URL: http://127.0.0.1:4400
+      TEAMS_API_URL: http://127.0.0.1:9000
+      AREAS_API_URL: http://127.0.0.1:9000
+      WRI_MAIL_RECIPIENTS: <mails>
+      TARGET_SHEET_ID: <sheet>
+      S3_ACCESS_KEY_ID: <key>
+      S3_SECRET_ACCESS_KEY: <key>
+      S3_BUCKET: <key>
     command: test
     depends_on:
       - mongo

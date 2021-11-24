@@ -1,5 +1,5 @@
-const logger = require('logger');
 const axios = require('axios');
+const logger = require('logger');
 const loggedInUserService = require('./LoggedInUserService');
 
 class TeamService {
@@ -7,13 +7,13 @@ class TeamService {
     static* getTeam(user) {
         let team = {};
         try {
-            let baseURL = process.env.TEAMS_API_URL;
+            const baseURL = process.env.TEAMS_API_URL;
             const response = yield axios.default({
                 baseURL,
                 url: `/teams/user/${user}`,
                 method: 'GET',
                 headers: {
-                    'authorization': loggedInUserService.token
+                    authorization: loggedInUserService.token
                 }
             });
             team = response.data.data;

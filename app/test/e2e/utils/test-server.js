@@ -1,4 +1,3 @@
-const nock = require('nock');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 
@@ -11,13 +10,7 @@ exports.getTestServer = async function getTestServer() {
         return requester;
     }
 
-    nock(process.env.CT_URL)
-        .post(`/api/v1/microservice`)
-        .reply(200);
-
-    // eslint-disable-next-line global-require
-    const serverPromise = require('../../../src/app');
-    const { server } = await serverPromise();
+    const server = require('../../../src/app');
     requester = chai.request(server).keepOpen();
 
     return requester;
