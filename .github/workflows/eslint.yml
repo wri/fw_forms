@@ -8,19 +8,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-      with:
-        ref: ${{ github.head_ref }}
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
 
-    - name: Run eslint
-      run : make lint
+      - name: Start containers
+        run: make up-and-build
 
-    - name: Commit prettier changes
-      uses: stefanzweifel/git-auto-commit-action@v4
-      with:
-        commit_message: "auto commit: apply eslint fixes"
+      - name: Run eslint
+        run : make lint
 
-    - name: Stop containers
-      if: always()
-      run: make down
+      - name: Commit prettier changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "auto commit: apply eslint fixes"
+
+      - name: Stop containers
+        if: always()
+        run: make down
