@@ -1,8 +1,8 @@
 FROM mhart/alpine-node:12
 MAINTAINER info@vizzuality.com
 
-ENV NAME fw-forms-api
-ENV USER fw-forms-api
+ENV NAME gfw-forms-api
+ENV USER gfw-forms-api
 
 RUN apk update && apk upgrade && \
     apk add --no-cache --update bash git openssh python build-base
