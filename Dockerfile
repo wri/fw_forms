@@ -28,4 +28,4 @@ RUN chown -R $USER:$USER /opt/$NAME
 EXPOSE 4400
 USER $USER
 
-ENTRYPOINT ["./entrypoint.sh"]
+CMD node app/index.js

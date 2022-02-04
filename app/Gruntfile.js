@@ -11,10 +11,7 @@ module.exports = (grunt) => {
         express: {
             dev: {
                 options: {
-                    script: 'app/index.js',
-                    node_env: 'dev',
-                    port: process.env.PORT,
-                    output: 'started'
+                    script: 'app/index.js'
                 }
             }
         },
@@ -55,7 +52,7 @@ module.exports = (grunt) => {
             },
             e2eTest: {
                 files: [
-                    'app/test/unit/**/*.spec.js',
+                    'app/test/e2e/**/*.spec.js',
                 ],
                 tasks: ['jshint:jsTest', 'mochaTest:e2e'],
                 options: {
