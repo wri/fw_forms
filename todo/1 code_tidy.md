@@ -1,0 +1,13 @@
+- [ ] Add .idea to .gitignore
+- [ ] Remove Travis and Jenkins files
+- [ ] Remove changelog
+- [ ] Remove K8S files
+- [ ] Remove NPM lock file
+- [ ] Remove eslint: airbnb, jsx, react
+- [ ] Remove husky and lint-staged configs
+- [ ] Add prettier and eslint to the project. Using eslint recommended config and 3SidedCube prettier config.
+  - yarn add -D prettier eslint-config-prettier eslint-plugin-prettier @3sidedcube/prettier-config
+  - yarn upgrade eslint@^8.8.0
+    - [ ] Add lint npm script
+      - "lint": "eslint app --fix"
+- [ ] Remove the remaining package.json scripts

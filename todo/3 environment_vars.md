@@ -1,0 +1,10 @@
+- [ ] Remove all references to process.env (except NODE_ENV in one place)
+- [ ] Simplify the configuration files
+  - [ ] Should only have default.json
+  - [ ] And then custom-environment-variables.json for environment variables
+- [ ] Align Docker’s ENV vars with the configuration files
+- [ ] Align the Docker Compose files for develop and test
+- [ ] Ensure the following ENV vars exist
+  - [ ] NODE_PATH
+  - [ ] NODE_ENV
+  - [ ] SUPPRESS_NO_CONFIG_WARNING = “true”
