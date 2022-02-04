@@ -1,6 +1,6 @@
 {
     "logger": {
-        "name": "gfw-forms-DEV",
+        "name": "gfw-forms",
         "level": "debug",
         "toFile": false,
         "dirLogFile": null

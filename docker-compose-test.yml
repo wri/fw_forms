@@ -9,8 +9,9 @@ services:
       PORT: 4400
       NODE_PATH: app/src
       NODE_ENV: test
+      SUPPRESS_NO_CONFIG_WARNING: "true"
       MONGO_PORT_27017_TCP_ADDR: mongo
-      CT_URL: http://127.0.0.1:9000
+      CONTROL_TOWER_URL: http://127.0.0.1:9000
       LOCAL_URL: http://127.0.0.1:4400
       TEAMS_API_URL: http://127.0.0.1:9000
       AREAS_API_URL: http://127.0.0.1:9000

@@ -1,4 +1,5 @@
 const axios = require("axios");
+const config = require("config");
 // eslint-disable-next-line camelcase
 const response_error = require("../responses/response.error");
 require("logger");
@@ -27,7 +28,7 @@ class LoggedInUserService {
     }
     try {
       this.token = ctx.request.header.authorization;
-      const baseURL = process.env.CT_URL;
+      const baseURL = config.get("controlTower.url");
       const getUserDetailsRequestConfig = {
         method: "GET",
         baseURL,
