@@ -5,7 +5,7 @@
 - [x] Remove NPM lock file
 - [x] Remove eslint: airbnb, jsx, react
 - [x] Remove husky and lint-staged configs
-- [ ] Add prettier and eslint to the project. Using eslint recommended config and 3SidedCube prettier config.
+- [x] Add prettier and eslint to the project. Using eslint recommended config and 3SidedCube prettier config.
   - yarn add -D prettier eslint-config-prettier eslint-plugin-prettier @3sidedcube/prettier-config
   - yarn upgrade eslint@^8.8.0
     - [x] Add lint npm script

@@ -1,0 +1,27 @@
+{
+  "root": true,
+  "ignorePatterns": ["node_modules"],
+  "env": {
+    "node": true,
+    "commonjs": true,
+    "es6": true,
+    "mocha": true
+  },
+  "plugins": ["prettier", "mocha"],
+  "extends": ["eslint:recommended", "plugin:mocha/recommended", "prettier"],
+  "rules": {
+    // Allow Prettier to throw errors via ESLint
+    "prettier/prettier": "error"
+  },
+  "parserOptions": {
+    "ecmaVersion": "2018",
+    "sourceType": "module"
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "moduleDirectory": ["node_modules", "app/src"]
+      }
+    }
+  }
+}
