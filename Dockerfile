@@ -25,7 +25,7 @@ COPY ./app /opt/$NAME/app
 RUN chown -R $USER:$USER /opt/$NAME
 
 # Tell Docker we are going to use this ports
-EXPOSE 4400
+EXPOSE 4401
 USER $USER
 
 CMD node app/index.js
