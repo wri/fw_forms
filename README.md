@@ -19,7 +19,7 @@ Dependencies on other Microservices:
 Start by cloning the repository from github to your execution environment
 
 ```
-git clone https://github.com/gfw-api/gfw-forms-api.git && cd gfw-forms-api
+git clone https://github.com/wri/fw_forms.git && cd gfw-forms-api
 ```
 
 After that, follow one of the instructions below:
