@@ -36,7 +36,7 @@ module "lb_listener_rule" {
 }
 
 module "fargate_autoscaling" {
-  source                    = "git::https://github.com/wri/gfw-terraform-modules.git//terraform/modules/fargate_autoscaling?ref=v0.5.1"
+  source                    = "./modules/fargate_autoscaling"
   project                   = var.project_prefix
   tags                      = local.fargate_tags
   vpc_id                    = data.terraform_remote_state.core.outputs.vpc_id
