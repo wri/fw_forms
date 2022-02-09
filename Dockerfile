@@ -29,3 +29,4 @@ EXPOSE 4400
 USER $USER
 
 ENTRYPOINT ["./entrypoint.sh"]
+CMD [ "start" ]
