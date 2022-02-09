@@ -14,7 +14,7 @@ variable "region" {
 }
 
 variable "container_port" {
-  default = 4401
+  default = 80
   type    = number
 }
 variable "log_level" {
