@@ -7,6 +7,9 @@ terraform {
   }
 }
 
+provider "aws" {
+  region = var.region
+}
 
 
 # Docker image for FW Template app
@@ -27,6 +30,9 @@ module "lb_listener_rule" {
   tags = local.tags
   vpc_id = data.terraform_remote_state.core.outputs.vpc_id
   priority = 1
+  depends_on = [
+    module.fargate_autoscaling
+  ]
 }
 
 module "fargate_autoscaling" {
@@ -59,6 +65,11 @@ module "fargate_autoscaling" {
     module.google_sheets_project_email.read_policy_arn
   ]
   container_definition = data.template_file.container_definition.rendered
+  depends_on = [
+    module.google_sheets_private_key,
+    module.google_sheets_project_email,
+    module.app_docker_image
+  ]
 }
 
 
@@ -69,20 +80,26 @@ data "template_file" "container_definition" {
     environment       = var.environment
     aws_region        = var.region
     image = "${module.app_docker_image.repository_url}:${local.container_tag}"
-    container_name = var.project_prefix
     container_port = var.container_port
+    container_name = var.project_prefix
     log_group = aws_cloudwatch_log_group.default.name
-    log_level         = var.log_level
     db_secret_arn = data.terraform_remote_state.core.outputs.document_db_secrets_arn
-    db_name = var.db_name
-    data_bucket = data.terraform_remote_state.fw_core.outputs.data_bucket
-    redis_endpoint = data.terraform_remote_state.core.outputs.redis_replication_group_primary_endpoint_address
+    # data_bucket = data.terraform_remote_state.fw_core.outputs.data_bucket
     google_private_key = module.google_sheets_private_key.secret_arn
     google_project_email = module.google_sheets_project_email.secret_arn
     target_sheet_id = var.target_sheet_id
-    legacy_template_id = var.legacy_template_id
-    default_template_id = var.default_template_id
     wri_mail_recipients = var.wri_mail_recipients
+
+    node_path = var.node_path
+    node_env = var.node_env
+    mongo_port_27017_tcp_addr = data.terraform_remote_state.core.outputs.document_db_endpoint
+    ct_url = var.ct_url
+    local_url = "http://127.0.0.1:${var.container_port}"
+    teams_api_url = var.teams_api_url
+    areas_api_url = var.areas_api_url
+    s3_access_key_id = var.s3_access_key_id
+    s3_secret_access_key = var.s3_secret_access_key
+    s3_bucket = var.s3_bucket
 
   }
 

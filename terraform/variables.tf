@@ -14,7 +14,7 @@ variable "region" {
 }
 
 variable "container_port" {
-  default = 80
+  default = 4401
   type    = number
 }
 variable "log_level" {
@@ -81,4 +81,34 @@ variable "wri_mail_recipients" {
 variable "db_name" {
   type = string
   default = "forms"
+}
+
+variable "node_path" {
+  type = string
+  default = "app/src"
+}
+variable "node_env" {
+  type = string
+}
+variable "ct_url" {
+  type = string
+  default = "https://api.resourcewatch.org"
+}
+# variable "local_url" {
+#   type = string
+# }
+variable "teams_api_url" {
+  type = string
+}
+variable "areas_api_url" {
+  type = string
+}
+variable "s3_access_key_id" {
+  type = string
+}
+variable "s3_secret_access_key" {
+  type = string
+}
+variable "s3_bucket" {
+  type = string
 }
