@@ -2,15 +2,9 @@ FROM mhart/alpine-node:12
 MAINTAINER info@vizzuality.com
 
 ENV NAME gfw-forms-api
-ENV USER microservice
 
 RUN apk update && apk upgrade && \
     apk add --no-cache --update bash git openssh python build-base
-
-RUN addgroup $USER && adduser -s /bin/bash -D -G $USER $USER sudo && \
-    sed -i /etc/sudoers -re 's/^%sudo.*/%sudo ALL=(ALL:ALL) NOPASSWD: ALL/g' && \
-    sed -i /etc/sudoers -re 's/^root.*/root ALL=(ALL:ALL) NOPASSWD: ALL/g' && \
-    echo "${USER} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 RUN yarn global add grunt-cli bunyan
 
@@ -25,11 +19,9 @@ COPY config /opt/$NAME/config
 WORKDIR /opt/$NAME
 
 COPY ./app /opt/$NAME/app
-RUN chown -R $USER:$USER /opt/$NAME
 
 # Tell Docker we are going to use this ports
 EXPOSE 4400
-USER $USER
 
 ENTRYPOINT ["./entrypoint.sh"]
 CMD [ "start" ]

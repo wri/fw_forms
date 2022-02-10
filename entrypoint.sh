@@ -16,7 +16,7 @@ case "$1" in
         ;;
     start)
         echo "Running Start"
-        exec sudo yarn start
+        exec yarn start
         ;;
     *)
         exec "$@"
