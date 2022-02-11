@@ -9,7 +9,7 @@ default_template_id = "59b6a26b138f260012e9fdeb"
 wri_mail_recipients = "sam@3sidedcube.com,tom.yeadon@3sidedcube.com,ben.sherred@3sidedcube.com,javier@3sidedcube.com"
 
 node_env = "dev"
-teams_api_url = "http://fw-teams-develop:3035/api/v1"
+# teams_api_url = "http://fw-teams-develop:3035/api/v1"
 areas_api_url = "https://api.resourcewatch.org"
 s3_access_key_id = "key"
 s3_secret_access_key = "key"
