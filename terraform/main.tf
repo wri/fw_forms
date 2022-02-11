@@ -26,7 +26,7 @@ module "lb_listener_rule" {
   lb_target_group_arn = module.fargate_autoscaling.lb_target_group_arn
   listener_arn        = data.terraform_remote_state.fw_core.outputs.lb_listener_arn
   project_prefix      = var.project_prefix
-  path_pattern        = ["/v1/form*", "/v1/questionnaire*", "/v1/reports*"]
+  path_pattern        = ["/api/v1/form*", "/api/v1/questionnaire*", "/api/v1/reports*"]
   tags                = local.tags
   vpc_id              = data.terraform_remote_state.core.outputs.vpc_id
   priority            = 1
