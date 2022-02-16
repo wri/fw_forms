@@ -23,5 +23,4 @@ COPY ./app /opt/$NAME/app
 # Tell Docker we are going to use this ports
 EXPOSE 4400
 
-ENTRYPOINT ["./entrypoint.sh"]
-CMD [ "start" ]
+CMD ["node", "app/index.js"]
