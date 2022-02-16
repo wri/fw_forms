@@ -1,5 +1,0 @@
-- [ ] Ensure it runs properly through the Dockerfile
-- [x] Ensure it runs locally through the develop Docker Compose file
-- [x] Ensure the tests pass through the test Docker Compose file
-- [x] Add a Make file for the docker-compose commands
-- [x] Add github workflow which will run the lint script on each pull request
