@@ -21,6 +21,6 @@ WORKDIR /opt/$NAME
 COPY ./app /opt/$NAME/app
 
 # Tell Docker we are going to use this ports
-EXPOSE 4400
+EXPOSE 4401
 
 CMD ["node", "app/index.js"]
