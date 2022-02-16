@@ -66,7 +66,7 @@ module.exports = grunt => {
     }
   });
 
-  grunt.registerTask("test", ["mochaTest:e2e"]);
+  grunt.registerTask("e2eTest", ["mochaTest:e2e"]);
 
   grunt.registerTask("serve", ["express:dev", "watch"]);
 

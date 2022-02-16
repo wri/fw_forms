@@ -1,4 +1,7 @@
 {
+  "service": {
+    "port": "PORT"
+  },
   "legacyTemplateId": "LEGACY_TEMPLATE_ID",
   "defaultTemplateId": "DEFAULT_TEMPLATE_ID",
   "mongodb": {
@@ -12,5 +15,14 @@
   },
   "logger": {
     "level": "LOGGER_LEVEL"
+  },
+  "controlTower": {
+    "url": "CONTROL_TOWER_URL"
+  },
+  "teamsAPI": {
+    "url": "TEAMS_API_URL"
+  },
+  "areaAPI": {
+    "url": "AREAS_API_URL"
   }
 }

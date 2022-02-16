@@ -20,9 +20,9 @@ const koaBody = require("koa-body")({
 });
 const loggedInUserService = require("./services/LoggedInUserService");
 
-const mongoUri =
-  process.env.MONGO_URI ||
-  `mongodb://${config.get("mongodb.host")}:${config.get("mongodb.port")}/${config.get("mongodb.database")}`;
+const mongoUri = `mongodb://${config.get("mongodb.host")}:${config.get("mongodb.port")}/${config.get(
+  "mongodb.database"
+)}`;
 mongoose.Promise = Promise;
 
 const onDbReady = err => {
@@ -85,9 +85,9 @@ loader.loadRoutes(app);
 
 // get port of environment, if not exist obtain of the config.
 // In production environment, the port must be declared in environment variable
-const port = process.env.PORT || config.get("service.port");
+const port = config.get("service.port");
 
-const server = app.listen(process.env.PORT, () => {});
+const server = app.listen(port, () => {});
 
 logger.info(`Server started in port:${port}`);
 

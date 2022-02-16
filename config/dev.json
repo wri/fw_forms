@@ -1,8 +1,5 @@
 {
   "s3": {
-    "accessKeyId": null,
-    "secretAccessKey": null,
-    "bucket": null,
     "folder": "forms-dev"
   }
 }

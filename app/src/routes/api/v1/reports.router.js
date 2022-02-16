@@ -106,7 +106,7 @@ class ReportsRouter {
     if (request.areaOfInterest) {
       const reportId = report._id.toString();
       try {
-        let baseURL = process.env.AREAS_API_URL;
+        let baseURL = config.get("areaAPI.url");
         yield axios.default({
           baseURL,
           url: `/area/${request.areaOfInterest}`,
@@ -205,7 +205,7 @@ class ReportsRouter {
       if (request.oldAreaOfInterest) {
         logger.info(`PATCHing old area of interest ${request.oldAreaOfInterest}...`);
         try {
-          let baseURL = process.env.AREAS_API_URL;
+          let baseURL = config.get("areaAPI.url");
           yield axios.default({
             baseURL,
             url: `/area/${request.oldAreaOfInterest}`,
@@ -229,7 +229,7 @@ class ReportsRouter {
       if (request.areaOfInterest) {
         logger.info(`PATCHing new area of interest ${request.oldAreaOfInterest}...`);
         try {
-          let baseURL = process.env.AREAS_API_URL;
+          let baseURL = config.get("areaAPI.url");
           yield axios.default({
             baseURL,
             url: `/area/${request.areaOfInterest}`,
@@ -278,7 +278,7 @@ class ReportsRouter {
       for (let i = 0; i < aoi.length; i++) {
         logger.info(`PATCHing area ${aoi[i]} to remove template association...`);
         try {
-          let baseURL = process.env.AREAS_API_URL;
+          let baseURL = config.get("areaAPI.url");
           yield axios.default({
             baseURL,
             url: `/area/${aoi[i]}`,

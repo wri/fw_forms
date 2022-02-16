@@ -6,9 +6,6 @@ const { createReport, mockGetUserFromToken } = require("./utils/helpers");
 const { ROLES } = require("./utils/test.constants");
 const { getTestServer } = require("./utils/test-server");
 
-nock.disableNetConnect();
-nock.enableNetConnect(process.env.HOST_IP);
-
 chai.should();
 
 let requester;
