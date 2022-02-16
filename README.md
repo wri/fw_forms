@@ -1,20 +1,10 @@
 # GFW Forms API
 
-[![Build Status](https://travis-ci.com/gfw-api/gfw-forms-api.svg?branch=dev)](https://travis-ci.com/gfw-api/gfw-forms-api)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/fead108699d985f0b266/test_coverage)](https://codeclimate.com/github/gfw-api/gfw-forms-api/test_coverage)
-
 This repository is the microservice that implements the forms and Questionnaire functionality
-
 
 ## Dependencies
 
-You will need [Control Tower](https://github.com/control-tower/control-tower) up and running - either natively or with Docker. Refer to the project's README for information on how to set it up.
-
-The GFW Forms API microservice is built using [Node.js](https://nodejs.org/en/), and can be executed either natively or using Docker, each of which has its own set of requirements.
-
-Native execution requires:
-- [Node.js](https://nodejs.org/en/)
-- [MongoDB](https://www.mongodb.com/)
+The GFW Forms API microservice is built using [Node.js](https://nodejs.org/en/), and can be executed using Docker.
 
 Execution using Docker requires:
 - [Docker](https://www.docker.com/)
@@ -29,64 +19,42 @@ Dependencies on other Microservices:
 Start by cloning the repository from github to your execution environment
 
 ```
-git clone https://github.com/gfw-api/gfw-forms-api.git && cd gfw-forms-api
+git clone https://github.com/wri/fw_forms.git && cd gfw-forms-api
 ```
 
 After that, follow one of the instructions below:
 
-### Using native execution
-
-1 - Set up your environment variables. See `dev.env.sample` for a list of variables you should set, which are described in detail in [this section](#environment-variables) of the documentation. Native execution will NOT load the `dev.env` file content, so you need to use another way to define those values
-
-2 - Install node dependencies using yarn:
-```
-yarn
-```
-
-3 - Start the application server:
-```
-yarn start
-```
-
-The endpoints provided by this microservice should now be available through Control Tower's URL.
-
 ### Using Docker
 
-1 - Create and complete your `dev.env` file with your configuration. The meaning of the variables is available in this [section](#configuration-environment-variables). You can find an example `dev.env.sample` file in the project root.
+1 - Execute the following command to run Docker:
 
-2 - Execute the following command to run Control tower:
-
+```shell
+make up-and-build   # First time building Docker or you've made changes to the Dockerfile
+make up             # When Docker has already been built and you're starting from where you left off
 ```
-./forms.sh develop
+
+The endpoints provided by this microservice should now be available: [localhost:4401](http://localhost:4401)
+
+2 - Run the following command to lint the project:
+
+```shell
+make lint
 ```
 
-The endpoints provided by this microservice should now be available through Control Tower's URL.
+3 - To close Docker:
+
+```shell
+make down
+```
 
 ## Testing
-
-There are two ways to run the included tests:
-
-### Using native execution
-
-Follow the instruction above for setting up the runtime environment for native execution, then run:
-```
-yarn test
-```
 
 ### Using Docker
 
 Follow the instruction above for setting up the runtime environment for Docker execution, then run:
+```shell
+make test-and-build
 ```
-./forms.sh test
-```
-
-### Configuration
-
-It is necessary to define these environment variables:
-
-* CT_URL => Control Tower URL
-* NODE_ENV => Environment (prod, staging, dev)
-
 
 ## Quick Overview
 

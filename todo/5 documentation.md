@@ -1,1 +1,1 @@
-- [ ] Update README.md to be accurate
+- [x] Update README.md to be accurate
