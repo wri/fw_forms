@@ -1,5 +1,5 @@
 const config = require('config');
-const logger = require("logger");
+const logger = require('logger');
 const path = require("path");
 const convert = require("koa-convert");
 const koaSimpleHealthCheck = require("koa-simple-healthcheck");
