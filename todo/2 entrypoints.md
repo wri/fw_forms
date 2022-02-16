@@ -1,0 +1,6 @@
+- [ ] Remove Bash files
+- [ ] Remove entrypoint.sh
+- [ ] Standardise Gruntfile
+- [ ] Refactor Dockerfile CMD to node app/index.js
+- [ ] Refactor Docker Compose files to use command 
+  - command: node node_modules/.bin/grunt --gruntfile app/Gruntfile.js
