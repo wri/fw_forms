@@ -3,8 +3,8 @@ services:
   test:
     build: .
     ports:
-      - "4400"
-    container_name: gfw-forms-test
+      - "4400:4400"
+    container_name: fw-forms-test
     environment:
       PORT: 4400
       NODE_PATH: app/src
@@ -19,9 +19,9 @@ services:
       S3_ACCESS_KEY_ID: <key>
       S3_SECRET_ACCESS_KEY: <key>
       S3_BUCKET: <key>
-    command: test
     depends_on:
       - mongo
+    command: node node_modules/.bin/grunt --gruntfile app/Gruntfile.js e2eTest
 
   mongo:
     image: mongo:3.4
