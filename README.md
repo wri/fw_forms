@@ -12,7 +12,7 @@ Execution using Docker requires:
 
 Dependencies on other Microservices:
 - [GFW Areas](https://github.com/gfw-api/gfw-area)
-- [FW teams](https://github.com/gfw-api/fw-teams)
+- [FW teams](https://github.com/wri/fw_teams)
 
 ## Getting started
 
