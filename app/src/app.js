@@ -2,6 +2,7 @@ const config = require("config");
 const logger = require("logger");
 const path = require("path");
 const convert = require("koa-convert");
+const koaSimpleHealthCheck = require("koa-simple-healthcheck");
 const koa = require("koa");
 const koaLogger = require("koa-logger");
 const loader = require("loader");
@@ -69,6 +70,8 @@ app.use(function* handleErrors(next) {
   }
   this.response.type = "application/vnd.api+json";
 });
+
+app.use(convert.back(koaSimpleHealthCheck()));
 
 app.use(
   convert.back(async (ctx, next) => {

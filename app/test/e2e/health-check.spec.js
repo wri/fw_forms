@@ -6,7 +6,7 @@ chai.should();
 
 let requester;
 
-describe("GET /api/v1/healthcheck", function () {
+describe("GET healthcheck", function () {
   // eslint-disable-next-line mocha/no-hooks-for-single-case
   before(async function () {
     if (process.env.NODE_ENV !== "test") {
@@ -19,7 +19,7 @@ describe("GET /api/v1/healthcheck", function () {
   });
 
   it("Checking the application's health should return a 200", async function () {
-    const response = await requester.get("/api/v1/healthcheck");
+    const response = await requester.get("/healthcheck");
 
     response.status.should.equal(200);
     response.body.should.be.an("object").and.have.property("uptime");
