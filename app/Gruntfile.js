@@ -30,21 +30,14 @@ module.exports = grunt => {
       },
       jssrc: {
         files: ["app/src/**/*.js"],
-        tasks: ["jshint:js", "mochaTest:unit", "express:dev"],
-        options: {
-          spawn: false
-        }
-      },
-      unitTest: {
-        files: ["app/test/unit/**/*.test.js"],
-        tasks: ["jshint:jsTest", "mochaTest:unit"],
+        tasks: ["express:dev"],
         options: {
           spawn: false
         }
       },
       e2eTest: {
         files: ["app/test/e2e/**/*.spec.js"],
-        tasks: ["jshint:jsTest", "mochaTest:e2e"],
+        tasks: ["mochaTest:e2e"],
         options: {
           spawn: false
         }
