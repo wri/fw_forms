@@ -20,23 +20,10 @@ module "app_docker_image" {
   tag        = local.container_tag
 }
 
-module "lb_listener_rule" {
-  source              = "./modules/lb_listener_rule"
-  container_port      = var.container_port
-  lb_target_group_arn = module.fargate_autoscaling.lb_target_group_arn
-  listener_arn        = data.terraform_remote_state.fw_core.outputs.lb_listener_arn
-  project_prefix      = var.project_prefix
-  path_pattern        = ["/api/v1/form*", "/api/v1/questionnaire*", "/api/v1/reports*"]
-  tags                = local.tags
-  vpc_id              = data.terraform_remote_state.core.outputs.vpc_id
-  priority            = 1
-  depends_on = [
-    module.fargate_autoscaling
-  ]
-}
 
 module "fargate_autoscaling" {
-  source                       = "git::https://github.com/wri/gfw-terraform-modules.git//terraform/modules/fargate_autoscaling?ref=v0.5.1"
+  # source                       = "git::https://github.com/wri/gfw-terraform-modules.git//terraform/modules/fargate_autoscaling?ref=v0.5.1"
+  source                       = "./modules/fargate_autoscaling"
   project                      = var.project_prefix
   tags                         = local.fargate_tags
   vpc_id                       = data.terraform_remote_state.core.outputs.vpc_id
@@ -65,6 +52,14 @@ module "fargate_autoscaling" {
     module.google_sheets_project_email.read_policy_arn
   ]
   container_definition = data.template_file.container_definition.rendered
+
+  # Listner rule variables
+  lb_target_group_arn = module.fargate_autoscaling.lb_target_group_arn
+  listener_arn        = data.terraform_remote_state.fw_core.outputs.lb_listener_arn
+  project_prefix      = var.project_prefix
+  path_pattern        = ["/api/v1/form*", "/api/v1/questionnaire*", "/api/v1/reports*"]
+  priority            = 3
+
   depends_on = [
     module.google_sheets_private_key,
     module.google_sheets_project_email,
