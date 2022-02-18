@@ -7,7 +7,8 @@
     },
     "service": {
         "id": "gfw-forms-1.0.0",
-        "name": "GFW Forms"
+        "name": "GFW Forms",
+        "port": "PORT"
     },
     "wriMail": {
         "recipients": "",
