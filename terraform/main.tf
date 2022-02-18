@@ -57,6 +57,7 @@ module "fargate_autoscaling" {
   project_prefix      = var.project_prefix
   path_pattern        = ["/api/v1/fw_forms/healthcheck", "/api/v1/questionnaire*", "/api/v1/reports*"]
   priority = 1
+  health_check_path = "/api/v1/fw_forms/healthcheck"
 
   depends_on = [
     module.google_sheets_private_key,

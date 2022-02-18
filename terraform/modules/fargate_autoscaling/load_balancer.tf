@@ -20,6 +20,12 @@ resource "aws_lb_target_group" "default" {
   vpc_id   = var.vpc_id
   target_type = "ip"
   tags = var.tags
+
+  health_check {
+    enabled = true
+    path = var.health_check_path
+  }
+
   depends_on = [
     aws_lb.default
   ]
