@@ -21,8 +21,7 @@ module "app_docker_image" {
 }
 
 module "fargate_autoscaling" {
-  # source                       = "git::https://github.com/wri/gfw-terraform-modules.git//terraform/modules/fargate_autoscaling?ref=v0.5.1"
-  source                       = "./modules/fargate_autoscaling"
+  source                       = "git::https://github.com/wri/gfw-terraform-modules.git//terraform/modules/fargate_autoscaling_v2?ref=v0.5.5"
   project                      = var.project_prefix
   tags                         = local.fargate_tags
   vpc_id                       = data.terraform_remote_state.core.outputs.vpc_id
