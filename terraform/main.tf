@@ -20,10 +20,8 @@ module "app_docker_image" {
   tag        = local.container_tag
 }
 
-
 module "fargate_autoscaling" {
-  # source                       = "git::https://github.com/wri/gfw-terraform-modules.git//terraform/modules/fargate_autoscaling?ref=v0.5.1"
-  source                       = "./modules/fargate_autoscaling"
+  source                       = "git::https://github.com/wri/gfw-terraform-modules.git//terraform/modules/fargate_autoscaling_v2?ref=v0.5.5"
   project                      = var.project_prefix
   tags                         = local.fargate_tags
   vpc_id                       = data.terraform_remote_state.core.outputs.vpc_id
@@ -53,12 +51,12 @@ module "fargate_autoscaling" {
   ]
   container_definition = data.template_file.container_definition.rendered
 
-  # Listner rule variables
   lb_target_group_arn = module.fargate_autoscaling.lb_target_group_arn
   listener_arn        = data.terraform_remote_state.fw_core.outputs.lb_listener_arn
   project_prefix      = var.project_prefix
-  path_pattern        = ["/api/v1/form*", "/api/v1/questionnaire*", "/api/v1/reports*"]
-  priority            = 3
+  path_pattern        = ["/api/v1/fw_forms/healthcheck", "/api/v1/questionnaire*", "/api/v1/reports*"]
+  priority = 1
+  health_check_path = "/api/v1/fw_forms/healthcheck"
 
   depends_on = [
     module.google_sheets_private_key,
@@ -90,7 +88,7 @@ data "template_file" "container_definition" {
     mongo_port_27017_tcp_addr = data.terraform_remote_state.core.outputs.document_db_endpoint
     ct_url                    = var.ct_url
     local_url                 = "http://127.0.0.1:${var.container_port}"
-    teams_api_url             = "http://${data.terraform_remote_state.fw_core.outputs.public_url}/teams"
+    teams_api_url             = "http://${data.terraform_remote_state.fw_core.outputs.public_url}/api/v1"
     areas_api_url             = var.areas_api_url
     s3_access_key_id          = var.s3_access_key_id
     s3_secret_access_key      = var.s3_secret_access_key

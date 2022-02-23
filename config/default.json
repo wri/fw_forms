@@ -1,13 +1,14 @@
 {
     "logger": {
-        "name": "gfw-forms-DEV",
+        "name": "gfw-forms",
         "level": "debug",
         "toFile": false,
         "dirLogFile": null
     },
     "service": {
         "id": "gfw-forms-1.0.0",
-        "name": "GFW Forms"
+        "name": "GFW Forms",
+        "port": "PORT"
     },
     "wriMail": {
         "recipients": "",

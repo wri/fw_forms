@@ -147,3 +147,7 @@ variable "path_pattern" {
 variable "priority" {
   type = number
 }
+
+variable "health_check_path" {
+  type = string
+}
