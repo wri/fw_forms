@@ -11,7 +11,7 @@ services:
       NODE_ENV: dev
       SUPPRESS_NO_CONFIG_WARNING: "true"
       MONGO_PORT_27017_TCP_ADDR: mongo
-      CONTROL_TOWER_URL: https://api.resourcewatch.org
+      CT_URL: https://api.resourcewatch.org
       LOCAL_URL: http://127.0.0.1:4401
       TEAMS_API_URL: http://fw-teams-develop:3035/api/v1
       AREAS_API_URL: https://api.resourcewatch.org

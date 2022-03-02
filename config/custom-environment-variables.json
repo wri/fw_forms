@@ -17,7 +17,7 @@
     "level": "LOGGER_LEVEL"
   },
   "controlTower": {
-    "url": "CONTROL_TOWER_URL"
+    "url": "CT_URL"
   },
   "teamsAPI": {
     "url": "TEAMS_API_URL"
