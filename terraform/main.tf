@@ -83,17 +83,16 @@ data "template_file" "container_definition" {
     target_sheet_id      = var.target_sheet_id
     wri_mail_recipients  = var.wri_mail_recipients
 
-    PORT                      = "${var.container_port}"
-    NODE_PATH                 = var.node_path
-    NODE_ENV                  = var.node_env
-    MONGO_PORT_27017_TCP_ADDR = data.terraform_remote_state.core.outputs.document_db_endpoint
-    CT_URL                    = var.ct_url
-    LOCAL_URL                 = "http://127.0.0.1:${var.container_port}"
-    TEAMS_API_URL             = "http://${data.terraform_remote_state.fw_core.outputs.public_url}/api/v1"
-    AREAS_API_URL             = var.areas_api_url
-    S3_ACCESS_KEY_ID          = var.s3_access_key_id
-    S3_SECRET_ACCESS_KEY      = var.s3_secret_access_key
-    S3_BUCKET                 = var.s3_bucket
+    node_path                 = var.node_path
+    node_env                  = var.node_env
+    mongo_port_27017_tcp_addr = data.terraform_remote_state.core.outputs.document_db_endpoint
+    ct_url                    = var.ct_url
+    local_url                 = "http://127.0.0.1:${var.container_port}"
+    teams_api_url             = "http://${data.terraform_remote_state.fw_core.outputs.public_url}/api/v1"
+    areas_api_url             = var.areas_api_url
+    s3_access_key_id          = var.s3_access_key_id
+    s3_secret_access_key      = var.s3_secret_access_key
+    s3_bucket                 = var.s3_bucket
 
   }
 
