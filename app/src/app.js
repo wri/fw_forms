@@ -19,9 +19,12 @@ const koaBody = require("koa-body")({
 });
 const loggedInUserService = require("./services/LoggedInUserService");
 
-const mongoUri = `mongodb://${config.get("mongodb.host")}:${config.get("mongodb.port")}/${config.get(
-  "mongodb.database"
-)}`;
+const mongoURL =
+  "mongodb://" +
+  `${config.get("mongodb.username")}:${config.get("mongodb.secret.password")}` +
+  `@${config.get("mongodb.host")}:${config.get("mongodb.port")}` +
+  `/${config.get("mongodb.database")}`;
+
 mongoose.Promise = Promise;
 
 const onDbReady = err => {
@@ -31,7 +34,7 @@ const onDbReady = err => {
   }
 };
 
-mongoose.connect(mongoUri, onDbReady);
+mongoose.connect(mongoURL, onDbReady);
 
 const app = koa();
 
