@@ -35,10 +35,8 @@ mongoose.connect(mongoUri, onDbReady);
 
 const app = koa();
 
-// if environment is dev then load koa-logger
-if (process.env.NODE_ENV === "dev") {
-  app.use(koaLogger());
-}
+app.use(koaLogger());
+
 app.use(koaBody);
 
 require("koa-validate")(app);
