@@ -25,6 +25,10 @@
       "value" : "${mongo_port_27017_tcp_addr}"
     },
     {
+      "name": "DB_USERNAME",
+      "value" : "${db_secret_arn.username}"
+    }
+    {
       "name" : "CT_URL",
       "value" : "${ct_url}"
     },
@@ -65,14 +69,19 @@
     {
       "name": "DB_SECRET",
       "valueFrom": "${db_secret_arn}"
-    },{
+    },
+    {
+      "name": "DB_SECRET_PASSWORD",
+      "valueFrom": "${db_secret_arn.password}"
+    }
+    {
       "name": "GOOGLE_PRIVATE_KEY",
        "valueFrom": "${google_private_key}"
-      },
-      {
+    },
+    {
       "name": "GOOGLE_PROJECT_EMAIL",
        "valueFrom": "${google_project_email}"
-      }
+    }
   ],
   "portMappings": [
     {
