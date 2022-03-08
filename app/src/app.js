@@ -19,9 +19,14 @@ const koaBody = require("koa-body")({
 });
 const loggedInUserService = require("./services/LoggedInUserService");
 
+let dbSecret = config.get("mongodb.secret");
+if (typeof dbSecret === "string") {
+  dbSecret = JSON.parse(dbSecret);
+}
+
 const mongoURL =
   "mongodb://" +
-  `${config.get("mongodb.username")}:${config.get("mongodb.secret.password")}` +
+  `${dbSecret.username}:${dbSecret.password}` +
   `@${config.get("mongodb.host")}:${config.get("mongodb.port")}` +
   `/${config.get("mongodb.database")}`;
 

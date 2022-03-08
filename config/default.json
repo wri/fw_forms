@@ -66,11 +66,7 @@
     "mongodb": {
         "database": "gfw_forms",
         "host": "mymachine",
-        "port": 27017,
-        "username": "admin",
-        "secret": {
-            "password": "password"
-        }
+        "port": 27017
     },
     "s3":{
         "accessKeyId": null,
