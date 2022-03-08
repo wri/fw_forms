@@ -37,7 +37,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: admin
     volumes:
       - ./data/mongo/001_users.js:/docker-entrypoint-initdb.d/001_users.js:ro
-      - gfw-forms-mongodb-data::/data/db
+      - gfw-forms-mongodb-data:/data/db
 
 volumes:
   gfw-forms-mongodb-data:
