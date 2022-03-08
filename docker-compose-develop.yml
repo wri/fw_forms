@@ -11,6 +11,8 @@ services:
       NODE_ENV: dev
       SUPPRESS_NO_CONFIG_WARNING: "true"
       MONGO_PORT_27017_TCP_ADDR: mongo
+      DB_SECRET: '{ "username": "admin", "password": "password" }'
+      DB_DATABASE: gfw_forms
       CT_URL: https://api.resourcewatch.org
       LOCAL_URL: http://127.0.0.1:4401
       TEAMS_API_URL: http://fw-teams-develop:3035/api/v1
@@ -34,11 +36,19 @@ services:
     container_name: gfw-forms-mongo
     ports:
       - "27024:27017"
+    environment:
+      MONGO_INITDB_DATABASE: gfw_forms
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_ROOT_USERNAME: admin
     volumes:
-      - $HOME/docker/data/gfw-forms-api/mongodb:/data/db
+      - ./data/mongo/001_users.js:/docker-entrypoint-initdb.d/001_users.js:ro
+      - gfw-forms-mongodb-data:/data/db
     restart: always
     networks:
       - gfw-forms-network
+
+volumes:
+  gfw-forms-mongodb-data:
 
 networks:
   gfw-forms-network:

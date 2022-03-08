@@ -11,6 +11,8 @@ services:
       NODE_ENV: test
       SUPPRESS_NO_CONFIG_WARNING: "true"
       MONGO_PORT_27017_TCP_ADDR: mongo
+      DB_SECRET: '{ "username": "admin", "password": "password" }'
+      DB_DATABASE: gfw_forms
       CT_URL: http://127.0.0.1:9000
       LOCAL_URL: http://127.0.0.1:4400
       TEAMS_API_URL: http://127.0.0.1:9000
@@ -29,3 +31,13 @@ services:
     command: --smallfiles
     ports:
       - "27017"
+    environment:
+      MONGO_INITDB_DATABASE: gfw_forms
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_ROOT_USERNAME: admin
+    volumes:
+      - ./data/mongo/001_users.js:/docker-entrypoint-initdb.d/001_users.js:ro
+      - gfw-forms-mongodb-data::/data/db
+
+volumes:
+  gfw-forms-mongodb-data:

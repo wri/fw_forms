@@ -19,9 +19,17 @@ const koaBody = require("koa-body")({
 });
 const loggedInUserService = require("./services/LoggedInUserService");
 
-const mongoUri = `mongodb://${config.get("mongodb.host")}:${config.get("mongodb.port")}/${config.get(
-  "mongodb.database"
-)}`;
+let dbSecret = config.get("mongodb.secret");
+if (typeof dbSecret === "string") {
+  dbSecret = JSON.parse(dbSecret);
+}
+
+const mongoURL =
+  "mongodb://" +
+  `${dbSecret.username}:${dbSecret.password}` +
+  `@${config.get("mongodb.host")}:${config.get("mongodb.port")}` +
+  `/${config.get("mongodb.database")}`;
+
 mongoose.Promise = Promise;
 
 const onDbReady = err => {
@@ -31,14 +39,12 @@ const onDbReady = err => {
   }
 };
 
-mongoose.connect(mongoUri, onDbReady);
+mongoose.connect(mongoURL, onDbReady);
 
 const app = koa();
 
-// if environment is dev then load koa-logger
-if (process.env.NODE_ENV === "dev") {
-  app.use(koaLogger());
-}
+app.use(koaLogger());
+
 app.use(koaBody);
 
 require("koa-validate")(app);
