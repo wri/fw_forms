@@ -3,6 +3,7 @@ const logger = require("logger");
 const path = require("path");
 const convert = require("koa-convert");
 const koa = require("koa");
+const cors = require("@koa/cors");
 const koaLogger = require("koa-logger");
 const loader = require("loader");
 const ErrorSerializer = require("serializers/errorSerializer");
@@ -43,8 +44,8 @@ mongoose.connect(mongoURL, onDbReady);
 
 const app = koa();
 
+app.use(convert.back(cors()));
 app.use(koaLogger());
-
 app.use(koaBody);
 
 require("koa-validate")(app);

@@ -32,6 +32,7 @@
   },
   "homepage": "https://github.com/gfw-api/gfw-forms-api#readme",
   "dependencies": {
+    "@koa/cors": "^3.1.0",
     "aws-sdk": "^2.18.0",
     "axios": "^0.24.0",
     "bunyan": "1.7.1",
