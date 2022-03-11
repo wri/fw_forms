@@ -64,7 +64,7 @@
         }
     },
     "mongodb": {
-        "database": "test",
+        "database": "gfw_forms",
         "host": "mymachine",
         "port": 27017
     },
