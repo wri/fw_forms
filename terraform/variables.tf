@@ -102,6 +102,7 @@ variable "ct_url" {
 # }
 variable "areas_api_url" {
   type = string
+  default = "https://api.resourcewatch.org"
 }
 variable "s3_access_key_id" {
   type = string
