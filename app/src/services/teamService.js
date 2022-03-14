@@ -16,7 +16,7 @@ class TeamService {
           authorization: loggedInUserService.token
         }
       });
-      team = response.data.data;
+      team = response.data;
     } catch (e) {
       logger.info("Failed to fetch team");
     }
