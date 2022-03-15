@@ -10,6 +10,6 @@ wri_mail_recipients = "sam@3sidedcube.com,tom.yeadon@3sidedcube.com,ben.sherred@
 
 node_env = "dev"
 areas_api_url = "https://api.resourcewatch.org"
-s3_access_key_id = "key"
-s3_secret_access_key = "key"
-s3_bucket = "key"
+s3_access_key_id = "overridden_in_github_secrets"
+s3_secret_access_key = "overridden_in_github_secrets"
+s3_bucket = "gfw-fw-data-staging"
