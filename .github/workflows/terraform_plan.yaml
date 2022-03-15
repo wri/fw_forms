@@ -18,7 +18,9 @@ jobs:
         GOOGLE_SHEETS_PRIVATE_KEY: ${{ secrets.google_sheets_private_key }}
         GOOGLE_SHEETS_PROJECT_EMAIL: ${{ secrets.google_sheets_project_email }}
       run: ./scripts/infra plan -var "google_sheets_private_key=${GOOGLE_SHEETS_PRIVATE_KEY}" \
-                                -var "google_sheets_project_email=${GOOGLE_SHEETS_PROJECT_EMAIL}"
+                                -var "google_sheets_project_email=${GOOGLE_SHEETS_PROJECT_EMAIL}" \
+                                -var "s3_access_key_id=${AWS_ACCESS_KEY_ID}" \
+                                -var "s3_secret_access_key=${AWS_SECRET_ACCESS_KEY}" 
     - name: Plan staging
       if: github.base_ref == 'staging'
       env:
@@ -29,7 +31,9 @@ jobs:
         GOOGLE_SHEETS_PRIVATE_KEY: ${{ secrets.google_sheets_private_key }}
         GOOGLE_SHEETS_PROJECT_EMAIL: ${{ secrets.google_sheets_project_email }}
       run: ./scripts/infra plan -var "google_sheets_private_key=${GOOGLE_SHEETS_PRIVATE_KEY}" \
-                                -var "google_sheets_project_email=${GOOGLE_SHEETS_PROJECT_EMAIL}"
+                                -var "google_sheets_project_email=${GOOGLE_SHEETS_PROJECT_EMAIL}" \
+                                -var "s3_access_key_id=${AWS_ACCESS_KEY_ID}" \
+                                -var "s3_secret_access_key=${AWS_SECRET_ACCESS_KEY}" 
     - name: Plan dev
       if: github.base_ref == 'dev'
       env:
@@ -40,5 +44,7 @@ jobs:
         GOOGLE_SHEETS_PRIVATE_KEY: ${{ secrets.google_sheets_private_key }}
         GOOGLE_SHEETS_PROJECT_EMAIL: ${{ secrets.google_sheets_project_email }}
       run: ./scripts/infra plan -var "google_sheets_private_key=${GOOGLE_SHEETS_PRIVATE_KEY}" \
-                                -var "google_sheets_project_email=${GOOGLE_SHEETS_PROJECT_EMAIL}"
+                                -var "google_sheets_project_email=${GOOGLE_SHEETS_PROJECT_EMAIL}" \
+                                -var "s3_access_key_id=${AWS_ACCESS_KEY_ID}" \
+                                -var "s3_secret_access_key=${AWS_SECRET_ACCESS_KEY}" 
 
