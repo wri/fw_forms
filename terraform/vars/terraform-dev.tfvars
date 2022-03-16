@@ -13,3 +13,6 @@ areas_api_url = "https://api.resourcewatch.org"
 s3_access_key_id = "key"
 s3_secret_access_key = "key"
 s3_bucket = "key"
+
+healthcheck_path = "/v1/fw_forms/healthcheck"
+healthcheck_sns_emails = ["server@3sidedcube.com"]
