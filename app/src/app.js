@@ -19,6 +19,7 @@ const koaBody = require("koa-body")({
   }
 });
 const loggedInUserService = require("./services/LoggedInUserService");
+const Sentry = require("@sentry/node");
 
 let dbSecret = config.get("mongodb.secret");
 if (typeof dbSecret === "string") {
@@ -43,6 +44,21 @@ const onDbReady = err => {
 mongoose.connect(mongoURL, onDbReady);
 
 const app = koa();
+
+/**
+ * Sentry
+ */
+Sentry.init({ dsn: "https://6eadede9d24343abbcaa82ba3712699d@o163691.ingest.sentry.io/6262402" });
+
+app.on("error", (err, ctx) => {
+  Sentry.withScope(function (scope) {
+    scope.addEventProcessor(function (event) {
+      return Sentry.Handlers.parseRequest(event, ctx.request);
+    });
+    Sentry.captureException(err);
+  });
+});
+/** */
 
 app.use(convert.back(cors()));
 app.use(koaLogger());
