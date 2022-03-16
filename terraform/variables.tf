@@ -113,3 +113,11 @@ variable "s3_secret_access_key" {
 variable "s3_bucket" {
   type = string
 }
+
+variable "healthcheck_path" {
+  type = string
+}
+
+variable "healthcheck_sns_emails" {
+  type = list(string)
+}

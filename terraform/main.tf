@@ -125,3 +125,16 @@ module "google_sheets_project_email" {
   name          = "${var.project_prefix}-google_sheets_project_email"
   secret_string = var.google_sheets_project_email
 }
+#
+# Route53 Healthcheck
+#
+module "route53_healthcheck" {
+  source           = "git::https://github.com/wri/gfw-terraform-modules.git//terraform/modules/route53_healthcheck?ref=v0.5.6"
+  prefix           = var.project_prefix
+  healthcheck_fqdn = data.terraform_remote_state.fw_core.outputs.public_url
+  healthcheck_path = var.healthcheck_path
+  forward_emails   = var.healthcheck_sns_emails
+  depends_on = [
+    module.fargate_autoscaling
+  ]
+}
