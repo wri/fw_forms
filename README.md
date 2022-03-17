@@ -33,7 +33,9 @@ make up-and-build   # First time building Docker or you've made changes to the D
 make up             # When Docker has already been built and you're starting from where you left off
 ```
 
-The endpoints provided by this microservice should now be available: [localhost:4401](http://localhost:4401)
+The endpoints provided by this microservice should now be available: 
+[localhost:4401](http://localhost:4401)\
+OpenAPI docs will also be available at [localhost:44010](http://localhost:44010)
 
 2 - Run the following command to lint the project:
 
@@ -55,6 +57,12 @@ Follow the instruction above for setting up the runtime environment for Docker e
 ```shell
 make test-and-build
 ```
+
+## Docs
+
+The endpoints are documented using the OpenAPI spec and saved under `./docs`.\
+A visualisation of these docs will be available to view in a web browser
+when developing, please see above.
 
 ## Quick Overview
 
