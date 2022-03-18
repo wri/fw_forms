@@ -14,43 +14,43 @@ jobs:
         ENV: production
         AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_production }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_production }}
-        FW_FORMS_AWS_ACCESS_KEY_ID: ${{ secrets.fw_forms_aws_key_staging }}
-        FW_FORMS_AWS_SECRET_ACCESS_KEY: ${{ secrets.fw_forms_aws_secret_staging }}
+        FORMS_S3_ACCESS_KEY_ID: ${{ secrets.forms_s3_access_key_id }}
+        FORMS_S3_SECRET_ACCESS_KEY: ${{ secrets.forms_s3_secret_access_key }}
         AWS_REGION: ${{ secrets.aws_region_production }}
         GOOGLE_SHEETS_PRIVATE_KEY: ${{ secrets.google_sheets_private_key }}
         GOOGLE_SHEETS_PROJECT_EMAIL: ${{ secrets.google_sheets_project_email }}
       run: ./scripts/infra plan -var "google_sheets_private_key=${GOOGLE_SHEETS_PRIVATE_KEY}" \
                                 -var "google_sheets_project_email=${GOOGLE_SHEETS_PROJECT_EMAIL}" \
-                                -var "s3_access_key_id=${FW_FORMS_AWS_ACCESS_KEY_ID}" \
-                                -var "s3_secret_access_key=${FW_FORMS_AWS_SECRET_ACCESS_KEY}" 
+                                -var "s3_access_key_id=${FORMS_S3_ACCESS_KEY_ID}" \
+                                -var "s3_secret_access_key=${FORMS_S3_SECRET_ACCESS_KEY}"
     - name: Plan staging
       if: github.base_ref == 'staging'
       env:
         ENV: staging
         AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_staging }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_staging }}
-        FW_FORMS_AWS_ACCESS_KEY_ID: ${{ secrets.fw_forms_aws_key_staging }}
-        FW_FORMS_AWS_SECRET_ACCESS_KEY: ${{ secrets.fw_forms_aws_secret_staging }}
+        FORMS_S3_ACCESS_KEY_ID: ${{ secrets.forms_s3_access_key_id }}
+        FORMS_S3_SECRET_ACCESS_KEY: ${{ secrets.forms_s3_secret_access_key }}
         AWS_REGION: ${{ secrets.aws_region_staging }}
         GOOGLE_SHEETS_PRIVATE_KEY: ${{ secrets.google_sheets_private_key }}
         GOOGLE_SHEETS_PROJECT_EMAIL: ${{ secrets.google_sheets_project_email }}
       run: ./scripts/infra plan -var "google_sheets_private_key=${GOOGLE_SHEETS_PRIVATE_KEY}" \
                                 -var "google_sheets_project_email=${GOOGLE_SHEETS_PROJECT_EMAIL}" \
-                                -var "s3_access_key_id=${FW_FORMS_AWS_ACCESS_KEY_ID}" \
-                                -var "s3_secret_access_key=${FW_FORMS_AWS_SECRET_ACCESS_KEY}" 
+                                -var "s3_access_key_id=${FORMS_S3_ACCESS_KEY_ID}" \
+                                -var "s3_secret_access_key=${FORMS_S3_SECRET_ACCESS_KEY}"
     - name: Plan dev
       if: github.base_ref == 'dev'
       env:
         ENV: dev
         AWS_ACCESS_KEY_ID: ${{ secrets.aws_key_dev }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_dev }}
-        FW_FORMS_AWS_ACCESS_KEY_ID: ${{ secrets.fw_forms_aws_key_staging }}
-        FW_FORMS_AWS_SECRET_ACCESS_KEY: ${{ secrets.fw_forms_aws_secret_staging }}
+        FORMS_S3_ACCESS_KEY_ID: ${{ secrets.forms_s3_access_key_id }}
+        FORMS_S3_SECRET_ACCESS_KEY: ${{ secrets.forms_s3_secret_access_key }}
         AWS_REGION: ${{ secrets.aws_region_dev }}
         GOOGLE_SHEETS_PRIVATE_KEY: ${{ secrets.google_sheets_private_key }}
         GOOGLE_SHEETS_PROJECT_EMAIL: ${{ secrets.google_sheets_project_email }}
       run: ./scripts/infra plan -var "google_sheets_private_key=${GOOGLE_SHEETS_PRIVATE_KEY}" \
                                 -var "google_sheets_project_email=${GOOGLE_SHEETS_PROJECT_EMAIL}" \
-                                -var "s3_access_key_id=${FW_FORMS_AWS_ACCESS_KEY_ID}" \
-                                -var "s3_secret_access_key=${FW_FORMS_AWS_SECRET_ACCESS_KEY}" 
+                                -var "s3_access_key_id=${FORMS_S3_ACCESS_KEY_ID}" \
+                                -var "s3_secret_access_key=${FORMS_S3_SECRET_ACCESS_KEY}"
 
