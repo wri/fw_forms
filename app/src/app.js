@@ -80,6 +80,7 @@ app.use(function* handleErrors(next) {
     }
     this.status = error.status || this.status || 500;
     if (this.status >= 500) {
+      Sentry.captureException(error); // send error to sentry
       logger.error(error);
     } else {
       logger.info(error);
