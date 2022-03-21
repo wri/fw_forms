@@ -7,9 +7,5 @@ const router = new Router({
 });
 
 router.get("/", convert.back(koaSimpleHealthCheck()));
-router.get("/fail", ctx => {
-  ctx.status = 500;
-  throw new Error("Test Fail");
-});
 
 module.exports = router;
