@@ -13,3 +13,6 @@ areas_api_url = "https://api.resourcewatch.org/v1"
 s3_access_key_id = "overridden_in_github_secrets"
 s3_secret_access_key = "overridden_in_github_secrets"
 s3_bucket = "forest-watcher-files"
+
+healthcheck_path = "/v1/fw_forms/healthcheck"
+healthcheck_sns_emails = ["server@3sidedcube.com"]
