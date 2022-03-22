@@ -48,7 +48,10 @@ const app = koa();
 /**
  * Sentry
  */
-Sentry.init({ dsn: "https://6eadede9d24343abbcaa82ba3712699d@o163691.ingest.sentry.io/6262402" });
+Sentry.init({
+  dsn: "https://6eadede9d24343abbcaa82ba3712699d@o163691.ingest.sentry.io/6262402",
+  environment: process.env.NODE_ENV
+});
 
 app.on("error", (err, ctx) => {
   Sentry.withScope(function (scope) {
@@ -87,7 +90,7 @@ app.use(function* handleErrors(next) {
     }
 
     this.body = ErrorSerializer.serializeError(this.status, error.message);
-    if (process.env.NODE_ENV === "prod" && this.status === 500) {
+    if (process.env.NODE_ENV === "production" && this.status === 500) {
       this.body = "Unexpected error";
     }
   }
