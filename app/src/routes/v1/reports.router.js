@@ -468,9 +468,8 @@ router.get("/:id", mapTemplateParamToId, loggedUserToState, queryToState, Report
 router.put("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsValidator.create, ReportsRouter.put);
 router.delete("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsRouter.delete);
 router.get("/:id/download-answers", mapTemplateParamToId, loggedUserToState, ReportsRouter.downloadAnswers);
-router.get("/fail", ctx => {
-  ctx.status = 500;
-  throw new Error("Test Fail");
+router.get("/fail", function () {
+  this.throw(500, "Test Fail");
 });
 
 module.exports = router;
