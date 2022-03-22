@@ -9,10 +9,10 @@ default_template_id = "59b6a26b138f260012e9fdeb"
 wri_mail_recipients = "sam@3sidedcube.com,tom.yeadon@3sidedcube.com,ben.sherred@3sidedcube.com,javier@3sidedcube.com"
 
 node_env = "dev"
-areas_api_url = "https://api.resourcewatch.org"
-s3_access_key_id = "key"
-s3_secret_access_key = "key"
-s3_bucket = "key"
+areas_api_url = "https://api.resourcewatch.org/v1"
+s3_access_key_id = "overridden_in_github_secrets"
+s3_secret_access_key = "overridden_in_github_secrets"
+s3_bucket = "forest-watcher-files"
 
 healthcheck_path = "/v1/fw_forms/healthcheck"
 healthcheck_sns_emails = ["server@3sidedcube.com"]

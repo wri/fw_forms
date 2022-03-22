@@ -17,7 +17,7 @@
     "userMail": {
         "template": "data-contribution-confirmation"
     },
-    "legacyTemplateId": "5964eb872b0e030011f422ee",
+    "legacyTemplateId": "597b0f55856351000b087c9c",
     "defaultTemplateId": "59b6a26b138f260012e9fdeb",
     "contactEmail": {
         "template": "contact-form",
