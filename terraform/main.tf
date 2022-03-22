@@ -130,7 +130,7 @@ module "google_sheets_project_email" {
 #
 
 module "route53_healthcheck" {
-  source           = "git::https://github.com/wri/gfw-terraform-modules.git//terraform/modules/route53_healthcheck?ref=v0.5.6"
+  source           = "git::https://github.com/wri/gfw-terraform-modules.git//terraform/modules/route53_healthcheck?ref=v0.5.7"
   prefix           = var.project_prefix
   healthcheck_fqdn = data.terraform_remote_state.fw_core.outputs.public_url
   healthcheck_path = var.healthcheck_path
