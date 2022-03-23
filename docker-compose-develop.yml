@@ -31,6 +31,15 @@ services:
       - gfw-network
     command: node node_modules/.bin/grunt --gruntfile app/Gruntfile.js
 
+  docs:
+    build: .
+    ports:
+      - "44010:44010"
+    container_name: fw-forms-docs
+    volumes:
+      - ./docs:/opt/gfw-forms-api/docs
+    command: yarn run docs -l 44010
+
   mongo:
     image: mongo:3.4
     container_name: gfw-forms-mongo
