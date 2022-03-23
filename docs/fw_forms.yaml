@@ -30,8 +30,6 @@ paths:
           $ref: '#/components/responses/Error'
         '401':
           $ref: '#/components/responses/Error'
-      requestBody:
-        $ref: '#/components/requestBodies/Report'
   '/reports/{reportId}':
     get:
       summary: Get report
@@ -60,8 +58,6 @@ paths:
           $ref: '#/components/responses/Error'
         '404':
           $ref: '#/components/responses/Error'
-      requestBody:
-        $ref: '#/components/requestBodies/Report'
     delete:
       summary: Delete report
       operationId: delete-report
@@ -86,8 +82,6 @@ paths:
           $ref: '#/components/responses/Error'
         '404':
           $ref: '#/components/responses/Error'
-      requestBody:
-        $ref: '#/components/requestBodies/Report'
   '/reports/{reportId}/answers':
     parameters:
       - schema:
@@ -200,8 +194,6 @@ paths:
           $ref: '#/components/responses/Questionnaire'
         '401':
           $ref: '#/components/responses/Error'
-      requestBody:
-        $ref: '#/components/requestBodies/Questionnaire'
     parameters: []
   '/questionnaire/{id}':
     get:
@@ -340,6 +332,15 @@ paths:
         '404':
           $ref: '#/components/responses/Error'
       description: ''
+  /fw_forms/healthcheck:
+    get:
+      summary: Healthcheck
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/Healthcheck'
+      operationId: get-fw_forms-healthcheck
+      security: []
 components:
   schemas:
     ReportsQuestionConditional:
@@ -1012,6 +1013,16 @@ components:
                         - question: string
                           value: string
                       createdAt: '2019-08-24T14:15:22Z'
+    Healthcheck:
+      description: Healthcheck response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              uptime:
+                type: number
+          examples: {}
   requestBodies:
     Questionnaire:
       content:
@@ -1103,3 +1114,5 @@ components:
           schema:
             $ref: '#/components/schemas/Response'
           examples: {}
+security:
+  - Authorization: []
