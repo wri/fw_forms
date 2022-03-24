@@ -13,7 +13,8 @@ paths:
   /reports:
     get:
       summary: Get all reports
-      tags: []
+      tags:
+        - Reports
       responses:
         '200':
           $ref: '#/components/responses/Reports'
@@ -30,10 +31,13 @@ paths:
           $ref: '#/components/responses/Error'
         '401':
           $ref: '#/components/responses/Error'
+      tags:
+        - Reports
   '/reports/{reportId}':
     get:
       summary: Get report
-      tags: []
+      tags:
+        - Reports
       responses:
         '200':
           $ref: '#/components/responses/Report'
@@ -58,6 +62,8 @@ paths:
           $ref: '#/components/responses/Error'
         '404':
           $ref: '#/components/responses/Error'
+      tags:
+        - Reports
     delete:
       summary: Delete report
       operationId: delete-report
@@ -70,6 +76,8 @@ paths:
           $ref: '#/components/responses/Error'
         '404':
           $ref: '#/components/responses/Error'
+      tags:
+        - Reports
     put:
       summary: Update report
       operationId: put-report
@@ -82,80 +90,11 @@ paths:
           $ref: '#/components/responses/Error'
         '404':
           $ref: '#/components/responses/Error'
-  '/reports/{reportId}/answers':
-    parameters:
-      - schema:
-          type: string
-        name: reportId
-        in: path
-        required: true
-    get:
-      summary: Get all answers for given report
-      tags: []
-      responses:
-        '200':
-          $ref: '#/components/responses/Answers'
-        '401':
-          $ref: '#/components/responses/Error'
-        '404':
-          $ref: '#/components/responses/Error'
-      operationId: get-answers-for-report
-    post:
-      summary: Save answers for the given report
-      operationId: post-answers-for-report
-      responses:
-        '200':
-          $ref: '#/components/responses/Answers'
-        '400':
-          $ref: '#/components/responses/Error'
-        '401':
-          $ref: '#/components/responses/Error'
-      description: ''
-  '/reports/{reportId}/answers/{id}':
-    parameters:
-      - schema:
-          type: string
-        name: reportId
-        in: path
-        required: true
-      - schema:
-          type: string
-        name: id
-        in: path
-        required: true
-    get:
-      summary: Get the given answers for a given report
-      tags: []
-      responses:
-        '200':
-          $ref: '#/components/responses/Answer'
-        '401':
-          $ref: '#/components/responses/Error'
-        '404':
-          $ref: '#/components/responses/Error'
-      operationId: get-answer-for-report
-    patch:
-      summary: Update answers for a given report
-      operationId: patch-awnser-for-report
-      responses:
-        '500':
-          $ref: '#/components/responses/Error'
-      description: ''
-      deprecated: true
-    delete:
-      summary: Delete answer for given report
-      operationId: delete-answer-for-report
-      responses:
-        '204':
-          description: No Content
-        '401':
-          $ref: '#/components/responses/Error'
-        '404':
-          $ref: '#/components/responses/Error'
+      tags:
+        - Reports
   '/reports/{reportId}/download-answers':
     get:
       summary: Get report csv
-      tags: []
       responses:
         '200':
           description: OK
@@ -170,22 +109,105 @@ paths:
           $ref: '#/components/responses/Error'
       operationId: get-report-csv
       description: Download the given report as a CSV file
+      tags:
+        - Reports
     parameters:
       - schema:
           type: string
         name: reportId
         in: path
         required: true
+  '/reports/{reportId}/answers':
+    parameters:
+      - schema:
+          type: string
+        name: reportId
+        in: path
+        required: true
+    get:
+      summary: Get all answers for given report
+      tags:
+        - Answers
+      responses:
+        '200':
+          $ref: '#/components/responses/Answers'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      operationId: get-answers-for-report
+      description: ''
+    post:
+      summary: Save answers for the given report
+      operationId: post-answers-for-report
+      responses:
+        '200':
+          $ref: '#/components/responses/Answers'
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+      description: ''
+      tags:
+        - Answers
+  '/reports/{reportId}/answers/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: reportId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Get the given answers for a given report
+      tags:
+        - Answers
+      responses:
+        '200':
+          $ref: '#/components/responses/Answer'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      operationId: get-answer-for-report
+      description: ''
+    patch:
+      summary: Update answers for a given report
+      operationId: patch-awnser-for-report
+      responses:
+        '500':
+          $ref: '#/components/responses/Error'
+      description: ''
+      deprecated: true
+      tags:
+        - Answers
+    delete:
+      summary: Delete answer for given report
+      operationId: delete-answer-for-report
+      responses:
+        '204':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      tags:
+        - Answers
   /questionnaire:
     get:
       summary: Get all questionnaires
-      tags: []
       responses:
         '200':
           $ref: '#/components/responses/Questionnaires'
         '401':
           $ref: '#/components/responses/Error'
       operationId: get-all-questionnaires
+      tags:
+        - Questionnaires
     post:
       summary: Create a questionnaire
       operationId: post-questionnaire
@@ -194,11 +216,14 @@ paths:
           $ref: '#/components/responses/Questionnaire'
         '401':
           $ref: '#/components/responses/Error'
+      tags:
+        - Questionnaires
     parameters: []
   '/questionnaire/{id}':
     get:
       summary: Get questionnaire
-      tags: []
+      tags:
+        - Questionnaires
       responses:
         '200':
           $ref: '#/components/responses/Questionnaire'
@@ -224,6 +249,8 @@ paths:
           $ref: '#/components/responses/Error'
         '404':
           $ref: '#/components/responses/Error'
+      tags:
+        - Questionnaires
     delete:
       summary: Delete questionnaire
       operationId: delete-questionnaire
@@ -234,10 +261,13 @@ paths:
           $ref: '#/components/responses/Error'
         '404':
           $ref: '#/components/responses/Error'
+      tags:
+        - Questionnaires
   '/questionnaire/{id}/download-answers':
     get:
       summary: Get questionnaire csv
-      tags: []
+      tags:
+        - Questionnaires
       responses:
         '200':
           description: OK
@@ -261,7 +291,8 @@ paths:
   '/questionnaire/{questionnaireId}/answer':
     get:
       summary: Get all answers for a questionnaire
-      tags: []
+      tags:
+        - QuestionnairesAnswers
       responses:
         '200':
           $ref: '#/components/responses/Responses'
@@ -288,10 +319,13 @@ paths:
         '401':
           $ref: '#/components/responses/Error'
       description: ''
+      tags:
+        - QuestionnairesAnswers
   '/questionnaire/{questionnaireId}/answer/{id}':
     get:
       summary: Get answers for a given questionnaire
-      tags: []
+      tags:
+        - QuestionnairesAnswers
       responses:
         '200':
           $ref: '#/components/responses/Response'
@@ -321,6 +355,8 @@ paths:
           $ref: '#/components/responses/Error'
         '404':
           $ref: '#/components/responses/Error'
+      tags:
+        - QuestionnairesAnswers
     delete:
       summary: Delete answers for a given questionnaire
       operationId: delete-awnsers-for-questionnaire
@@ -332,6 +368,8 @@ paths:
         '404':
           $ref: '#/components/responses/Error'
       description: ''
+      tags:
+        - QuestionnairesAnswers
   /fw_forms/healthcheck:
     get:
       summary: Healthcheck
