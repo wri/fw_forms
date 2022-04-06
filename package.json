@@ -4,7 +4,8 @@
   "description": "Global forest watch - Forms API",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint app --fix"
+    "lint": "eslint app --fix",
+    "docs": "serve docs"
   },
   "repository": {
     "type": "git",
@@ -81,6 +82,7 @@
     "nock": "^13.0.4",
     "nyc": "^15.1.0",
     "prettier": "^2.5.1",
+    "serve": "^13.0.2",
     "sinon": "^9.0.3"
   },
   "prettier": "@3sidedcube/prettier-config"

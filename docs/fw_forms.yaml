@@ -1,0 +1,1156 @@
+openapi: 3.1.0
+info:
+  title: fw_forms
+  version: '1.0'
+servers:
+  - url: 'https://api.resourcewatch.org/v1'
+    description: Production
+  - url: 'https://gfw-staging.globalforestwatch.org/v1'
+    description: Staging
+  - url: 'http://localhost:4401/v1'
+    description: Local
+paths:
+  /reports:
+    get:
+      summary: Get all reports
+      tags:
+        - Reports
+      responses:
+        '200':
+          $ref: '#/components/responses/Reports'
+        '401':
+          $ref: '#/components/responses/Error'
+      operationId: get-all-reports
+    post:
+      summary: Create a report
+      operationId: post-report
+      responses:
+        '200':
+          $ref: '#/components/responses/Report'
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+      tags:
+        - Reports
+  '/reports/{reportId}':
+    get:
+      summary: Get report
+      tags:
+        - Reports
+      responses:
+        '200':
+          $ref: '#/components/responses/Report'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      operationId: get-report
+    parameters:
+      - schema:
+          type: string
+        name: reportId
+        in: path
+        required: true
+    patch:
+      summary: Update report
+      operationId: patch-report
+      responses:
+        '200':
+          $ref: '#/components/responses/Report'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      tags:
+        - Reports
+    delete:
+      summary: Delete report
+      operationId: delete-report
+      responses:
+        '204':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      tags:
+        - Reports
+    put:
+      summary: Update report
+      operationId: put-report
+      responses:
+        '200':
+          $ref: '#/components/responses/Report'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      tags:
+        - Reports
+  '/reports/{reportId}/download-answers':
+    get:
+      summary: Get report csv
+      responses:
+        '200':
+          description: OK
+          content:
+            text/csv:
+              schema:
+                type: object
+                properties: {}
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      operationId: get-report-csv
+      description: Download the given report as a CSV file
+      tags:
+        - Reports
+    parameters:
+      - schema:
+          type: string
+        name: reportId
+        in: path
+        required: true
+  '/reports/{reportId}/answers':
+    parameters:
+      - schema:
+          type: string
+        name: reportId
+        in: path
+        required: true
+    get:
+      summary: Get all answers for given report
+      tags:
+        - Answers
+      responses:
+        '200':
+          $ref: '#/components/responses/Answers'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      operationId: get-answers-for-report
+      description: ''
+    post:
+      summary: Save answers for the given report
+      operationId: post-answers-for-report
+      responses:
+        '200':
+          $ref: '#/components/responses/Answers'
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+      description: ''
+      tags:
+        - Answers
+  '/reports/{reportId}/answers/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: reportId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Get the given answers for a given report
+      tags:
+        - Answers
+      responses:
+        '200':
+          $ref: '#/components/responses/Answer'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      operationId: get-answer-for-report
+      description: ''
+    patch:
+      summary: Update answers for a given report
+      operationId: patch-awnser-for-report
+      responses:
+        '500':
+          $ref: '#/components/responses/Error'
+      description: ''
+      deprecated: true
+      tags:
+        - Answers
+    delete:
+      summary: Delete answer for given report
+      operationId: delete-answer-for-report
+      responses:
+        '204':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      tags:
+        - Answers
+  /questionnaire:
+    get:
+      summary: Get all questionnaires
+      responses:
+        '200':
+          $ref: '#/components/responses/Questionnaires'
+        '401':
+          $ref: '#/components/responses/Error'
+      operationId: get-all-questionnaires
+      tags:
+        - Questionnaires
+    post:
+      summary: Create a questionnaire
+      operationId: post-questionnaire
+      responses:
+        '200':
+          $ref: '#/components/responses/Questionnaire'
+        '401':
+          $ref: '#/components/responses/Error'
+      tags:
+        - Questionnaires
+    parameters: []
+  '/questionnaire/{id}':
+    get:
+      summary: Get questionnaire
+      tags:
+        - Questionnaires
+      responses:
+        '200':
+          $ref: '#/components/responses/Questionnaire'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      operationId: get-questionnaire
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+        description: Questionnaire ObjectId
+    patch:
+      summary: Update questionnaire
+      operationId: patch-questionnaire-id
+      responses:
+        '200':
+          $ref: '#/components/responses/Questionnaire'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      tags:
+        - Questionnaires
+    delete:
+      summary: Delete questionnaire
+      operationId: delete-questionnaire
+      responses:
+        '204':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      tags:
+        - Questionnaires
+  '/questionnaire/{id}/download-answers':
+    get:
+      summary: Get questionnaire csv
+      tags:
+        - Questionnaires
+      responses:
+        '200':
+          description: OK
+          content:
+            text/csv:
+              schema:
+                type: object
+                properties: {}
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      operationId: get-questionnaire-csv
+      description: Download the given questionnaire as a CSV file
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+  '/questionnaire/{questionnaireId}/answer':
+    get:
+      summary: Get all answers for a questionnaire
+      tags:
+        - QuestionnairesAnswers
+      responses:
+        '200':
+          $ref: '#/components/responses/Responses'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      operationId: get-all-answers-for-questionnaire
+      description: ''
+    parameters:
+      - schema:
+          type: string
+        name: questionnaireId
+        in: path
+        required: true
+    post:
+      summary: Save answer for a questionnaire
+      operationId: post-answer-for-questionnaire
+      responses:
+        '200':
+          $ref: '#/components/responses/Response'
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+      description: ''
+      tags:
+        - QuestionnairesAnswers
+  '/questionnaire/{questionnaireId}/answer/{id}':
+    get:
+      summary: Get answers for a given questionnaire
+      tags:
+        - QuestionnairesAnswers
+      responses:
+        '200':
+          $ref: '#/components/responses/Response'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      operationId: get-answers-for-questionnaire
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: questionnaireId
+        in: path
+        required: true
+    patch:
+      summary: Update answers for a given questionnaire
+      operationId: patch-awnsers-for-questionnaire
+      responses:
+        '200':
+          $ref: '#/components/responses/Response'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      tags:
+        - QuestionnairesAnswers
+    delete:
+      summary: Delete answers for a given questionnaire
+      operationId: delete-awnsers-for-questionnaire
+      responses:
+        '204':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      description: ''
+      tags:
+        - QuestionnairesAnswers
+  /fw_forms/healthcheck:
+    get:
+      summary: Healthcheck
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/Healthcheck'
+      operationId: get-fw_forms-healthcheck
+      security: []
+components:
+  schemas:
+    ReportsQuestionConditional:
+      title: ReportsQuestionConditional
+      type: object
+      examples: []
+      properties:
+        type:
+          type: string
+        label:
+          type: any
+          default: {}
+        name:
+          type: string
+        defaultValue:
+          type: any
+        values:
+          type: any
+          default: {}
+        required:
+          type: boolean
+          default: false
+        order:
+          type: number
+        conditionalValue:
+          type: number
+      required:
+        - type
+        - label
+        - name
+        - values
+        - required
+    ReportsQuestion:
+      title: ReportsQuestion
+      type: object
+      examples: []
+      properties:
+        type:
+          type: string
+        label:
+          type: any
+          default: {}
+        name:
+          type: string
+        defaultValue:
+          type: any
+        values:
+          type: any
+          default: {}
+        required:
+          type: boolean
+          default: false
+        order:
+          type: number
+        childQuestions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportsQuestionConditional'
+        conditions:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              value:
+                type: number
+      required:
+        - type
+        - label
+        - name
+        - values
+        - required
+    Report:
+      title: Report
+      type: object
+      examples: []
+      properties:
+        name:
+          type: any
+          default: {}
+        user:
+          type: string
+          description: ObjectId for User
+          readOnly: true
+        languages:
+          type: array
+          items: {}
+        defaultLanguage:
+          type: string
+        public:
+          type: boolean
+          default: false
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        status:
+          type: string
+          default: unpublished
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportsQuestion'
+      required:
+        - name
+        - user
+        - languages
+        - defaultLanguage
+        - public
+        - status
+    QuestionConditional:
+      title: QuestionConditional
+      type: object
+      examples:
+        - id: string
+          type: string
+          label: {}
+          name: string
+          defaultValue: null
+          values: {}
+          required: false
+          order: 0
+          conditionalValue: 0
+      properties:
+        id:
+          type: string
+          readOnly: true
+        type:
+          type: string
+        label:
+          type: any
+          default: {}
+        name:
+          type: string
+        defaultValue:
+          type: string
+        values:
+          type: array
+          default: []
+          items:
+            type: string
+        required:
+          type: boolean
+          default: false
+        order:
+          type: number
+        conditionalValue:
+          type: number
+      required:
+        - id
+        - type
+        - label
+        - name
+        - values
+        - required
+    Question:
+      title: Question
+      type: object
+      examples:
+        - id: string
+          type: string
+          label: {}
+          name: string
+          defaultValue: null
+          values: {}
+          required: false
+          order: 0
+          conditionalValue: 0
+      properties:
+        type:
+          type: string
+        label:
+          type: string
+        name:
+          type: string
+        defaultValue:
+          type: string
+        values:
+          type: array
+          default: []
+          items:
+            type: string
+        required:
+          type: boolean
+          default: false
+        order:
+          type: number
+        childQuestions:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestionConditional'
+        conditions:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              value:
+                type: string
+      required:
+        - type
+        - label
+        - name
+        - values
+        - required
+    Questionnaire:
+      title: Questionnaire
+      type: object
+      properties:
+        name:
+          type: string
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+        - name
+        - createdAt
+    AnswerResponse:
+      title: AnswerResponse
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        value:
+          type: string
+      required:
+        - name
+    Answer:
+      title: Answer
+      type: object
+      properties:
+        report:
+          type: string
+          description: Report ObjectId
+        reportName:
+          type: string
+        username:
+          type: string
+        organization:
+          type: string
+        areaOfInterest:
+          type: string
+          description: Area ObjectId
+        areaOfInterestName:
+          type: string
+        language:
+          type: string
+        userPosition:
+          type: array
+          items: {}
+        clickedPosition:
+          type: array
+          items: {}
+        startDate:
+          type: string
+        endDate:
+          type: string
+        layer:
+          type: string
+        user:
+          type: string
+          description: User ObjectId
+        responses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnswerResponse'
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+        - report
+        - reportName
+        - language
+        - user
+        - createdAt
+    Response:
+      title: Response
+      type: object
+      examples: []
+      properties:
+        questionnaire:
+          type: string
+          description: Questionnaire ObjectId
+          readOnly: true
+        user:
+          type: string
+          description: User ObjectId
+          readOnly: true
+        responses:
+          type: array
+          items:
+            type: object
+            properties:
+              question:
+                type: string
+              value:
+                type: string
+            required:
+              - question
+              - value
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+        - questionnaire
+        - user
+        - createdAt
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+  responses:
+    Error:
+      description: Error Response
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            properties:
+              errors:
+                type: array
+                uniqueItems: true
+                minItems: 1
+                items:
+                  required:
+                    - status
+                    - detail
+                  properties:
+                    status:
+                      type: number
+                    detail:
+                      type: string
+                      minLength: 1
+            required:
+              - errors
+          examples: {}
+    Questionnaire:
+      description: Questionnaire response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  type:
+                    type: string
+                  attributes:
+                    $ref: '#/components/schemas/Questionnaire'
+                required:
+                  - id
+                  - type
+          examples:
+            Questionnaire:
+              value:
+                data:
+                  id: string
+                  type: string
+                  attributes:
+                    name: string
+                    questions:
+                      - id: string
+                        type: string
+                        label: {}
+                        name: string
+                        defaultValue: null
+                        values: {}
+                        required: false
+                        order: 0
+                        conditionalValue: 0
+                    createdAt: '2019-08-24T14:15:22Z'
+    Questionnaires:
+      description: Questionnaires response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                    attributes:
+                      $ref: '#/components/schemas/Questionnaire'
+                  required:
+                    - id
+          examples:
+            Questionnaires:
+              value:
+                data:
+                  - id: string
+                    type: string
+                    attributes:
+                      name: string
+                      questions:
+                        - id: string
+                          type: string
+                          label: {}
+                          name: string
+                          defaultValue: null
+                          values: {}
+                          required: false
+                          order: 0
+                          conditionalValue: 0
+                      createdAt: '2019-08-24T14:15:22Z'
+    Answer:
+      description: Questionnaire Answer response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  type:
+                    type: string
+                  attributes:
+                    $ref: '#/components/schemas/Answer'
+          examples:
+            example-1:
+              value:
+                data:
+                  id: string
+                  type: string
+                  attributes:
+                    report: string
+                    reportName: string
+                    username: string
+                    organization: string
+                    areaOfInterest: string
+                    areaOfInterestName: string
+                    language: string
+                    userPosition:
+                      - null
+                    clickedPosition:
+                      - null
+                    startDate: string
+                    endDate: string
+                    layer: string
+                    user: string
+                    responses:
+                      - id: string
+                        name: string
+                        value: string
+                    createdAt: '2019-08-24T14:15:22Z'
+    Answers:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                    attributes:
+                      $ref: '#/components/schemas/Answer'
+          examples:
+            example-1:
+              value:
+                data:
+                  - id: string
+                    type: string
+                    attributes:
+                      report: string
+                      reportName: string
+                      username: string
+                      organization: string
+                      areaOfInterest: string
+                      areaOfInterestName: string
+                      language: string
+                      userPosition:
+                        - null
+                      clickedPosition:
+                        - null
+                      startDate: string
+                      endDate: string
+                      layer: string
+                      user: string
+                      responses:
+                        - id: string
+                          name: string
+                          value: string
+                      createdAt: '2019-08-24T14:15:22Z'
+    Report:
+      description: Report response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                required:
+                  - id
+                  - type
+                  - attributes
+                properties:
+                  id:
+                    type: string
+                  type:
+                    type: string
+                  attributes:
+                    $ref: '#/components/schemas/Report'
+            required:
+              - data
+          examples:
+            example-1:
+              value:
+                data:
+                  id: string
+                  type: string
+                  attributes:
+                    name: {}
+                    user: string
+                    languages:
+                      - null
+                    defaultLanguage: string
+                    public: false
+                    createdAt: '2019-08-24T14:15:22Z'
+                    status: unpublished
+                    questions:
+                      - id: string
+                        type: string
+                        label: {}
+                        name: string
+                        defaultValue: null
+                        values: {}
+                        required: false
+                        order: 0
+                        conditionalValue: 0
+    Reports:
+      description: Reports response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                    attributes:
+                      $ref: '#/components/schemas/Report'
+                  required:
+                    - id
+                    - type
+                    - attributes
+          examples:
+            example-1:
+              value:
+                data:
+                  - id: string
+                    type: string
+                    attributes:
+                      name: {}
+                      user: string
+                      languages:
+                        - null
+                      defaultLanguage: string
+                      public: false
+                      createdAt: '2019-08-24T14:15:22Z'
+                      status: unpublished
+                      questions:
+                        - id: string
+                          type: string
+                          label: {}
+                          name: string
+                          defaultValue: null
+                          values: {}
+                          required: false
+                          order: 0
+                          conditionalValue: 0
+    Response:
+      description: Response response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  type:
+                    type: string
+                  attributes:
+                    $ref: '#/components/schemas/Response'
+                required:
+                  - id
+                  - type
+                  - attributes
+          examples:
+            Response:
+              value:
+                data:
+                  id: string
+                  type: string
+                  attributes:
+                    questionnaire: string
+                    user: string
+                    responses:
+                      - question: string
+                        value: string
+                    createdAt: '2019-08-24T14:15:22Z'
+    Responses:
+      description: Responses response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                    attributes:
+                      $ref: '#/components/schemas/Response'
+          examples:
+            Responses:
+              value:
+                data:
+                  - id: string
+                    type: string
+                    attributes:
+                      questionnaire: string
+                      user: string
+                      responses:
+                        - question: string
+                          value: string
+                      createdAt: '2019-08-24T14:15:22Z'
+    Healthcheck:
+      description: Healthcheck response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              uptime:
+                type: number
+          examples: {}
+  requestBodies:
+    Questionnaire:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Questionnaire'
+          examples:
+            Questionnaire:
+              value:
+                name: string
+                questions:
+                  - id: string
+                    type: string
+                    label: {}
+                    name: string
+                    defaultValue: null
+                    values: {}
+                    required: false
+                    order: 0
+                    conditionalValue: 0
+                createdAt: '2019-08-24T14:15:22Z'
+    Answer:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Answer'
+          examples:
+            example-1:
+              value:
+                report: string
+                reportName: string
+                username: string
+                organization: string
+                areaOfInterest: string
+                areaOfInterestName: string
+                language: string
+                userPosition:
+                  - null
+                clickedPosition:
+                  - null
+                startDate: string
+                endDate: string
+                layer: string
+                user: string
+                responses:
+                  - id: string
+                    name: string
+                    value: string
+                createdAt: '2019-08-24T14:15:22Z'
+    Report:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Report'
+          examples:
+            Report:
+              value:
+                name: {}
+                user: string
+                languages:
+                  - null
+                defaultLanguage: string
+                public: false
+                createdAt: '2019-08-24T14:15:22Z'
+                status: unpublished
+                questions:
+                  - type: string
+                    label: {}
+                    name: string
+                    defaultValue: null
+                    values: {}
+                    required: false
+                    order: 0
+                    childQuestions:
+                      - type: string
+                        label: {}
+                        name: string
+                        defaultValue: null
+                        values: {}
+                        required: false
+                        order: 0
+                        conditionalValue: 0
+                    conditions:
+                      - name: string
+                        value: 0
+    Response:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Response'
+          examples: {}
+security:
+  - Authorization: []
