@@ -63,6 +63,11 @@ app.on("error", (err, ctx) => {
 });
 /** */
 
+app.use(function* cacheControl(next) {
+  yield* next;
+
+  this.set("Cache-Control", "private");
+});
 app.use(convert.back(cors()));
 app.use(koaLogger());
 app.use(koaBody);
