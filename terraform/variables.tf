@@ -17,7 +17,7 @@ variable "container_port" {
   default = 80
   type    = number
 }
-variable "log_level" {
+variable "logger_level" {
   type = string
 }
 variable "log_retention" {

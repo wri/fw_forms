@@ -76,6 +76,7 @@ data "template_file" "container_definition" {
     container_port = var.container_port
     container_name = var.project_prefix
     log_group      = aws_cloudwatch_log_group.default.name
+    logger_level   = var.logger_level
     db_secret_arn  = data.terraform_remote_state.core.outputs.document_db_secrets_arn
     # data_bucket = data.terraform_remote_state.fw_core.outputs.data_bucket
     google_private_key   = module.google_sheets_private_key.secret_arn
