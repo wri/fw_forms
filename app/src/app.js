@@ -44,8 +44,8 @@ const onDbReady = err => {
 mongoose.connect(mongoURL, onDbReady);
 
 const app = new koa();
-const _use = app.use
-app.use = x => _use.call(app, convert(x))
+const _use = app.use;
+app.use = x => _use.call(app, convert(x));
 
 /**
  * Sentry
