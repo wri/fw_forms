@@ -22,6 +22,7 @@ services:
       S3_SECRET_ACCESS_KEY: <key>
       S3_BUCKET: <key>
     volumes:
+      - ./app:/opt/gfw-forms-api/app
       - ./nodemon.json:/opt/gfw-forms-api/nodemon.json # Change NAME to the value of $NAME in the Dockerfile
     command: yarn dev
     depends_on:
@@ -55,7 +56,7 @@ services:
     restart: always
     networks:
       - gfw-forms-network
-      
+
   test:
     build: .
     container_name: fw-forms-test
