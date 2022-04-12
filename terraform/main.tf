@@ -83,7 +83,6 @@ data "template_file" "container_definition" {
     target_sheet_id      = var.target_sheet_id
     wri_mail_recipients  = var.wri_mail_recipients
 
-    node_path                 = var.node_path
     node_env                  = var.node_env
     mongo_port_27017_tcp_addr = data.terraform_remote_state.core.outputs.document_db_endpoint
     ct_url                    = var.ct_url

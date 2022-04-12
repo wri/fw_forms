@@ -1,6 +1,7 @@
 {
   "root": true,
-  "ignorePatterns": ["node_modules"],
+  "ignorePatterns": ["node_modules","dist"],
+  "parser": "@typescript-eslint/parser",
   "env": {
     "node": true,
     "commonjs": true,
@@ -8,10 +9,17 @@
     "mocha": true
   },
   "plugins": ["prettier", "mocha"],
-  "extends": ["eslint:recommended", "plugin:mocha/recommended", "prettier"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:mocha/recommended",
+    "prettier"
+  ],
   "rules": {
     // Allow Prettier to throw errors via ESLint
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    // To allow old commonjs modules to be used
+    "@typescript-eslint/no-var-requires": 0
   },
   "parserOptions": {
     "ecmaVersion": "2018",

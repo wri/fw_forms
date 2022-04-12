@@ -43,7 +43,9 @@ const onDbReady = err => {
 
 mongoose.connect(mongoURL, onDbReady);
 
-const app = koa();
+const app = new koa();
+const _use = app.use
+app.use = x => _use.call(app, convert(x))
 
 /**
  * Sentry
@@ -111,7 +113,9 @@ loader.loadRoutes(app);
 // In production environment, the port must be declared in environment variable
 const port = config.get("service.port");
 
-const server = app.listen(port, () => {});
+const server = app.listen(port, () => {
+  // do nothing for eslint
+});
 
 logger.info(`Server started in port:${port}`);
 

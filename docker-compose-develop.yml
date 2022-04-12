@@ -7,7 +7,6 @@ services:
     container_name: fw-forms-develop
     environment:
       PORT: 4401
-      NODE_PATH: app/src
       NODE_ENV: dev
       SUPPRESS_NO_CONFIG_WARNING: "true"
       MONGO_PORT_27017_TCP_ADDR: mongo
@@ -23,13 +22,14 @@ services:
       S3_SECRET_ACCESS_KEY: <key>
       S3_BUCKET: <key>
     volumes:
-      - ./app:/opt/gfw-forms-api/app
+      - ./nodemon.json:/opt/gfw-forms-api/nodemon.json # Change NAME to the value of $NAME in the Dockerfile
+    command: yarn dev
     depends_on:
       - mongo
     networks:
       - gfw-forms-network
       - gfw-network
-    command: node node_modules/.bin/grunt --gruntfile app/Gruntfile.js
+    #command: node node_modules/.bin/grunt --gruntfile app/Gruntfile.js
 
   docs:
     build: .
@@ -55,6 +55,31 @@ services:
     restart: always
     networks:
       - gfw-forms-network
+      
+  test:
+    build: .
+    container_name: fw-forms-test
+    environment:
+      PORT: 4400
+      NODE_ENV: test
+      SUPPRESS_NO_CONFIG_WARNING: "true"
+      MONGO_PORT_27017_TCP_ADDR: mongo
+      DB_SECRET: '{ "username": "admin", "password": "password" }'
+      DB_DATABASE: gfw_forms
+      CT_URL: http://127.0.0.1:9000
+      LOCAL_URL: http://127.0.0.1:4400
+      TEAMS_API_URL: http://127.0.0.1:9000
+      AREAS_API_URL: http://127.0.0.1:9000
+      WRI_MAIL_RECIPIENTS: <mails>
+      TARGET_SHEET_ID: <sheet>
+      S3_ACCESS_KEY_ID: <key>
+      S3_SECRET_ACCESS_KEY: <key>
+      S3_BUCKET: <key>
+    volumes:
+      - ./app:/opt/gfw-forms-api/app    # Change NAME to the value of $NAME in the Dockerfile
+      - ./nodemon.json:/opt/gfw-forms-api/nodemon.json
+      - ./jest.config.js:/opt/gfw-forms-api/jest.config.js
+    command: yarn test
 
 volumes:
   gfw-forms-mongodb-data:
