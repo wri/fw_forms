@@ -81,6 +81,8 @@ services:
       - ./nodemon.json:/opt/gfw-forms-api/nodemon.json
       - ./jest.config.js:/opt/gfw-forms-api/jest.config.js
     command: yarn test
+    depends_on:
+      - mongo
 
 volumes:
   gfw-forms-mongodb-data:
