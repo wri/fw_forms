@@ -1,3 +1,4 @@
+/* eslint-disable */
 const nock = require("nock");
 const chai = require("chai");
 const { getTestServer } = require("./utils/test-server");

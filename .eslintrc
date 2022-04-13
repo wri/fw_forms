@@ -6,14 +6,12 @@
     "node": true,
     "commonjs": true,
     "es6": true,
-    "mocha": true,
     "jest/globals": true
   },
-  "plugins": ["prettier", "mocha", "jest"],
+  "plugins": ["prettier", "jest"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:mocha/recommended",
     "plugin:jest/recommended",
     "prettier"
   ],
