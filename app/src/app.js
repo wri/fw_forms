@@ -114,9 +114,7 @@ loader.loadRoutes(app);
 const port = config.get("service.port");
 
 const server = app.listen(port, () => {
-  // do nothing for eslint
+  logger.info(`Server started in port:${port}`);
 });
-
-logger.info(`Server started in port:${port}`);
 
 module.exports = server;
