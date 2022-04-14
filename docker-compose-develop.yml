@@ -60,7 +60,7 @@ services:
     build: .
     container_name: fw-forms-test
     environment:
-      PORT: 4400
+      PORT: 0
       NODE_ENV: test
       SUPPRESS_NO_CONFIG_WARNING: "true"
       MONGO_PORT_27017_TCP_ADDR: mongo
