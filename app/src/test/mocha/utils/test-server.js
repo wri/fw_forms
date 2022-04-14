@@ -1,3 +1,4 @@
+/* eslint-disable */
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 
@@ -10,7 +11,7 @@ exports.getTestServer = async function getTestServer() {
     return requester;
   }
 
-  const server = require("../../../src/app");
+  const server = require("../../../app");
   requester = chai.request(server).keepOpen();
 
   return requester;
