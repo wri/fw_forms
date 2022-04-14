@@ -5,6 +5,7 @@
 
 .tsc-btn {
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-size: 0.9rem;
     padding: 0.5rem 1rem;
     margin-right: 0.5rem;
     border-radius: 5px;
@@ -17,4 +18,8 @@
 
 .tsc-btn:active, .tsc-btn.active {
     background-color: #799828;
+}
+
+#view-raw {
+    margin-left: auto;
 }

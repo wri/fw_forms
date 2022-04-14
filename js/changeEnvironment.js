@@ -1,5 +1,6 @@
 (doc => {
   const DOCS_SELECTOR = "#docs";
+  const RAW_LINK_SELECTOR  = "#view-raw";
   const ENV = [
     {
       selector: "#switch-prod",
@@ -15,7 +16,7 @@
     }
   ];
 
-  let activeSwitch;
+  let activeSwitch, viewRawLink;
   const activateSwitch = selector => {
     if (activeSwitch) {
       activeSwitch.classList.remove("active");
@@ -29,9 +30,12 @@
     activateSwitch(env.selector);
     docs.apiDescriptionDocument = "";
     docs.apiDescriptionDocument = await fetch(env.docsURL).then(res => res.text());
+    viewRawLink.href = env.docsURL;
   };
 
   const init = () => {
+    viewRawLink = doc.querySelector(RAW_LINK_SELECTOR);
+
     ENV.forEach((env) => {
       const switcher = doc.querySelector(env.selector);
 
