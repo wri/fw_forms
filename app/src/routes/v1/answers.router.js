@@ -8,6 +8,7 @@ const ReportsModel = require("models/reportsModel");
 const s3Service = require("services/s3Service");
 const { ObjectId } = require("mongoose").Types;
 const config = require("config");
+const convert = require("koa-convert");
 
 const router = new Router({
   prefix: "/reports/:reportId/answers"
@@ -240,10 +241,28 @@ function* mapTemplateParamToId(next) {
   yield next;
 }
 
-router.post("/", mapTemplateParamToId, loggedUserToState, reportPermissions, AnswersRouter.save);
-router.patch("/:id", mapTemplateParamToId, loggedUserToState, AnswersRouter.update);
-router.get("/", mapTemplateParamToId, loggedUserToState, reportPermissions, queryToState, AnswersRouter.getAll);
-router.get("/:id", mapTemplateParamToId, loggedUserToState, queryToState, AnswersRouter.get);
-router.delete("/:id", mapTemplateParamToId, loggedUserToState, AnswersRouter.delete);
+router.post(
+  "/",
+  convert(mapTemplateParamToId),
+  convert(loggedUserToState),
+  convert(reportPermissions),
+  convert(AnswersRouter.save)
+);
+router.patch("/:id", convert(mapTemplateParamToId), convert(loggedUserToState), convert(AnswersRouter.update));
+router.get(
+  "/",
+  convert(mapTemplateParamToId),
+  convert(loggedUserToState),
+  convert(reportPermissions),
+  convert(queryToState, AnswersRouter.getAll)
+);
+router.get(
+  "/:id",
+  convert(mapTemplateParamToId),
+  convert(loggedUserToState),
+  convert(queryToState),
+  convert(AnswersRouter.get)
+);
+router.delete("/:id", convert(mapTemplateParamToId), convert(loggedUserToState), convert(AnswersRouter.delete));
 
 module.exports = router;
