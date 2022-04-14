@@ -6,6 +6,7 @@ const QuestionnaireValidator = require("validators/questionnaireValidator");
 const AnswerModel = require("models/answerModel");
 const passThrough = require("stream").PassThrough;
 const json2csv = require("json2csv");
+const convert = require("koa-convert");
 
 const router = new Router({
   prefix: "/questionnaire"
@@ -140,11 +141,22 @@ function* checkAdmin(next) {
   yield next;
 }
 
-router.post("/", loggedUserToState, QuestionnaireValidator.create, QuestionnaireRouter.save);
-router.patch("/:id", loggedUserToState, checkPermission, QuestionnaireValidator.update, QuestionnaireRouter.update);
-router.get("/", loggedUserToState, QuestionnaireRouter.getAll);
-router.get("/:id", loggedUserToState, QuestionnaireRouter.get);
-router.delete("/:id", loggedUserToState, checkPermission, QuestionnaireRouter.delete);
-router.get("/:id/download-answers", loggedUserToState, checkAdmin, QuestionnaireRouter.downloadAnswers);
+router.post("/", convert(loggedUserToState), convert(QuestionnaireValidator.create), convert(QuestionnaireRouter.save));
+router.patch(
+  "/:id",
+  convert(loggedUserToState),
+  convert(checkPermission),
+  convert(QuestionnaireValidator.update),
+  convert(QuestionnaireRouter.update)
+);
+router.get("/", convert(loggedUserToState), convert(QuestionnaireRouter.getAll));
+router.get("/:id", convert(loggedUserToState), convert(QuestionnaireRouter.get));
+router.delete("/:id", convert(loggedUserToState), convert(checkPermission), convert(QuestionnaireRouter.delete));
+router.get(
+  "/:id/download-answers",
+  convert(loggedUserToState),
+  convert(checkAdmin),
+  convert(QuestionnaireRouter.downloadAnswers)
+);
 
 module.exports = router;

@@ -462,13 +462,43 @@ function* queryToState(next) {
 }
 
 // check permission must be added at some point
-router.post("/", loggedUserToState, ReportsValidator.create, ReportsRouter.save);
-router.patch("/:id", mapTemplateParamToId, loggedUserToState, ReportsValidator.patch, ReportsRouter.patch);
+router.post("/", convert(loggedUserToState), convert(ReportsValidator.create), convert(ReportsRouter.save));
+router.patch(
+  "/:id",
+  convert(mapTemplateParamToId),
+  convert(loggedUserToState),
+  convert(ReportsValidator.patch),
+  convert(ReportsRouter.patch)
+);
 router.get("/", convert(loggedUserToState), convert(queryToState), convert(ReportsRouter.getAll));
-router.get("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsRouter.get);
-router.put("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsValidator.create, ReportsRouter.put);
-router.delete("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsRouter.delete);
-router.get("/:id/download-answers", mapTemplateParamToId, loggedUserToState, ReportsRouter.downloadAnswers);
+router.get(
+  "/:id",
+  convert(mapTemplateParamToId),
+  convert(loggedUserToState),
+  convert(queryToState),
+  convert(ReportsRouter.get)
+);
+router.put(
+  "/:id",
+  convert(mapTemplateParamToId),
+  convert(loggedUserToState),
+  convert(queryToState),
+  convert(ReportsValidator.create),
+  convert(ReportsRouter.put)
+);
+router.delete(
+  "/:id",
+  convert(mapTemplateParamToId),
+  convert(loggedUserToState),
+  convert(queryToState),
+  convert(ReportsRouter.delete)
+);
+router.get(
+  "/:id/download-answers",
+  convert(mapTemplateParamToId),
+  convert(loggedUserToState),
+  convert(ReportsRouter.downloadAnswers)
+);
 router.get("/fail", function () {
   this.throw(500, "Test Fail");
 });
