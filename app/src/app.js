@@ -65,7 +65,7 @@ app.on("error", (err, ctx) => {
 });
 /** */
 
-app.use(convert.back(cors()));
+app.use(cors());
 app.use(koaLogger());
 app.use(koaBody);
 
@@ -99,12 +99,10 @@ app.use(function* handleErrors(next) {
   this.response.type = "application/vnd.api+json";
 });
 
-app.use(
-  convert.back(async (ctx, next) => {
-    await loggedInUserService.setLoggedInUser(ctx, logger);
-    await next();
-  })
-);
+app.use(async (ctx, next) => {
+  await loggedInUserService.setLoggedInUser(ctx, logger);
+  await next();
+});
 
 // load routes
 loader.loadRoutes(app);

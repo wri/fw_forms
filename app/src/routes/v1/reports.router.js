@@ -1,6 +1,7 @@
 const axios = require("axios");
 const Router = require("koa-router");
 const logger = require("logger");
+const convert = require("koa-convert");
 const ReportsSerializer = require("serializers/reportsSerializer");
 const ReportsModel = require("models/reportsModel");
 const ReportsValidator = require("validators/reportsValidator");
@@ -463,7 +464,7 @@ function* queryToState(next) {
 // check permission must be added at some point
 router.post("/", loggedUserToState, ReportsValidator.create, ReportsRouter.save);
 router.patch("/:id", mapTemplateParamToId, loggedUserToState, ReportsValidator.patch, ReportsRouter.patch);
-router.get("/", loggedUserToState, queryToState, ReportsRouter.getAll);
+router.get("/", convert(loggedUserToState), convert(queryToState), convert(ReportsRouter.getAll));
 router.get("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsRouter.get);
 router.put("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsValidator.create, ReportsRouter.put);
 router.delete("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsRouter.delete);
