@@ -69,10 +69,7 @@ class AnswersService {
     // Admin users and owners of the report can check all answers
     if (loggedUser.role === "ADMIN" || loggedUser.id === template.user) {
       filter = {
-        $and: [
-          { report: new ObjectId(reportId) },
-          { areaOfInterest: areaId }
-        ]
+        $and: [{ report: new ObjectId(reportId) }, { areaOfInterest: areaId }]
       };
     } else if (currentManager && template.public) {
       // managers can check all answers from the default template from his and his team's members
@@ -103,8 +100,6 @@ class AnswersService {
     }
     return yield AnswersModel.find(filter);
   }
-
-
 }
 
 module.exports = AnswersService;

@@ -36,7 +36,7 @@ class AnswersRouter {
   }
 
   static *getArea() {
-    console.log("getting area")
+    console.log("getting area");
     logger.info(`Obtaining answers for report ${this.params.reportId} for area ${this.params.areaId}`);
 
     const template = yield ReportsModel.findOne({ _id: this.params.reportId });
