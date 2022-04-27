@@ -35,7 +35,7 @@ const Report = new Schema({
   name: { type: Schema.Types.Mixed, required: true, default: {} },
   user: { type: ObjectId, required: true },
   languages: { type: Array, required: true, default: false },
-  defaultLanguage: { type: String, required: true, trim: true },
+  defaultLanguage: { type: String, required: true, trim: true, default: "en" },
   public: { type: Boolean, required: true, default: false },
   createdAt: { type: Date, required: true, default: Date.now },
   status: {

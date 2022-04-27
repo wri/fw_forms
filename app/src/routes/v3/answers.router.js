@@ -35,6 +35,28 @@ class AnswersRouter {
     this.body = AnswersSerializer.serialize(answers);
   }
 
+  static *getArea() {
+    console.log("getting area")
+    logger.info(`Obtaining answers for report ${this.params.reportId} for area ${this.params.areaId}`);
+
+    const template = yield ReportsModel.findOne({ _id: this.params.reportId });
+
+    const answers = yield AnswersService.filterAnswersByArea({
+      template,
+      reportId: this.params.reportId,
+      loggedUser: this.state.loggedUser,
+      team: this.state.team,
+      query: this.state.query,
+      areaId: this.params.areaId
+    });
+
+    if (!answers) {
+      this.throw(404, "Answers not found with these permissions");
+      return;
+    }
+    this.body = AnswersSerializer.serialize(answers);
+  }
+
   static *get() {
     logger.info(`Obtaining answer ${this.params.id} for report ${this.params.reportId}`);
     let filter = {};
@@ -254,7 +276,16 @@ router.get(
   convert(mapTemplateParamToId),
   convert(loggedUserToState),
   convert(reportPermissions),
-  convert(queryToState, AnswersRouter.getAll)
+  convert(queryToState),
+  convert(AnswersRouter.getAll)
+);
+router.get(
+  "/area/:areaId",
+  convert(mapTemplateParamToId),
+  convert(loggedUserToState),
+  convert(reportPermissions),
+  convert(queryToState),
+  convert(AnswersRouter.getArea)
 );
 router.get(
   "/:id",

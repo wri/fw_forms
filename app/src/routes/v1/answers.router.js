@@ -254,7 +254,8 @@ router.get(
   convert(mapTemplateParamToId),
   convert(loggedUserToState),
   convert(reportPermissions),
-  convert(queryToState, AnswersRouter.getAll)
+  convert(queryToState),
+  convert(AnswersRouter.getAll)
 );
 router.get(
   "/:id",

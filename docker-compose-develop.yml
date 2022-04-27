@@ -12,7 +12,7 @@ services:
       MONGO_PORT_27017_TCP_ADDR: mongo
       DB_SECRET: '{ "username": "admin", "password": "password" }'
       DB_DATABASE: gfw_forms
-      CT_URL: https://api.resourcewatch.org
+      CT_URL: https://staging-api.resourcewatch.org
       LOCAL_URL: http://127.0.0.1:4401
       TEAMS_API_URL: http://fw-teams-develop:3035/api/v1
       AREAS_API_URL: https://api.resourcewatch.org
@@ -79,9 +79,12 @@ services:
       - ./app:/opt/gfw-forms-api/app
       - ./nodemon.json:/opt/gfw-forms-api/nodemon.json
       - ./jest.config.js:/opt/gfw-forms-api/jest.config.js
-    command: yarn test
+    command: yarn test:jest --runInBand
     depends_on:
       - mongo
+    networks:
+      - gfw-forms-network
+      - gfw-network
 
 volumes:
   gfw-forms-mongodb-data:

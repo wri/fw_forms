@@ -499,8 +499,5 @@ router.get(
   convert(loggedUserToState),
   convert(ReportsRouter.downloadAnswers)
 );
-router.get("/fail", function () {
-  this.throw(500, "Test Fail");
-});
 
 module.exports = router;
