@@ -45,12 +45,7 @@ describe("Get answers filtered by area tests", function () {
     const report = await createReport({ user: ROLES.USER.id, public: true, defaultLanguage: 'en' });
     const answerOne = await createAnswer({ user: ROLES.USER.id, areaOfInterest: areaId1, report: report._id, reportName: report.name });
     const answerTwo = await createAnswer({ user: ROLES.USER.id, areaOfInterest: areaId1, report: report._id, reportName: report.name });
-    const answerThree = await createAnswer({ user: ROLES.USER.id, areaOfInterest: areaId2, report: report._id, reportName: report.name });
-
-    console.log("report", report);
-    console.log("answerOne", answerOne);
-    console.log("answerTwo", answerTwo);
-    console.log("answerThree", answerThree);
+    await createAnswer({ user: ROLES.USER.id, areaOfInterest: areaId2, report: report._id, reportName: report.name });
 
     const response = await requester
       .get(`/v3/reports/${report._id}/answers/area/${areaId1}`)
@@ -60,8 +55,6 @@ describe("Get answers filtered by area tests", function () {
     response.status.should.equal(200);
     response.body.should.have.property("data");
     response.body.data.should.be.an("array").and.length(2);
-
-    console.log("response body is", response.body.data)
 
     const responseAnswerOne = response.body.data[0];
     const responseAnswerTwo = response.body.data[1];
