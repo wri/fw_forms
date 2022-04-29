@@ -14,7 +14,7 @@ class AreaService {
         headers: {
           authorization: loggedInUserService.token
         },
-        data: {templateId}
+        data: { templateId }
       });
     } catch (e) {
       logger.info("Failed to delete relations");

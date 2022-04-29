@@ -196,7 +196,7 @@ class ReportsRouter {
     logger.info(`Deleting report with id ${this.params.id}...`);
 
     // remove all area - template relations
-    yield AreaService.deleteTemplateAreaRelations(this.params.id)
+    yield AreaService.deleteTemplateAreaRelations(this.params.id);
 
     // finally remove template
     const query = {
