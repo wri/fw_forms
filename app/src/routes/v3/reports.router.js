@@ -102,33 +102,6 @@ class ReportsRouter {
       status: request.status
     }).save();
 
-    // PATCH templateId onto area
-    // Remove report if PATCH fails
-    if (request.areaOfInterest) {
-      const reportId = report._id.toString();
-      try {
-        let baseURL = config.get("areaAPI.url");
-        yield axios.default({
-          baseURL,
-          url: `/area/${request.areaOfInterest}`,
-          method: "PATCH",
-          headers: {
-            authorization: loggedInUserService.token
-          },
-          data: {
-            templateId: reportId,
-            userId: this.state.loggedUser.id
-          }
-        });
-      } catch (e) {
-        yield ReportsModel.remove({ _id: reportId });
-        logger.error("request to microservice failed");
-        logger.error(e);
-        this.throw(500, "Error creating templates: patch to area failed");
-        return;
-      }
-    }
-
     this.body = ReportsSerializer.serialize(report);
   }
 
@@ -199,58 +172,6 @@ class ReportsRouter {
       report.public = request.public;
     }
 
-    // PATCH templateId onto area
-    // Remove report if PATCH fails
-    if (request.areaOfInterest !== request.oldAreaOfInterest) {
-      // remove old area
-      if (request.oldAreaOfInterest) {
-        logger.info(`PATCHing old area of interest ${request.oldAreaOfInterest}...`);
-        try {
-          let baseURL = config.get("areaAPI.url");
-          yield axios.default({
-            baseURL,
-            url: `/area/${request.oldAreaOfInterest}`,
-            method: "PATCH",
-            headers: {
-              authorization: loggedInUserService.token
-            },
-            data: {
-              templateId: null,
-              userId: this.state.loggedUser.id
-            }
-          });
-        } catch (e) {
-          logger.error(e);
-          this.throw(500, "PATCHing old area failed");
-          return;
-        }
-      }
-
-      // PATCH new area
-      if (request.areaOfInterest) {
-        logger.info(`PATCHing new area of interest ${request.oldAreaOfInterest}...`);
-        try {
-          let baseURL = config.get("areaAPI.url");
-          yield axios.default({
-            baseURL,
-            url: `/area/${request.areaOfInterest}`,
-            method: "PATCH",
-            headers: {
-              authorization: loggedInUserService.token
-            },
-            data: {
-              templateId: this.params.id,
-              userId: this.state.loggedUser.id
-            }
-          });
-        } catch (e) {
-          logger.error(e);
-          this.throw(500, "PATCHing new area failed");
-          return;
-        }
-      }
-    }
-
     // add answers count to return and updated date
     const answers = yield AnswersModel.count({
       report: new ObjectId(this.params.id)
@@ -275,32 +196,6 @@ class ReportsRouter {
     }
     logger.info(`Report has no answers.`);
     logger.info(`Deleting report with id ${this.params.id}...`);
-    if (aoi !== null) {
-      for (let i = 0; i < aoi.length; i++) {
-        logger.info(`PATCHing area ${aoi[i]} to remove template association...`);
-        try {
-          let baseURL = config.get("areaAPI.url");
-          yield axios.default({
-            baseURL,
-            url: `/area/${aoi[i]}`,
-            method: "PATCH",
-            headers: {
-              authorization: loggedInUserService.token
-            },
-            data: {
-              templateId: null,
-              userId: this.state.loggedUser.id
-            }
-          });
-          logger.info(`Area ${aoi[i]} patched.`);
-        } catch (e) {
-          logger.error(e);
-          this.throw(500, e);
-          return;
-        }
-      }
-      logger.info("Areas patched. Removing template...");
-    }
 
     // finally remove template
     const query = {
