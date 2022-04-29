@@ -28,7 +28,7 @@ describe("Get answers filtered by area tests", function () {
   });
 
   it('Get answers as an anonymous user should return an "Not logged" error with matching 401 HTTP code', async function () {
-    const response = await requester.get(`/v3/reports/1/answers`).send();
+    const response = await requester.get(`/v1/reports/1/answers`).send();
 
     response.status.should.equal(401);
     response.body.should.have.property("errors").and.be.an("array").and.length(1);
