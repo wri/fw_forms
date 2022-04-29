@@ -11,6 +11,7 @@ const passThrough = require("stream").PassThrough;
 const { ObjectId } = require("mongoose").Types;
 const config = require("config");
 const CSV = require("services/csvService");
+const AreaService = require("../../services/areaService");
 
 const router = new Router({
   prefix: "/reports"
@@ -193,6 +194,9 @@ class ReportsRouter {
     }
     logger.info(`Report has no answers.`);
     logger.info(`Deleting report with id ${this.params.id}...`);
+
+    // remove all area - template relations
+    yield AreaService.deleteTemplateAreaRelations(this.params.id)
 
     // finally remove template
     const query = {
