@@ -1,4 +1,3 @@
-const axios = require("axios");
 const Router = require("koa-router");
 const logger = require("logger");
 const convert = require("koa-convert");
@@ -12,7 +11,6 @@ const passThrough = require("stream").PassThrough;
 const { ObjectId } = require("mongoose").Types;
 const config = require("config");
 const CSV = require("services/csvService");
-const loggedInUserService = require("services/LoggedInUserService");
 
 const router = new Router({
   prefix: "/reports"
@@ -185,7 +183,6 @@ class ReportsRouter {
 
   static *delete() {
     const { role } = this.state.loggedUser;
-    const aoi = this.state.query && this.state.query.aoi !== null ? this.state.query.aoi.split(",") : null;
     logger.info(`Checking report for answers...`);
     const answers = yield AnswersModel.count({
       report: new ObjectId(this.params.id)
