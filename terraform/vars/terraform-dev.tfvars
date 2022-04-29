@@ -11,6 +11,7 @@ wri_mail_recipients       = "owen@3sidedcube.com,edward@3sidedcube.com,ben.sherr
 node_env                  = "dev"
 ct_url                    = "https://staging-api.resourcewatch.org"
 areas_api_url             = "https://gfw-staging.globalforestwatch.org/v1"
+api_api_url               = "https://dev-fw-api.globalforestwatch.org/v3/forest-watcher"
 s3_access_key_id          = "overridden_in_github_secrets"
 s3_secret_access_key      = "overridden_in_github_secrets"
 s3_bucket                 = "forest-watcher-files"

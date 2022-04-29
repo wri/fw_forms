@@ -16,6 +16,7 @@ services:
       LOCAL_URL: http://127.0.0.1:4401
       TEAMS_API_URL: http://fw-teams-develop:3035/api/v1
       AREAS_API_URL: https://api.resourcewatch.org
+      API_API_URL: https://dev-fw-api.globalforestwatch.org/v3/forest-watcher
       WRI_MAIL_RECIPIENTS: <mails>
       TARGET_SHEET_ID: <sheet>
       S3_ACCESS_KEY_ID: <key>
@@ -70,6 +71,7 @@ services:
       LOCAL_URL: http://127.0.0.1:4400
       TEAMS_API_URL: http://127.0.0.1:9000
       AREAS_API_URL: http://127.0.0.1:9000
+      API_API_URL: https://dev-fw-api.globalforestwatch.org/v3/forest-watcher
       WRI_MAIL_RECIPIENTS: <mails>
       TARGET_SHEET_ID: <sheet>
       S3_ACCESS_KEY_ID: <key>
