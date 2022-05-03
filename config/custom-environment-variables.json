@@ -26,5 +26,8 @@
   },
   "areaAPI": {
     "url": "AREAS_API_URL"
+  },
+  "apiAPI": {
+    "url": "API_API_URL"
   }
 }

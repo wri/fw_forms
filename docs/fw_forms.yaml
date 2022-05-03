@@ -3,37 +3,14 @@ info:
   title: fw_forms
   version: '1.0'
 servers:
-  - url: 'https://api.resourcewatch.org/v1'
+  - url: 'https://api.resourcewatch.org'
     description: Production
-  - url: 'https://gfw-staging.globalforestwatch.org/v1'
+  - url: 'https://gfw-staging.globalforestwatch.org'
     description: Staging
-  - url: 'http://localhost:4401/v1'
+  - url: 'http://localhost:4401'
     description: Local
 paths:
-  /reports:
-    get:
-      summary: Get all reports
-      tags:
-        - Reports
-      responses:
-        '200':
-          $ref: '#/components/responses/Reports'
-        '401':
-          $ref: '#/components/responses/Error'
-      operationId: get-all-reports
-    post:
-      summary: Create a report
-      operationId: post-report
-      responses:
-        '200':
-          $ref: '#/components/responses/Report'
-        '400':
-          $ref: '#/components/responses/Error'
-        '401':
-          $ref: '#/components/responses/Error'
-      tags:
-        - Reports
-  '/reports/{reportId}':
+  '/v1/reports/{reportId}':
     get:
       summary: Get report
       tags:
@@ -92,7 +69,31 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Reports
-  '/reports/{reportId}/download-answers':
+  /v1/reports:
+    get:
+      summary: Get all reports
+      tags:
+        - Reports
+      responses:
+        '200':
+          $ref: '#/components/responses/Reports'
+        '401':
+          $ref: '#/components/responses/Error'
+      operationId: get-all-reports
+    post:
+      summary: Create a report
+      operationId: post-report
+      responses:
+        '200':
+          $ref: '#/components/responses/Report'
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+      tags:
+        - Reports
+    parameters: []
+  '/v1/reports/{reportId}/download-answers':
     get:
       summary: Get report csv
       responses:
@@ -117,7 +118,7 @@ paths:
         name: reportId
         in: path
         required: true
-  '/reports/{reportId}/answers':
+  '/v1/reports/{reportId}/answers':
     parameters:
       - schema:
           type: string
@@ -150,7 +151,32 @@ paths:
       description: ''
       tags:
         - Answers
-  '/reports/{reportId}/answers/{id}':
+  '/v3/reports/{reportId}/answers/area/{areaId}':
+    parameters:
+      - schema:
+          type: string
+        name: reportId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: areaId
+        in: path
+        required: true
+    get:
+      summary: v3 Get all answers for given report and given area
+      tags:
+        - Answers
+      responses:
+        '200':
+          $ref: '#/components/responses/Answers'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      operationId: get-answers-for-report
+      description: ''
+  '/v1/reports/{reportId}/answers/{id}':
     parameters:
       - schema:
           type: string
@@ -197,7 +223,7 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Answers
-  /questionnaire:
+  /v1/questionnaire:
     get:
       summary: Get all questionnaires
       responses:
@@ -219,7 +245,7 @@ paths:
       tags:
         - Questionnaires
     parameters: []
-  '/questionnaire/{id}':
+  '/v1/questionnaire/{id}':
     get:
       summary: Get questionnaire
       tags:
@@ -263,7 +289,7 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Questionnaires
-  '/questionnaire/{id}/download-answers':
+  '/v1/questionnaire/{id}/download-answers':
     get:
       summary: Get questionnaire csv
       tags:
@@ -288,7 +314,7 @@ paths:
         name: id
         in: path
         required: true
-  '/questionnaire/{questionnaireId}/answer':
+  '/v1/questionnaire/{questionnaireId}/answer':
     get:
       summary: Get all answers for a questionnaire
       tags:
@@ -321,7 +347,7 @@ paths:
       description: ''
       tags:
         - QuestionnairesAnswers
-  '/questionnaire/{questionnaireId}/answer/{id}':
+  '/v1/questionnaire/{questionnaireId}/answer/{id}':
     get:
       summary: Get answers for a given questionnaire
       tags:
@@ -370,7 +396,7 @@ paths:
       description: ''
       tags:
         - QuestionnairesAnswers
-  /fw_forms/healthcheck:
+  /v1/fw_forms/healthcheck:
     get:
       summary: Healthcheck
       tags: []
@@ -379,6 +405,7 @@ paths:
           $ref: '#/components/responses/Healthcheck'
       operationId: get-fw_forms-healthcheck
       security: []
+    parameters: []
 components:
   schemas:
     ReportsQuestionConditional:
