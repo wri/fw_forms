@@ -12,7 +12,7 @@ router.get(
   koaSimpleHealthCheck({
     test: function () {
       if (mongoose.connection.readyState !== 1) {
-        const error = new Error("Not connected to the database");
+        const error = new Error(`Not connected to the database ${mongoose.connection.readyState}`);
         logger.error(error);
         return { error: error.message };
       }
