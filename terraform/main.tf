@@ -90,7 +90,7 @@ data "template_file" "container_definition" {
     teams_api_url             = "https://${data.terraform_remote_state.fw_core.outputs.public_url}/v1"
     v3_teams_api_url          = "https://${data.terraform_remote_state.fw_core.outputs.public_url}/v3"
     areas_api_url             = var.areas_api_url
-    api_api_url               = var.api_api_url
+    api_api_url               = "https://${data.terraform_remote_state.fw_core.outputs.public_url}/v3/forest-watcher"    
     s3_access_key_id          = var.s3_access_key_id
     s3_secret_access_key      = var.s3_secret_access_key
     s3_bucket                 = var.s3_bucket

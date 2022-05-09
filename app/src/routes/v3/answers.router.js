@@ -8,8 +8,8 @@ const AnswersModel = require("../../models/answersModel");
 const { ObjectId } = require("mongoose").Types;
 const config = require("config");
 const convert = require("koa-convert");
-const AreaService = require("../../services/areaService");
-const V3TeamService = require("../../services/v3TeamService");
+const AreaService = require("services/areaService");
+const V3TeamService = require("services/v3TeamService");
 
 const router = new Router({
   prefix: "/reports/:reportId/answers"
@@ -66,7 +66,7 @@ class AnswersRouter {
       return;
     }
 
-    const result = yield AnswersModel.findOneAndRemove({ _id: this.params.id });
+    const result = yield AnswersModel.findByIdAndRemove(this.params.id);
     if (!result || !result._id) {
       this.throw(404, "Answer not found");
       return;
