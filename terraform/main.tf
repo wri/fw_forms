@@ -88,6 +88,7 @@ data "template_file" "container_definition" {
     ct_url                    = var.ct_url
     local_url                 = "http://127.0.0.1:${var.container_port}"
     teams_api_url             = "https://${data.terraform_remote_state.fw_core.outputs.public_url}/v1"
+    v3_teams_api_url          = "https://${data.terraform_remote_state.fw_core.outputs.public_url}/v3"
     areas_api_url             = var.areas_api_url
     api_api_url               = var.api_api_url
     s3_access_key_id          = var.s3_access_key_id

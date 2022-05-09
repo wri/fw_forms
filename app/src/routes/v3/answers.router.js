@@ -4,9 +4,12 @@ const AnswersSerializer = require("serializers/answersSerializer");
 const AnswersService = require("services/answersService");
 const TeamService = require("services/teamService");
 const ReportsModel = require("models/reportsModel");
+const AnswersModel = require("../../models/answersModel");
 const { ObjectId } = require("mongoose").Types;
 const config = require("config");
 const convert = require("koa-convert");
+const AreaService = require("../../services/areaService");
+const V3TeamService = require("../../services/v3TeamService");
 
 const router = new Router({
   prefix: "/reports/:reportId/answers"
@@ -32,6 +35,44 @@ class AnswersRouter {
       return;
     }
     this.body = AnswersSerializer.serialize(answers);
+  }
+
+  static *delete() {
+    logger.info(`Deleting answer with id ${this.params.id}`);
+    // only the answer creator OR a manager for the area can delete the answer
+    let permitted = false;
+    // get the answer
+    const answer = yield AnswersModel.findById(this.params.id);
+    if (answer.user.toString() === this.state.loggedUser.id.toString()) permitted = true;
+    else {
+      // get associated teams of answer area
+      const areaTeams = yield AreaService.getAreaTeams(answer.areaOfInterest);
+      // get teams the user is part of
+      const userTeams = yield V3TeamService.getUserTeams(this.state.loggedUser.id);
+
+      // create array user is manager of
+      const managerTeams = [];
+      userTeams.forEach(userTeam => {
+        if (userTeam.attributes.userRole === "manager" || userTeam.attributes.userRole === "administrator")
+          managerTeams.push(userTeam.id.toString());
+      });
+      // create an array of teams in which the team is associated with the area AND the user is a manager of
+      const managerArray = areaTeams.filter(areaTeamId => managerTeams.includes(areaTeamId.toString()));
+      if (managerArray.length > 0) permitted = true;
+    }
+
+    if (!permitted) {
+      this.throw(401, "You are not authorised to delete this record");
+      return;
+    }
+
+    const result = yield AnswersModel.findOneAndRemove({ _id: this.params.id });
+    if (!result || !result._id) {
+      this.throw(404, "Answer not found");
+      return;
+    }
+    this.body = "";
+    this.status = 204;
   }
 }
 
@@ -115,5 +156,7 @@ router.get(
   convert(queryToState),
   convert(AnswersRouter.getArea)
 );
+
+router.delete("/:id", convert(mapTemplateParamToId), convert(loggedUserToState), convert(AnswersRouter.delete));
 
 module.exports = router;

@@ -8,6 +8,7 @@ const { ROLES } = require("./utils/test.constants");
 const { getTestServer } = require("./utils/test-server");
 const AnswersModel = require("models/answersModel");
 const { ObjectId } = require("mongoose").Types;
+const config = require("config");
 
 chai.should();
 

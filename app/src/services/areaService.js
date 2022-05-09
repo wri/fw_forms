@@ -21,6 +21,26 @@ class AreaService {
     }
     return Promise.resolve();
   }
+
+  static async getAreaTeams(areaId) {
+    let teams = [];
+    try {
+      const baseURL = config.get("apiAPI.url");
+      const response = await axios.default({
+        baseURL,
+        url: `/area/areaTeams/${areaId}`,
+        method: "GET",
+        headers: {
+          authorization: loggedInUserService.token
+        }
+      });
+      teams = response.data;
+    } catch (e) {
+      logger.info("Failed to get teams");
+    }
+
+    return Promise.resolve(teams);
+  }
 }
 
 module.exports = AreaService;
