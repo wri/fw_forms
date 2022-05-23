@@ -174,7 +174,7 @@ paths:
           $ref: '#/components/responses/Error'
         '404':
           $ref: '#/components/responses/Error'
-      operationId: get-answers-for-report
+      operationId: get-answers-for-report-and-area
       description: ''
   '/v1/reports/{reportId}/answers/{id}':
     parameters:
