@@ -1,8 +1,7 @@
 const Router = require("koa-router");
 const logger = require("logger");
 const AnswersSerializer = require("serializers/answersSerializer");
-const AnswersService = require("services/answersService");
-const TeamService = require("services/teamService");
+const V3AnswersService = require("services/v3AnswersService");
 const ReportsModel = require("models/reportsModel");
 const AnswersModel = require("../../models/answersModel");
 const { ObjectId } = require("mongoose").Types;
@@ -19,13 +18,16 @@ class AnswersRouter {
   static *getArea() {
     logger.info(`Obtaining answers for report ${this.params.reportId} for area ${this.params.areaId}`);
 
+    // get report template
     const template = yield ReportsModel.findOne({ _id: this.params.reportId });
+    // get teams the user is part of
+    const userTeams = yield V3TeamService.getUserTeams(this.state.loggedUser.id);
 
-    const answers = yield AnswersService.filterAnswersByArea({
+    const answers = yield V3AnswersService.filterAnswersByArea({
       template,
       reportId: this.params.reportId,
       loggedUser: this.state.loggedUser,
-      teams: this.state.teams,
+      teams: userTeams,
       query: this.state.query,
       areaId: this.params.areaId
     });
@@ -49,7 +51,6 @@ class AnswersRouter {
       const areaTeams = yield AreaService.getAreaTeams(answer.areaOfInterest);
       // get teams the user is part of
       const userTeams = yield V3TeamService.getUserTeams(this.state.loggedUser.id);
-
       // create array user is manager of
       const managerTeams = [];
       userTeams.forEach(userTeam => {
@@ -113,12 +114,12 @@ function* reportPermissions(next) {
   // get managers of those teams
   const managers = [];
   for (const team of teams) {
-    let teamManagers = yield V3TeamService.getTeamManagers(team.id)
-    teamManagers.forEach(manager => managers.push({user: manager}))
+    let teamUsers = yield V3TeamService.getTeamUsers(team.id);
+    let teamManagers = teamUsers.filter(teamUser => (teamUser.attributes.role === "manager" || teamUser.attributes.role === "administrator"))
+    teamManagers.forEach(manager => managers.push({ user: manager.id }));
   }
   let filters = {};
-  if (teams.length>0) {
-    this.state.teams = teams;
+  if (teams.length > 0) {
     filters = {
       $and: [
         { _id: new ObjectId(this.params.reportId) },
@@ -137,7 +138,7 @@ function* reportPermissions(next) {
       ]
     };
   }
-
+  
   const report = yield ReportsModel.findOne(filters).populate("questions");
   if (!report) {
     this.throw(404, "Report not found");
