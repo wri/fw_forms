@@ -25,7 +25,7 @@ const createFilter = async (reportId, template, loggedUser, teams, query) => {
     filter = {
       $and: [{ report: new ObjectId(reportId) }]
     };
-  } else if (teamsManaged.length>0 && template.public) {
+  } else if (teamsManaged.length>0) {
     // managers can check all report answers from the default template (the only public template) from him and his team's members
     filter = {
       $and: [
