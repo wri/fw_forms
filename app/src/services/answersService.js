@@ -22,7 +22,7 @@ class AnswersService {
       filter = {
         $and: [{ report: new ObjectId(reportId) }]
       };
-    } else if (currentManager && template.public) {
+    } else if (currentManager) {
       // managers can check all answers from the default template from his and his team's members
       filter = {
         $and: [
