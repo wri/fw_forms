@@ -4,14 +4,17 @@
   const ENV_PARAM_KEY = "env";
   const ENV = [
     {
+      value: "production",
       selector: "#switch-prod",
       docsURL: "https://raw.githubusercontent.com/wri/fw_forms/production/docs/fw_forms.yaml"
     },
     {
+      value: "staging",
       selector: "#switch-staging",
       docsURL: "https://raw.githubusercontent.com/wri/fw_forms/staging/docs/fw_forms.yaml"
     },
     {
+      value: "dev",
       selector: "#switch-dev",
       docsURL: "https://raw.githubusercontent.com/wri/fw_forms/dev/docs/fw_forms.yaml"
     }
