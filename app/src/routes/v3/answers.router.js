@@ -206,7 +206,9 @@ function* reportPermissions(next) {
   const managers = [];
   for (const team of teams) {
     let teamUsers = yield V3TeamService.getTeamUsers(team.id);
-    let teamManagers = teamUsers.filter(teamUser => (teamUser.attributes.role === "manager" || teamUser.attributes.role === "administrator"))
+    let teamManagers = teamUsers.filter(
+      teamUser => teamUser.attributes.role === "manager" || teamUser.attributes.role === "administrator"
+    );
     teamManagers.forEach(manager => managers.push({ user: manager.id }));
   }
   let filters = {};
@@ -229,7 +231,7 @@ function* reportPermissions(next) {
       ]
     };
   }
-  
+
   const report = yield ReportsModel.findOne(filters).populate("questions");
   if (!report) {
     this.throw(404, "Report not found");

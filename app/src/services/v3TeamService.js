@@ -29,7 +29,7 @@ class V3TeamService {
 
   static async getTeamUsers(teamId) {
     let teams = [];
-    
+
     try {
       const baseURL = config.get("v3teamsAPI.url");
       const response = await axios.default({
