@@ -53,7 +53,6 @@ class AnswersService {
 
   static async filterAnswersByArea({ reportId, template, loggedUser, teams, query, areaId }) {
     let filter = await createFilter(reportId, template, loggedUser, teams, query, areaId);
-    console.log("FILTER", filter);
     filter.$and.push({ areaOfInterest: areaId });
     return await AnswersModel.find(filter);
   }

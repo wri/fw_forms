@@ -71,19 +71,19 @@ describe("Delete an answer", function () {
 
     nock(config.get("apiAPI.url"))
       .get(`/area/areaTeams/${areaId}`)
-      .reply(200, [teamId1, teamId2]
+      .reply(200, {data: [teamId1, teamId2]}
       );
 
     nock(config.get("v3teamsAPI.url"))
-      .get(`/teams/user/${ROLES.USER.id}`)
-      .reply(200, [
+      .get(`/teams/users/${ROLES.USER.id}`)
+      .reply(200, {data: [
           {
             id: teamId2,
             attributes: {
               userRole: "manager"
             }
           }
-      ]);
+      ]});
 
     const response = await requester
       .delete(`/v3/reports/${report._id}/answers/${answer._id}`)
@@ -109,19 +109,19 @@ describe("Delete an answer", function () {
 
     nock(config.get("apiAPI.url"))
       .get(`/area/areaTeams/${areaId}`)
-      .reply(200, [teamId1, teamId2]
+      .reply(200, {data: [teamId1, teamId2] }
       );
 
     nock(config.get("v3teamsAPI.url"))
-      .get(`/teams/user/${ROLES.USER.id}`)
-      .reply(200, [
+      .get(`/teams/users/${ROLES.USER.id}`)
+      .reply(200, {data: [
           {
             id: teamId2,
             attributes: {
               userRole: "monitor"
             }
           }
-      ]);
+      ]});
       
     const response = await requester
       .delete(`/v3/reports/${report._id}/answers/${answer._id}`)
@@ -148,19 +148,19 @@ describe("Delete an answer", function () {
 
     nock(config.get("apiAPI.url"))
       .get(`/area/areaTeams/${areaId}`)
-      .reply(200, [teamId1, teamId2]
+      .reply(200, {data: [teamId1, teamId2] }
       );
 
     nock(config.get("v3teamsAPI.url"))
-      .get(`/teams/user/${ROLES.USER.id}`)
-      .reply(200, [
+      .get(`/teams/users/${ROLES.USER.id}`)
+      .reply(200, {data: [
           {
             id: teamId3,
             attributes: {
               userRole: "manager"
             }
           }
-      ]);
+      ]});
       
     const response = await requester
       .delete(`/v3/reports/${report._id}/answers/${answer._id}`)

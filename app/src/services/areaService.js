@@ -39,7 +39,7 @@ class AreaService {
       logger.info("Failed to get teams");
     }
 
-    return Promise.resolve(teams);
+    return Promise.resolve(teams.data);
   }
 }
 
