@@ -10,7 +10,7 @@ const ROLES = {
     }
   },
   MANAGER: {
-    id: "1a10d7c6e0a37126611fd7a7",
+    id: "1a10d7c6e0a37126611fd7a8",
     role: "MANAGER",
     provider: "local",
     email: "user@control-tower.org",
@@ -19,7 +19,7 @@ const ROLES = {
     }
   },
   ADMIN: {
-    id: "1a10d7c6e0a37126611fd7a7",
+    id: "1a10d7c6e0a37126611fd7a9",
     role: "ADMIN",
     provider: "local",
     email: "user@control-tower.org",

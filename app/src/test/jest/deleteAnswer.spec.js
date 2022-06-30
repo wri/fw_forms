@@ -75,8 +75,8 @@ describe("Delete an answer", function () {
       );
 
     nock(config.get("v3teamsAPI.url"))
-      .get(`/teams/user/${ROLES.USER.id}`)
-      .reply(200, { data : [
+      .get(`/teams/users/${ROLES.USER.id}`)
+      .reply(200, {data: [
           {
             id: teamId2,
             attributes: {
@@ -109,13 +109,13 @@ describe("Delete an answer", function () {
 
     nock(config.get("apiAPI.url"))
       .get(`/area/areaTeams/${areaId}`)
-      .reply(200, { data: [teamId1, teamId2] }
+      .reply(200, {data: [teamId1, teamId2] }
       );
 
     nock(config.get("v3teamsAPI.url"))
-      .get(`/teams/user/${ROLES.USER.id}`)
-      .reply(200, { data: [ 
-          { 
+      .get(`/teams/users/${ROLES.USER.id}`)
+      .reply(200, {data: [
+          {
             id: teamId2,
             attributes: {
               userRole: "monitor"
@@ -148,12 +148,12 @@ describe("Delete an answer", function () {
 
     nock(config.get("apiAPI.url"))
       .get(`/area/areaTeams/${areaId}`)
-      .reply(200, { data: [teamId1, teamId2] }
+      .reply(200, {data: [teamId1, teamId2] }
       );
 
     nock(config.get("v3teamsAPI.url"))
-      .get(`/teams/user/${ROLES.USER.id}`)
-      .reply(200, { data: [
+      .get(`/teams/users/${ROLES.USER.id}`)
+      .reply(200, {data: [
           {
             id: teamId3,
             attributes: {
