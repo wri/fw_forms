@@ -65,7 +65,7 @@ class AnswersRouter {
     logger.info("Saving answer");
     logger.debug(this.request.body);
 
-    const { fields } = this.request.body;
+    const fields = this.request.body;
     let userPosition = [];
 
     try {
@@ -113,8 +113,8 @@ class AnswersRouter {
       const question = questions[i];
 
       // handle parent questions
-      const bodyAnswer = this.request.body.fields[question.name];
-      const fileAnswer = this.request.body.files[question.name];
+      const bodyAnswer = this.request.body[question.name];
+      const fileAnswer = this.request.files[question.name];
       let response = typeof bodyAnswer !== "undefined" ? bodyAnswer : fileAnswer;
       if (!response && question.required) {
         pushError(question);
@@ -130,8 +130,8 @@ class AnswersRouter {
       if (question.childQuestions) {
         for (let j = 0; j < question.childQuestions.length; j++) {
           const childQuestion = question.childQuestions[j];
-          const childBodyAnswer = this.request.body.fields[childQuestion.name];
-          const childFileAnswer = this.request.body.files[childQuestion.name];
+          const childBodyAnswer = this.request.body[childQuestion.name];
+          const childFileAnswer = this.request.files[childQuestion.name];
           const conditionMatches = typeof bodyAnswer !== "undefined" && childQuestion.conditionalValue === bodyAnswer;
           let childResponse = typeof childBodyAnswer !== "undefined" ? childBodyAnswer : childFileAnswer;
           if (!childResponse && childQuestion.required && conditionMatches) {
