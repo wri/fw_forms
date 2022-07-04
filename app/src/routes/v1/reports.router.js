@@ -374,7 +374,7 @@ class ReportsRouter {
       teamData = team.data.attributes;
     }
 
-    const answers = yield AnswersService.getAllAnswers({
+    const answers = yield AnswersService.getAllTemplateAnswers({
       team: teamData,
       reportId: this.params.id,
       template: report,

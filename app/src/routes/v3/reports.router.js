@@ -6,12 +6,15 @@ const ReportsModel = require("models/reportsModel");
 const ReportsValidator = require("validators/reportsValidator");
 const AnswersModel = require("models/answersModel");
 const AnswersService = require("services/answersService");
+const V3AnswersService = require("services/v3AnswersService");
 const TeamService = require("services/teamService");
 const passThrough = require("stream").PassThrough;
 const { ObjectId } = require("mongoose").Types;
 const config = require("config");
 const CSV = require("services/csvService");
-const AreaService = require("../../services/areaService");
+const AreaService = require("services/areaService");
+const V3TeamService = require("services/v3TeamService");
+const AnswersSerializer = require("serializers/answersSerializer");
 
 const router = new Router({
   prefix: "/reports"
@@ -54,6 +57,24 @@ class ReportsRouter {
     }
 
     this.body = ReportsSerializer.serialize(reports);
+  }
+
+  static *getAllAnswers() {
+    logger.info(`Obtaining all answers`);
+
+    // get teams the user is part of
+    const userTeams = yield V3TeamService.getUserTeams(this.state.loggedUser.id);
+
+    const answers = yield V3AnswersService.getAllAnswers({
+      loggedUser: this.state.loggedUser,
+      teams: userTeams
+    });
+
+    if (!answers) {
+      this.throw(404, "Answers not found for this user");
+      return;
+    }
+    this.body = AnswersSerializer.serialize(answers);
   }
 
   static *get() {
@@ -270,7 +291,7 @@ class ReportsRouter {
       teamData = team.data.attributes;
     }
 
-    const answers = yield AnswersService.getAllAnswers({
+    const answers = yield AnswersService.getAllTemplateAnswers({
       team: teamData,
       reportId: this.params.id,
       template: report,
@@ -358,6 +379,12 @@ function* queryToState(next) {
 }
 
 // check permission must be added at some point
+router.get(
+  "/getAllAnswersForUser",
+  convert(mapTemplateParamToId),
+  convert(loggedUserToState),
+  convert(ReportsRouter.getAllAnswers)
+);
 router.post("/", convert(loggedUserToState), convert(ReportsValidator.create), convert(ReportsRouter.save));
 router.patch(
   "/:id",
@@ -395,5 +422,6 @@ router.get(
   convert(loggedUserToState),
   convert(ReportsRouter.downloadAnswers)
 );
+
 
 module.exports = router;

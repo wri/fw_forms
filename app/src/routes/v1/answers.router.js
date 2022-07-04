@@ -20,7 +20,7 @@ class AnswersRouter {
 
     const template = yield ReportsModel.findOne({ _id: this.params.reportId });
 
-    const answers = yield AnswersService.getAllAnswers({
+    const answers = yield AnswersService.getAllTemplateAnswers({
       template,
       reportId: this.params.reportId,
       loggedUser: this.state.loggedUser,

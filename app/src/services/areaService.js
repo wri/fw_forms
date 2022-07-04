@@ -34,7 +34,7 @@ class AreaService {
           authorization: loggedInUserService.token
         }
       });
-      teams = response.data.data;
+      teams = response.data;
     } catch (e) {
       logger.info("Failed to get teams");
     }

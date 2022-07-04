@@ -9,7 +9,6 @@ const config = require("config");
 const convert = require("koa-convert");
 const AreaService = require("services/areaService");
 const V3TeamService = require("services/v3TeamService");
-const s3Service = require("services/s3Service");
 
 const router = new Router({
   prefix: "/reports/:reportId/answers"
@@ -119,7 +118,7 @@ function* reportPermissions(next) {
     let teamManagers = teamUsers.filter(
       teamUser => teamUser.attributes.role === "manager" || teamUser.attributes.role === "administrator"
     );
-    teamManagers.forEach(manager => managers.push({ user: manager.id }));
+    teamManagers.forEach(manager => managers.push({ user: new ObjectId(manager.id) }));
   }
   let filters = {};
   if (teams.length > 0) {
@@ -141,8 +140,8 @@ function* reportPermissions(next) {
       ]
     };
   }
-
   const report = yield ReportsModel.findOne(filters).populate("questions");
+
   if (!report) {
     this.throw(404, "Report not found");
     return;
