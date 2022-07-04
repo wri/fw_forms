@@ -423,5 +423,4 @@ router.get(
   convert(ReportsRouter.downloadAnswers)
 );
 
-
 module.exports = router;

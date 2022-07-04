@@ -6,8 +6,8 @@ const createFilter = async (reportId, template, loggedUser, teams, query) => {
   let filter = {};
   let teamsManaged = [];
   const confirmedUsers = [];
-      // add current user to users array
-      confirmedUsers.push(loggedUser.id);
+  // add current user to users array
+  confirmedUsers.push(loggedUser.id);
   if (teams.length > 0) {
     // check if user is manager of any teams
     teamsManaged = teams.filter(
@@ -54,7 +54,7 @@ class AnswersService {
   }
 
   static async filterAnswersByArea({ reportId, template, loggedUser, teams, query, areaId }) {
-    let filter = await createFilter(reportId, template, loggedUser, teams, query, areaId); 
+    let filter = await createFilter(reportId, template, loggedUser, teams, query, areaId);
     filter.$and.push({ areaOfInterest: areaId });
     return await AnswersModel.find(filter);
   }
