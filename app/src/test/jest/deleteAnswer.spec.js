@@ -75,7 +75,7 @@ describe("Delete an answer", function () {
       );
 
     nock(config.get("v3teamsAPI.url"))
-      .get(`/teams/users/${ROLES.USER.id}`)
+      .get(`/teams/user/${ROLES.USER.id}`)
       .reply(200, {data: [
           {
             id: teamId2,
@@ -113,7 +113,7 @@ describe("Delete an answer", function () {
       );
 
     nock(config.get("v3teamsAPI.url"))
-      .get(`/teams/users/${ROLES.USER.id}`)
+      .get(`/teams/user/${ROLES.USER.id}`)
       .reply(200, {data: [
           {
             id: teamId2,
@@ -152,7 +152,7 @@ describe("Delete an answer", function () {
       );
 
     nock(config.get("v3teamsAPI.url"))
-      .get(`/teams/users/${ROLES.USER.id}`)
+      .get(`/teams/user/${ROLES.USER.id}`)
       .reply(200, {data: [
           {
             id: teamId3,
