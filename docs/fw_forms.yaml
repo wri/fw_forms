@@ -151,6 +151,21 @@ paths:
       description: ''
       tags:
         - Answers
+  /v3/reports/getAllAnswersForUser:
+    parameters: []
+    get:
+      summary: Get all answers for given report
+      tags:
+        - Answers
+      responses:
+        '200':
+          $ref: '#/components/responses/Answers'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      operationId: get-all-answers-for-user
+      description: Returns all answers created by a user and all team members of teams the user manages
   '/v3/reports/{reportId}/answers/area/{areaId}':
     parameters:
       - schema:

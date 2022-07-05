@@ -6,6 +6,8 @@ const createFilter = async (reportId, template, loggedUser, teams, query) => {
   let filter = {};
   let teamsManaged = [];
   const confirmedUsers = [];
+  // add current user to users array
+  confirmedUsers.push(loggedUser.id);
   if (teams.length > 0) {
     // check if user is manager of any teams
     teamsManaged = teams.filter(
@@ -46,7 +48,7 @@ const createFilter = async (reportId, template, loggedUser, teams, query) => {
 };
 
 class AnswersService {
-  static async getAllAnswers({ reportId, template, loggedUser, teams, query }) {
+  static async getAllTemplateAnswers({ reportId, template, loggedUser, teams, query }) {
     let filter = createFilter(reportId, template, loggedUser, teams, query);
     return await AnswersModel.find(filter);
   }
@@ -54,6 +56,32 @@ class AnswersService {
   static async filterAnswersByArea({ reportId, template, loggedUser, teams, query, areaId }) {
     let filter = await createFilter(reportId, template, loggedUser, teams, query, areaId);
     filter.$and.push({ areaOfInterest: areaId });
+    return await AnswersModel.find(filter);
+  }
+
+  static async getAllAnswers({ loggedUser, teams }) {
+    let filter = {};
+    let teamsManaged = [];
+    const confirmedUsers = [];
+    if (teams.length > 0) {
+      // check if user is manager of any teams
+      teamsManaged = teams.filter(
+        team => team.attributes.userRole === "manager" || team.attributes.userRole === "administrator"
+      );
+      // get all managed teams users
+      if (teamsManaged.length > 0) {
+        for await (const team of teamsManaged) {
+          // get users of each team and add to users array
+          const users = await V3TeamService.getTeamUsers(team.id);
+          confirmedUsers.push(...users.map(user => new ObjectId(user.attributes.userId)));
+        }
+      }
+    }
+    // add current user to users array
+    confirmedUsers.push(new ObjectId(loggedUser.id));
+
+    filter = { user: { $in: confirmedUsers } };
+
     return await AnswersModel.find(filter);
   }
 }
