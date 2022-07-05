@@ -8,6 +8,7 @@ const createFilter = async (reportId, template, loggedUser, teams, query) => {
   const confirmedUsers = [];
   // add current user to users array
   confirmedUsers.push(loggedUser.id);
+
   if (teams.length > 0) {
     // check if user is manager of any teams
     teamsManaged = teams.filter(

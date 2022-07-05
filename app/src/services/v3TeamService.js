@@ -10,7 +10,7 @@ class V3TeamService {
       const baseURL = config.get("v3teamsAPI.url");
       const response = await axios.default({
         baseURL,
-        url: `/teams/users/${user.toString()}`,
+        url: `/teams/user/${user.toString()}`,
         method: "get",
         headers: {
           authorization: loggedInUserService.token

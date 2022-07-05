@@ -61,7 +61,7 @@ describe("Get answers filtered by area tests", function () {
 
       nock(config.get("v3teamsAPI.url"))
       .persist()
-      .get(`/teams/users/${ROLES.USER.id}`)
+      .get(`/teams/user/${ROLES.USER.id}`)
       .reply(200,{ data: [
         {
           id: teamId,
@@ -125,7 +125,7 @@ describe("Get answers filtered by area tests", function () {
 
       nock(config.get("v3teamsAPI.url"))
       .persist()
-      .get(`/teams/users/${ROLES.USER.id}`)
+      .get(`/teams/user/${ROLES.USER.id}`)
       .reply(200,{ data: [
         {
           id: teamId,
@@ -188,7 +188,7 @@ describe("Get answers filtered by area tests", function () {
 
       nock(config.get("v3teamsAPI.url"))
       .persist()
-      .get(`/teams/users/${ROLES.USER.id}`)
+      .get(`/teams/user/${ROLES.USER.id}`)
       .reply(200,{ data: [
         {
           id: teamId,
