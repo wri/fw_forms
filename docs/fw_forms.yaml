@@ -93,7 +93,7 @@ paths:
       tags:
         - Reports
     parameters: []
-  /v1/reports/getAllAnswersForUser:
+  /v3/reports/getAllAnswersForUser:
     get:
       summary: Get all answers for every report
       responses:
