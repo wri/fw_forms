@@ -93,6 +93,21 @@ paths:
       tags:
         - Reports
     parameters: []
+  /v1/reports/getAllAnswersForUser:
+    get:
+      summary: Get all answers for every report
+      responses:
+        '200':
+          $ref: '#/components/responses/Answers'
+        '401':
+          $ref: '#/components/responses/Error'
+        '':
+          $ref: '#/components/responses/Answers'
+      operationId: get-all-answers-for-user
+      tags:
+        - answers
+      description: 'Returns all answers created by a user, and created by any member of a team they manage for all reports'
+    parameters: []
   '/v1/reports/{reportId}/download-answers':
     get:
       summary: Get report csv
