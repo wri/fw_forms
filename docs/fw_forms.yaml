@@ -101,8 +101,6 @@ paths:
           $ref: '#/components/responses/Answers'
         '401':
           $ref: '#/components/responses/Error'
-        '':
-          $ref: '#/components/responses/Answers'
       operationId: get-all-answers-for-user
       tags:
         - answers
