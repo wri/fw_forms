@@ -42,12 +42,13 @@ module "fargate_autoscaling" {
   cluster_name                 = data.terraform_remote_state.fw_core.outputs.ecs_cluster_name
   security_group_ids           = [data.terraform_remote_state.core.outputs.document_db_security_group_id, data.terraform_remote_state.core.outputs.redis_security_group_id]
   task_role_policies = [
-    data.terraform_remote_state.fw_core.outputs.data_bucket_write_policy_arn
+    data.terraform_remote_state.fw_core.outputs.data_bucket_write_policy_arn,
   ]
   task_execution_role_policies = [
     data.terraform_remote_state.core.outputs.document_db_secrets_policy_arn,
     module.google_sheets_private_key.read_policy_arn,
-    module.google_sheets_project_email.read_policy_arn
+    module.google_sheets_project_email.read_policy_arn,
+    data.terraform_remote_state.fw_core.outputs.microservice_token_secret_policy_arn
   ]
   container_definition = data.template_file.container_definition.rendered
 
@@ -70,18 +71,19 @@ module "fargate_autoscaling" {
 data "template_file" "container_definition" {
   template = file("${path.root}/templates/container_definition.json.tmpl")
   vars = {
-    environment    = var.environment
-    aws_region     = var.region
-    image          = "${module.app_docker_image.repository_url}:${local.container_tag}"
-    container_port = var.container_port
-    container_name = var.project_prefix
-    log_group      = aws_cloudwatch_log_group.default.name
-    db_secret_arn  = data.terraform_remote_state.core.outputs.document_db_secrets_arn
-    # data_bucket = data.terraform_remote_state.fw_core.outputs.data_bucket
-    google_private_key   = module.google_sheets_private_key.secret_arn
-    google_project_email = module.google_sheets_project_email.secret_arn
-    target_sheet_id      = var.target_sheet_id
-    wri_mail_recipients  = var.wri_mail_recipients
+    environment                 = var.environment
+    aws_region                  = var.region
+    image                       = "${module.app_docker_image.repository_url}:${local.container_tag}"
+    container_port              = var.container_port
+    container_name              = var.project_prefix
+    log_group                   = aws_cloudwatch_log_group.default.name
+    db_secret_arn               = data.terraform_remote_state.core.outputs.document_db_secrets_arn
+    microservice_token_secret   = data.terraform_remote_state.fw_core.outputs.microservice_token_secret_arn
+    # data_bucket               = data.terraform_remote_state.fw_core.outputs.data_bucket
+    google_private_key          = module.google_sheets_private_key.secret_arn
+    google_project_email        = module.google_sheets_project_email.secret_arn
+    target_sheet_id             = var.target_sheet_id
+    wri_mail_recipients         = var.wri_mail_recipients
 
     node_env                  = var.node_env
     mongo_port_27017_tcp_addr = data.terraform_remote_state.core.outputs.document_db_endpoint

@@ -1,4 +1,5 @@
 const AnswersModel = require("models/answersModel");
+const UserService = require("./user.service");
 const { ObjectId } = require("mongoose").Types;
 const V3TeamService = require("./v3TeamService");
 
@@ -83,7 +84,24 @@ class AnswersService {
 
     filter = { user: { $in: confirmedUsers } };
 
-    return await AnswersModel.find(filter);
+    let answers = await AnswersModel.find(filter);
+
+    // hashtable to store usernames
+    let users = {};
+
+    for await (let answer of answers) {
+      let userId = answer.attributes.user;
+      if (users[userId]) answer.username = users[userId];
+      // get username from hashtable
+      else {
+        // get user name from microservice
+        const username = await UserService.getNameByIdMICROSERVICE(userId);
+        answer.username = username;
+        users[userId] = username; // add to hashtable
+      }
+    }
+
+    return answers;
   }
 }
 
