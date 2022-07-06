@@ -11,6 +11,7 @@ const AnswerResponse = new Schema({
 const Answer = new Schema({
   report: { type: ObjectId, required: true },
   reportName: { type: String, required: true },
+  fullName: { type: String, required: false},
   username: { type: String, required: false, trim: true },
   organization: { type: String, required: false, trim: true },
   areaOfInterest: { type: ObjectId, required: false },
