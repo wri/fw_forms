@@ -3,6 +3,27 @@ const UserService = require("./user.service");
 const { ObjectId } = require("mongoose").Types;
 const V3TeamService = require("./v3TeamService");
 
+const addUsernameToAnswers = async answers => {
+
+// hashtable to store usernames
+let users = {};
+
+for await (let answer of answers) {
+  let userId = answer.attributes.user;
+  if (users[userId]) answer.username = users[userId];
+  // get username from hashtable
+  else {
+    // get user name from microservice
+    const username = await UserService.getNameByIdMICROSERVICE(userId);
+    answer.username = username;
+    users[userId] = username; // add to hashtable
+  }
+}
+
+return answers
+
+}
+
 const createFilter = async (reportId, template, loggedUser, teams, query) => {
   let filter = {};
   let teamsManaged = [];
@@ -52,13 +73,17 @@ const createFilter = async (reportId, template, loggedUser, teams, query) => {
 class AnswersService {
   static async getAllTemplateAnswers({ reportId, template, loggedUser, teams, query }) {
     let filter = createFilter(reportId, template, loggedUser, teams, query);
-    return await AnswersModel.find(filter);
+    let answers = await AnswersModel.find(filter);
+
+    return await addUsernameToAnswers(answers);
   }
 
   static async filterAnswersByArea({ reportId, template, loggedUser, teams, query, areaId }) {
     let filter = await createFilter(reportId, template, loggedUser, teams, query, areaId);
     filter.$and.push({ areaOfInterest: areaId });
-    return await AnswersModel.find(filter);
+    let answers = await AnswersModel.find(filter);
+
+    return await addUsernameToAnswers(answers);
   }
 
   static async getAllAnswers({ loggedUser, teams }) {
@@ -86,22 +111,7 @@ class AnswersService {
 
     let answers = await AnswersModel.find(filter);
 
-    // hashtable to store usernames
-    let users = {};
-
-    for await (let answer of answers) {
-      let userId = answer.attributes.user;
-      if (users[userId]) answer.username = users[userId];
-      // get username from hashtable
-      else {
-        // get user name from microservice
-        const username = await UserService.getNameByIdMICROSERVICE(userId);
-        answer.username = username;
-        users[userId] = username; // add to hashtable
-      }
-    }
-
-    return answers;
+    return await addUsernameToAnswers(answers);
   }
 }
 
