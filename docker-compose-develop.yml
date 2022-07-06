@@ -23,6 +23,7 @@ services:
       S3_ACCESS_KEY_ID: <key>
       S3_SECRET_ACCESS_KEY: <key>
       S3_BUCKET: <key>
+      MICROSERVICE_TOKEN: ${microservice_token}
     volumes:
       - ./app:/opt/gfw-forms-api/app
       - ./nodemon.json:/opt/gfw-forms-api/nodemon.json
@@ -79,6 +80,7 @@ services:
       S3_ACCESS_KEY_ID: <key>
       S3_SECRET_ACCESS_KEY: <key>
       S3_BUCKET: <key>
+      MICROSERVICE_TOKEN: ${microservice_token}
     volumes:
       - ./app:/opt/gfw-forms-api/app
       - ./nodemon.json:/opt/gfw-forms-api/nodemon.json

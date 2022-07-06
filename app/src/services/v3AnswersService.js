@@ -4,25 +4,23 @@ const { ObjectId } = require("mongoose").Types;
 const V3TeamService = require("./v3TeamService");
 
 const addUsernameToAnswers = async answers => {
+  // hashtable to store usernames
+  let users = {};
 
-// hashtable to store usernames
-let users = {};
-
-for await (let answer of answers) {
-  let userId = answer.attributes.user;
-  if (users[userId]) answer.username = users[userId];
-  // get username from hashtable
-  else {
-    // get user name from microservice
-    const username = await UserService.getNameByIdMICROSERVICE(userId);
-    answer.username = username;
-    users[userId] = username; // add to hashtable
+  for await (let answer of answers) {
+    let userId = answer.attributes.user;
+    if (users[userId]) answer.fullName = users[userId];
+    // get username from hashtable
+    else {
+      // get user name from microservice
+      const fullName = await UserService.getNameByIdMICROSERVICE(userId);
+      answer.fullName = fullName;
+      users[userId] = fullName; // add to hashtable
+    }
   }
-}
 
-return answers
-
-}
+  return answers;
+};
 
 const createFilter = async (reportId, template, loggedUser, teams, query) => {
   let filter = {};
