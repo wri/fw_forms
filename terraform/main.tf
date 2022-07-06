@@ -42,7 +42,7 @@ module "fargate_autoscaling" {
   cluster_name                 = data.terraform_remote_state.fw_core.outputs.ecs_cluster_name
   security_group_ids           = [data.terraform_remote_state.core.outputs.document_db_security_group_id, data.terraform_remote_state.core.outputs.redis_security_group_id]
   task_role_policies = [
-    data.terraform_remote_state.fw_core.outputs.data_bucket_write_policy_arn,
+    data.terraform_remote_state.fw_core.outputs.data_bucket_write_policy_arn
   ]
   task_execution_role_policies = [
     data.terraform_remote_state.core.outputs.document_db_secrets_policy_arn,
