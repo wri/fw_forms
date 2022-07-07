@@ -100,6 +100,10 @@ variable "ct_url" {
 # variable "teams_api_url" {
 #   type = string
 # }
+variable "USERS_API_URL" {
+  type    = string
+  default = "https://api.resourcewatch.org"
+}
 variable "areas_api_url" {
   type = string
   default = "https://api.resourcewatch.org/v1"
