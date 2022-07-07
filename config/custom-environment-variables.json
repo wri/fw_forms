@@ -32,5 +32,8 @@
   },
   "apiAPI": {
     "url": "API_API_URL"
+  },
+  "usersApi": {
+    "url": "USERS_API_URL"
   }
 }
