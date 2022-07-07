@@ -1,6 +1,7 @@
 {
   "service": {
-    "port": "PORT"
+    "port": "PORT",
+    "token": "MICROSERVICE_TOKEN"
   },
   "legacyTemplateId": "LEGACY_TEMPLATE_ID",
   "defaultTemplateId": "DEFAULT_TEMPLATE_ID",
