@@ -18,6 +18,7 @@ services:
       V3_TEAMS_API_URL: https://dev-fw-api.globalforestwatch.org/v3
       AREAS_API_URL: https://api.resourcewatch.org
       API_API_URL: https://dev-fw-api.globalforestwatch.org/v3/forest-watcher
+      USERS_API_URL: https://staging-api.resourcewatch.org
       WRI_MAIL_RECIPIENTS: <mails>
       TARGET_SHEET_ID: <sheet>
       S3_ACCESS_KEY_ID: <key>
