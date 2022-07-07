@@ -8,7 +8,7 @@ const addUsernameToAnswers = async answers => {
   let users = {};
 
   for await (let answer of answers) {
-    let userId = answer.attributes.user;
+    let userId = answer.user;
     if (users[userId]) answer.fullName = users[userId];
     // get username from hashtable
     else {
