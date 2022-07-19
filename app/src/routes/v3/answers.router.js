@@ -21,13 +21,13 @@ class AnswersRouter {
     // get report template
     const template = yield ReportsModel.findOne({ _id: this.params.reportId });
     // get teams the user is part of
-    const userTeams = yield V3TeamService.getUserTeams(this.state.loggedUser.id);
-
+    //const userTeams = yield V3TeamService.getUserTeams(this.state.loggedUser.id);
+   
     const answers = yield V3AnswersService.filterAnswersByArea({
       template,
       reportId: this.params.reportId,
       loggedUser: this.state.loggedUser,
-      teams: userTeams,
+      teams: this.state.userTeams,
       query: this.state.query,
       areaId: this.params.areaId
     });
@@ -111,10 +111,12 @@ function* reportPermissions(next) {
   // looks like a monitor can see reports made by their team manager(s)
   // get the users teams
   const teams = yield V3TeamService.getUserTeams(this.state.loggedUser.id);
+  this.state.userTeams = teams;
   // get managers of those teams
   const managers = [];
   for (const team of teams) {
     let teamUsers = yield V3TeamService.getTeamUsers(team.id);
+    if(!teamUsers) teamUsers = [];
     let teamManagers = teamUsers.filter(
       teamUser => teamUser.attributes.role === "manager" || teamUser.attributes.role === "administrator"
     );
