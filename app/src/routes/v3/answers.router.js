@@ -1,14 +1,14 @@
 const Router = require("koa-router");
 const logger = require("logger");
 const AnswersSerializer = require("serializers/answersSerializer");
-const V3AnswersService = require("services/v3AnswersService");
+const V3AnswersService = require("services/v3Answer.service");
 const ReportsModel = require("models/reportsModel");
 const AnswersModel = require("../../models/answersModel");
 const { ObjectId } = require("mongoose").Types;
 const config = require("config");
 const convert = require("koa-convert");
-const AreaService = require("services/areaService");
-const V3TeamService = require("services/v3TeamService");
+const AreaService = require("services/area.service");
+const V3TeamService = require("services/v3Team.service");
 
 const router = new Router({
   prefix: "/reports/:reportId/answers"
@@ -23,12 +23,18 @@ class AnswersRouter {
     // get teams the user is part of
     //const userTeams = yield V3TeamService.getUserTeams(this.state.loggedUser.id);
    
-    const answers = yield V3AnswersService.filterAnswersByArea({
+    /* const answers = yield V3AnswersService.filterAnswersByArea({
       template,
       reportId: this.params.reportId,
       loggedUser: this.state.loggedUser,
       teams: this.state.userTeams,
       query: this.state.query,
+      areaId: this.params.areaId
+    }); */
+
+    const answers = yield V3AnswersService.filterAnswersByArea({
+      reportId: this.params.reportId,
+      teams: this.state.userTeams,
       areaId: this.params.areaId
     });
 
