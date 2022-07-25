@@ -33,7 +33,7 @@ class AnswersRouter {
     }); */
 
     let restricted = false;
-    if(this.state.query && this.state.query.restricted === "true") restricted = true;
+    if (this.state.query && this.state.query.restricted === "true") restricted = true;
 
     const answers = yield V3AnswersService.filterAnswersByArea({
       reportId: this.params.reportId,

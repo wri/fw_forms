@@ -96,8 +96,8 @@ class AnswersService {
       }
     }
     // else just get user's reports
-    else userIds.push(loggedUser.id)
-  
+    else userIds.push(loggedUser.id);
+
     let filter = {
       $and: [{ report: new ObjectId(reportId) }, { user: { $in: userIds } }, { areaOfInterest: areaId }]
     };
