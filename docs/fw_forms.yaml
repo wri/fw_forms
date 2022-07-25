@@ -188,7 +188,13 @@ paths:
         '404':
           $ref: '#/components/responses/Error'
       operationId: get-answers-for-report-and-area
-      description: 'Returns all answers a user, and members of the user''s teams, have created for this area of interest'
+      description: 'Returns all answers a user, and members of the user''s teams, have created for this area of interest. Only returns user answers when optional "restricted" query param is true'
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: restricted
+          description: restricts returned answers to ONLY user answers when true
   '/v1/reports/{reportId}/answers/{id}':
     parameters:
       - schema:
