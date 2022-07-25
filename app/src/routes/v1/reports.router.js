@@ -6,12 +6,12 @@ const ReportsSerializer = require("serializers/reportsSerializer");
 const ReportsModel = require("models/reportsModel");
 const ReportsValidator = require("validators/reportsValidator");
 const AnswersModel = require("models/answersModel");
-const AnswersService = require("services/answersService");
-const TeamService = require("services/teamService");
+const AnswersService = require("services/answer.service");
+const TeamService = require("services/team.service");
 const passThrough = require("stream").PassThrough;
 const { ObjectId } = require("mongoose").Types;
 const config = require("config");
-const CSV = require("services/csvService");
+const CSV = require("services/csv.service");
 const loggedInUserService = require("services/LoggedInUserService");
 
 const router = new Router({
