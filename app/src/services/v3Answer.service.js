@@ -78,7 +78,7 @@ class AnswersService {
   }
 
   //static async filterAnswersByArea({ reportId, template, loggedUser, teams, query, areaId }) {
-  static async filterAnswersByArea({ reportId, teams, areaId }) {
+  static async filterAnswersByArea({ reportId, teams, areaId, loggedUser, restricted }) {
     // monitors can see reports from their team members in this area
 
     // get all area teams
@@ -87,14 +87,17 @@ class AnswersService {
     const filteredTeams = teams.filter(team => areaTeams.includes(team.id.toString()));
     // extract all user ids
     let userIds = [];
-    // get all filtered teams users
-    if (filteredTeams.length > 0) {
+    // get all filtered teams users if unrestricted
+    if (!restricted && filteredTeams.length > 0) {
       for await (const team of filteredTeams) {
         // get users of each team
         const users = await V3TeamService.getTeamUsers(team.id);
         userIds.push(...users.map(user => user.attributes.userId));
       }
     }
+    // else just get user's reports
+    else userIds.push(loggedUser.id)
+  
     let filter = {
       $and: [{ report: new ObjectId(reportId) }, { user: { $in: userIds } }, { areaOfInterest: areaId }]
     };

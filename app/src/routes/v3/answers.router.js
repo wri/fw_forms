@@ -32,10 +32,15 @@ class AnswersRouter {
       areaId: this.params.areaId
     }); */
 
+    let restricted = false;
+    if(this.state.query && this.state.query.restricted === "true") restricted = true;
+
     const answers = yield V3AnswersService.filterAnswersByArea({
       reportId: this.params.reportId,
       teams: this.state.userTeams,
-      areaId: this.params.areaId
+      areaId: this.params.areaId,
+      loggedUser: this.state.loggedUser,
+      restricted
     });
 
     if (!answers) {

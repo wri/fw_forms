@@ -150,6 +150,115 @@ describe("Get answers filtered by area tests", function () {
 
   });
 
+  it("Get area answers should be successful and return all report answers for an area for ONLY a monitor if restriction in place", async function () {
+    mockGetUserFromToken(ROLES.USER);
+
+    const areaId1 = new ObjectId();
+    const areaId2 = new ObjectId();
+    const teamId1 = new ObjectId();
+    const teamId2 = new ObjectId();
+    const monitorId1 = new ObjectId();
+    const monitorId2 = new ObjectId();
+
+    // mock user's team users
+    nock(config.get("v3teamsAPI.url"))
+      .persist()
+      .get(`/teams/${teamId1}/users`)
+      .reply(200, {
+        data: [
+          {
+            id: new ObjectId(),
+            attributes: {
+              teamId1,
+              userId: ROLES.USER.id,
+              role: "monitor"
+            }
+          },
+          {
+            id: new ObjectId(),
+            attributes: {
+              teamId1,
+              userId: monitorId1,
+              role: "monitor"
+            }
+          }
+        ]
+      });
+
+    // mock a different team's users
+    nock(config.get("v3teamsAPI.url"))
+      .persist()
+      .get(`/teams/${teamId2}/users`)
+      .reply(200, {
+        data: [
+          {
+            id: new ObjectId(),
+            attributes: {
+              teamId1,
+              userId: monitorId2,
+              role: "monitor"
+            }
+          }
+        ]
+      });
+
+    // mock request to get all user's teams
+    nock(config.get("v3teamsAPI.url"))
+      .persist()
+      .get(`/teams/user/${ROLES.USER.id}`)
+      .reply(200, {
+        data: [
+          {
+            id: teamId1,
+            attributes: {
+              userRole: "monitor"
+            }
+          }
+        ]
+      });
+
+    // mock request to get all teams related to an area
+    nock(config.get("apiAPI.url"))
+      .persist()
+      .get(`/area/areaTeams/${areaId1}`)
+      .reply(200, {
+        data: [
+          teamId1, teamId2
+        ]
+      });
+
+    // create report
+    const publicReport = await createReport({ user: new ObjectId(ROLES.USER.id), public: true, defaultLanguage: 'en' });
+    // answer for the given area
+    const userAnswerArea1 = await createAnswer({ user: ROLES.USER.id, areaOfInterest: areaId1, report: publicReport._id, reportName: publicReport.name });
+    // answer for a different area
+    const userAnswerArea2 = await createAnswer({ user: ROLES.USER.id, areaOfInterest: areaId2, report: publicReport._id, reportName: publicReport.name });
+    // answer for the given area by a team member of the user
+    const monitor1AnswerArea1 = await createAnswer({ user: monitorId1, areaOfInterest: areaId1, report: publicReport._id, reportName: publicReport.name });
+    // answer for a different area by a team member of the user
+    const monitor1AnswerArea2 = await createAnswer({ user: monitorId1, areaOfInterest: areaId2, report: publicReport._id, reportName: publicReport.name });
+    // answer for the given area by a non team member of the user
+    const monitor2AnswerArea1 = await createAnswer({ user: monitorId2, areaOfInterest: areaId1, report: publicReport._id, reportName: publicReport.name });
+    // answer for a different area by a non team member of the user
+    const monitor2AnswerArea2 = await createAnswer({ user: monitorId2, areaOfInterest: areaId2, report: publicReport._id, reportName: publicReport.name });
+
+
+    const response = await requester
+      .get(`/v3/reports/${publicReport._id}/answers/area/${areaId1}?restricted=true`)
+      .set("Authorization", `Bearer abcd`)
+      .send();
+
+    response.status.should.equal(200);
+    response.body.should.have.property("data");
+    response.body.data.should.be.an("array").and.length(1);
+
+    const responseAnswerOne = response.body.data[0];
+
+    responseAnswerOne.id.should.equal(userAnswerArea1.id);
+    responseAnswerOne.attributes.should.have.property("areaOfInterest").and.equal(areaId1.toString());
+
+  });
+
   it("A monitor can get all their answers, regardless of template", async function () {
     mockGetUserFromToken(ROLES.USER);
 
