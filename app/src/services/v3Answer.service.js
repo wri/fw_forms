@@ -40,7 +40,7 @@ const createFilter = async (reportId, template, loggedUser, teams, query) => {
       for await (const team of teamsManaged) {
         // get users of each team
         const users = await V3TeamService.getTeamUsers(team.id);
-        confirmedUsers.push(...users.map(user => user.id));
+        confirmedUsers.push(...users.map(user => user.attributes.userId));
       }
     }
   }
@@ -79,23 +79,20 @@ class AnswersService {
 
   //static async filterAnswersByArea({ reportId, template, loggedUser, teams, query, areaId }) {
   static async filterAnswersByArea({ reportId, teams, areaId }) {
-
     // monitors can see reports from their team members in this area
 
     // get all area teams
-    const areaTeams = await AreaService.getAreaTeams(answer.areaOfInterest);
-    // create array of user team ids
-    const userTeamIds = teams.map(team => team.id)
+    const areaTeams = await AreaService.getAreaTeams(areaId);
     // filter area teams by user teams
-    const filteredTeams = areaTeams.filter(areaTeam => userTeamIds.includes(areaTeam.id));
+    const filteredTeams = teams.filter(team => areaTeams.includes(team.id.toString()));
     // extract all user ids
-    let userIds = []
+    let userIds = [];
     // get all filtered teams users
     if (filteredTeams.length > 0) {
       for await (const team of filteredTeams) {
         // get users of each team
         const users = await V3TeamService.getTeamUsers(team.id);
-        userIds.push(...users.map(user => user.id));
+        userIds.push(...users.map(user => user.attributes.userId));
       }
     }
     let filter = {

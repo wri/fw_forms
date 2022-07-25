@@ -19,10 +19,10 @@ class AnswersRouter {
     logger.info(`Obtaining answers for report ${this.params.reportId} for area ${this.params.areaId}`);
 
     // get report template
-    const template = yield ReportsModel.findOne({ _id: this.params.reportId });
+    //const template = yield ReportsModel.findOne({ _id: this.params.reportId });
     // get teams the user is part of
     //const userTeams = yield V3TeamService.getUserTeams(this.state.loggedUser.id);
-   
+
     /* const answers = yield V3AnswersService.filterAnswersByArea({
       template,
       reportId: this.params.reportId,
@@ -122,11 +122,11 @@ function* reportPermissions(next) {
   const managers = [];
   for (const team of teams) {
     let teamUsers = yield V3TeamService.getTeamUsers(team.id);
-    if(!teamUsers) teamUsers = [];
+    if (!teamUsers) teamUsers = [];
     let teamManagers = teamUsers.filter(
       teamUser => teamUser.attributes.role === "manager" || teamUser.attributes.role === "administrator"
     );
-    teamManagers.forEach(manager => managers.push({ user: new ObjectId(manager.id) }));
+    teamManagers.forEach(manager => managers.push({ user: new ObjectId(manager.attributes.userId) }));
   }
   let filters = {};
   if (teams.length > 0) {
