@@ -80,14 +80,11 @@ class ReportsRouter {
   static *deleteAllAnswers() {
     logger.info(`Deleting all answers`);
 
-    try {
-      yield V3AnswersService.deleteAllAnswers({
-        loggedUser: this.state.loggedUser
-      });
-    } catch (error) {
-      this.throw(400, error);
-    }
+    yield V3AnswersService.deleteAllAnswers({
+      loggedUser: this.state.loggedUser
+    });
 
+    this.body = null;
     this.statusCode = 204;
   }
 
@@ -399,6 +396,12 @@ router.get(
   convert(loggedUserToState),
   convert(ReportsRouter.getAllAnswers)
 );
+router.delete(
+  "/deleteAllAnswersForUser",
+  convert(mapTemplateParamToId),
+  convert(loggedUserToState),
+  convert(ReportsRouter.deleteAllAnswers)
+);
 router.post("/", convert(loggedUserToState), convert(ReportsValidator.create), convert(ReportsRouter.save));
 router.patch(
   "/:id",
@@ -435,12 +438,6 @@ router.get(
   convert(mapTemplateParamToId),
   convert(loggedUserToState),
   convert(ReportsRouter.downloadAnswers)
-);
-router.get(
-  "/deleteAllAnswersForUser",
-  convert(mapTemplateParamToId),
-  convert(loggedUserToState),
-  convert(ReportsRouter.deleteAllAnswers)
 );
 
 module.exports = router;
