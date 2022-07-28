@@ -106,6 +106,17 @@ paths:
         - answers
       description: 'Returns all answers created by a user, and created by any member of a team they manage for all reports'
     parameters: []
+  /v3/reports/deleteAllAnswersForUser:
+    parameters: []
+    delete:
+      summary: Delete all answers for user
+      operationId: delete-v3-reports-deleteAllAnswersForUser
+      responses:
+        '204':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/Error'
+      description: Deletes all answers a user has created for all templates
   '/v1/reports/{reportId}/download-answers':
     get:
       summary: Get report csv

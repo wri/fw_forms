@@ -3,6 +3,7 @@ const UserService = require("./user.service");
 const AreaService = require("./area.service");
 const { ObjectId } = require("mongoose").Types;
 const V3TeamService = require("./v3Team.service");
+const logger = require("logger");
 
 const addUsernameToAnswers = async answers => {
   // hashtable to store usernames
@@ -133,6 +134,12 @@ class AnswersService {
     let answers = await AnswersModel.find(filter);
 
     return await addUsernameToAnswers(answers);
+  }
+
+  static async deleteAllAnswers({ loggedUser }) {
+    const { deletedCount } = await AnswersModel.deleteMany({ user: loggedUser.id });
+    logger.info(`${deletedCount} reports deleted`);
+    return Promise.resolve();
   }
 }
 

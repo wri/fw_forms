@@ -184,3 +184,61 @@ describe("Delete an answer", function () {
 
   });
 });
+
+describe("Delete all user answers", function () {
+  beforeEach(async function () {
+    if (process.env.NODE_ENV !== "test") {
+      throw Error(
+        `Running the test suite with NODE_ENV ${process.env.NODE_ENV} may result in permanent data loss. Please use NODE_ENV=test.`
+      );
+    }
+
+    requester = await getTestServer();
+    await AnswersModel.deleteMany({}).exec();
+    await Report.deleteMany({}).exec();
+
+  });
+
+  it('Delete answers as an anonymous user should return an "Not logged" error with matching 401 HTTP code', async function () {
+    const response = await requester.delete(`/v3/reports/1/answers/1`).send();
+
+    response.status.should.equal(401);
+    response.body.should.have.property("errors").and.be.an("array").and.length(1);
+    response.body.errors[0].should.have.property("status").and.equal(401);
+    response.body.errors[0].should.have.property("detail").and.equal("Unauthorized");
+  });
+
+  it("Delete all answers should remove user answers from all report templates", async function () {
+    mockGetUserFromToken(ROLES.USER);
+
+    const areaId = new ObjectId();
+
+    const report1 = await createReport({ user: ROLES.USER.id, public: true, defaultLanguage: 'en' });
+    const report2 = await createReport({ user: ROLES.USER.id, public: true, defaultLanguage: 'en' });
+
+    await createAnswer({ user: ROLES.USER.id, areaOfInterest: areaId, report: report1._id, reportName: report1.name });
+    await createAnswer({ user: ROLES.USER.id, areaOfInterest: areaId, report: report2._id, reportName: report2.name });
+    const answer3 = await createAnswer({ user: new ObjectId(), areaOfInterest: areaId, report: report2._id, reportName: report2.name });
+
+    const response = await requester
+      .delete(`/v3/reports/deleteAllAnswersForUser`)
+      .set("Authorization", `Bearer abcd`)
+      .send();
+
+    response.status.should.equal(204);
+    const answers = await AnswersModel.find({});
+    answers.length.should.equal(1);
+    answers[0]._id.toString().should.equal(answer3._id.toString())
+
+  });
+
+  afterEach(async function () {
+
+    await Report.deleteMany({}).exec();
+    await AnswersModel.deleteMany({}).exec();
+    if (!nock.isDone()) {
+      throw new Error(`Not all nock interceptors were used: ${nock.pendingMocks()}`);
+    }
+
+  });
+});

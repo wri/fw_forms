@@ -77,6 +77,17 @@ class ReportsRouter {
     this.body = AnswersSerializer.serialize(answers);
   }
 
+  static *deleteAllAnswers() {
+    logger.info(`Deleting all answers`);
+
+    yield V3AnswersService.deleteAllAnswers({
+      loggedUser: this.state.loggedUser
+    });
+
+    this.body = null;
+    this.statusCode = 204;
+  }
+
   static *get() {
     logger.info(`Obtaining reports with id ${this.params.id}`);
     const report = yield ReportsModel.findOne({ _id: this.params.id });
@@ -384,6 +395,12 @@ router.get(
   convert(mapTemplateParamToId),
   convert(loggedUserToState),
   convert(ReportsRouter.getAllAnswers)
+);
+router.delete(
+  "/deleteAllAnswersForUser",
+  convert(mapTemplateParamToId),
+  convert(loggedUserToState),
+  convert(ReportsRouter.deleteAllAnswers)
 );
 router.post("/", convert(loggedUserToState), convert(ReportsValidator.create), convert(ReportsRouter.save));
 router.patch(
