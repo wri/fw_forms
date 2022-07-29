@@ -236,7 +236,7 @@ class ReportsRouter {
     };
     if (role !== "ADMIN") {
       query.$and.push({ user: new ObjectId(this.state.loggedUser.id) });
-      query.$and.push({ status: ["draft", "unpublished"] });
+      //query.$and.push({ status: ["draft", "unpublished"] });
     } else if (answers > 0) {
       logger.info("User is admin, removing report answers...");
       yield AnswersModel.remove({ report: new ObjectId(this.params.id) });
