@@ -70,6 +70,12 @@ class ReportsRouter {
       teams: userTeams
     });
 
+    // speed this up
+    answers.forEach(answer => {
+      const template = yield ReportsModel.findOne({_id: answer.report});
+      answer.templateName = template.name
+    })
+
     if (!answers) {
       this.throw(404, "Answers not found for this user");
       return;
