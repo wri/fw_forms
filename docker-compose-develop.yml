@@ -87,7 +87,7 @@ services:
       - ./app:/opt/gfw-forms-api/app
       - ./nodemon.json:/opt/gfw-forms-api/nodemon.json
       - ./jest.config.js:/opt/gfw-forms-api/jest.config.js
-    command: yarn test:jest --runInBand
+    command: yarn test:jest -i
     depends_on:
       - mongo
     networks:

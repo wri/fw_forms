@@ -16,7 +16,7 @@ const router = new Router({
 });
 
 class AnswersRouter {
-  static async getArea() {
+  static async getArea(ctx) {
     logger.info(`Obtaining answers for report ${ctx.params.reportId} for area ${ctx.params.areaId}`);
 
     // get report template
@@ -51,7 +51,7 @@ class AnswersRouter {
     ctx.body = AnswersSerializer.serialize(answers);
   }
 
-  static async getAll() {
+  static async getAll(ctx) {
     logger.info(`Obtaining answers for report ${ctx.params.reportId}`);
 
     const template = await ReportsModel.findOne({ _id: ctx.params.reportId });
@@ -71,7 +71,7 @@ class AnswersRouter {
     ctx.body = AnswersSerializer.serialize(answers);
   }
 
-  static async get() {
+  static async get(ctx) {
     logger.info(`Obtaining answer ${ctx.params.id} for report ${ctx.params.reportId}`);
     let filter = {};
 
@@ -97,7 +97,7 @@ class AnswersRouter {
     ctx.body = AnswersSerializer.serialize(answer);
   }
 
-  static async save() {
+  static async save(ctx) {
     logger.info("Saving answer");
     logger.debug(ctx.request.body);
 
@@ -187,7 +187,7 @@ class AnswersRouter {
     ctx.body = AnswersSerializer.serialize(answerModel);
   }
 
-  static async delete() {
+  static async delete(ctx) {
     logger.info(`Deleting answer with id ${ctx.params.id}`);
     // only the answer creator OR a manager for the area can delete the answer
     let permitted = false;
@@ -225,7 +225,7 @@ class AnswersRouter {
   }
 }
 
-async function loggedUserToState(next) {
+async function loggedUserToState(ctx, next) {
   if (ctx.query && ctx.query.loggedUser) {
     ctx.state.loggedUser = JSON.parse(ctx.query.loggedUser);
     delete ctx.query.loggedUser;
@@ -247,14 +247,14 @@ async function loggedUserToState(next) {
   await next();
 }
 
-async function queryToState(next) {
+async function queryToState(ctx, next) {
   if (ctx.request.query && Object.keys(ctx.request.query).length > 0) {
     ctx.state.query = ctx.request.query;
   }
   await next();
 }
 
-async function reportPermissions(next) {
+async function reportPermissions(ctx, next) {
   // creates a filter to get the report if the user is allowed to see it
   // looks like a monitor can see reports made by their team manager(s)
   // get the users teams
@@ -300,7 +300,7 @@ async function reportPermissions(next) {
   await next();
 }
 
-async function mapTemplateParamToId(next) {
+async function mapTemplateParamToId(ctx, next) {
   if (ctx.params.reportId === config.get("legacyTemplateId") || ctx.params.reportId === "default") {
     ctx.params.reportId = config.get("defaultTemplateId");
   }
