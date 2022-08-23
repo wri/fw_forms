@@ -21,118 +21,111 @@ const router = new Router({
 });
 
 class ReportsRouter {
-  static async getAll(ctx) {
+  static *getAll() {
     logger.info("Obtaining all reports");
     const filter = {
       $and: [
         {
-          $or: [{ $and: [{ public: true }, { status: "published" }] }, { user: new ObjectId(ctx.state.loggedUser.id) }]
+          $or: [{ $and: [{ public: true }, { status: "published" }] }, { user: new ObjectId(this.state.loggedUser.id) }]
         }
       ]
     };
-    if (ctx.state.query) {
-      Object.keys(ctx.state.query).forEach(key => {
-        filter.$and.push({ [key]: ctx.state.query[key] });
+    if (this.state.query) {
+      Object.keys(this.state.query).forEach(key => {
+        filter.$and.push({ [key]: this.state.query[key] });
       });
     }
-    const reports = await ReportsModel.find(filter);
+    const reports = yield ReportsModel.find(filter);
 
     // get answer count for each report
     const numReports = reports.length;
     for (let i = 1; i < numReports; i++) {
       let answersFilter = {};
-      if (ctx.state.loggedUser.role === "ADMIN" || ctx.state.loggedUser.id === reports[i].user) {
+      if (this.state.loggedUser.role === "ADMIN" || this.state.loggedUser.id === reports[i].user) {
         answersFilter = {
           report: new ObjectId(reports[i].id)
         };
       } else {
         answersFilter = {
-          user: new ObjectId(ctx.state.loggedUser.id),
+          user: new ObjectId(this.state.loggedUser.id),
           report: new ObjectId(reports[i].id)
         };
       }
-      const answers = await AnswersModel.count(answersFilter);
+      const answers = yield AnswersModel.count(answersFilter);
       logger.info(answers);
       reports[i].answersCount = answers || 0;
     }
 
-    ctx.body = ReportsSerializer.serialize(reports);
+    this.body = ReportsSerializer.serialize(reports);
   }
 
-  static async getAllAnswers(ctx) {
+  static *getAllAnswers() {
     logger.info(`Obtaining all answers`);
 
     // get teams the user is part of
-    const userTeams = await V3TeamService.getUserTeams(ctx.state.loggedUser.id);
+    const userTeams = yield V3TeamService.getUserTeams(this.state.loggedUser.id);
 
-    const answers = await V3AnswersService.getAllAnswers({
-      loggedUser: ctx.state.loggedUser,
+    const answers = yield V3AnswersService.getAllAnswers({
+      loggedUser: this.state.loggedUser,
       teams: userTeams
     });
 
-    // speed this up
-    for await (const answer of answers) {
-      const id = answer.report;
-      const template = await ReportsModel.findOne({ _id: id });
-      answer.templateName = template.name;
-    }
-
     if (!answers) {
-      ctx.throw(404, "Answers not found for this user");
+      this.throw(404, "Answers not found for this user");
       return;
     }
-    ctx.body = AnswersSerializer.serialize(answers);
+    this.body = AnswersSerializer.serialize(answers);
   }
 
-  static async deleteAllAnswers(ctx) {
+  static *deleteAllAnswers() {
     logger.info(`Deleting all answers`);
 
-    await V3AnswersService.deleteAllAnswers({
-      loggedUser: ctx.state.loggedUser
+    yield V3AnswersService.deleteAllAnswers({
+      loggedUser: this.state.loggedUser
     });
 
-    ctx.body = null;
-    ctx.statusCode = 204;
+    this.body = null;
+    this.statusCode = 204;
   }
 
-  static async get(ctx) {
-    logger.info(`Obtaining reports with id ${ctx.params.id}`);
-    const report = await ReportsModel.findOne({ _id: ctx.params.id });
+  static *get() {
+    logger.info(`Obtaining reports with id ${this.params.id}`);
+    const report = yield ReportsModel.findOne({ _id: this.params.id });
     if (!report) {
-      ctx.throw(404, "Report not found");
+      this.throw(404, "Report not found");
       return;
     }
 
     // get answers count for the report
     let answersFilter = {};
-    if (ctx.state.loggedUser.role === "ADMIN" || ctx.state.loggedUser.id === report.user) {
+    if (this.state.loggedUser.role === "ADMIN" || this.state.loggedUser.id === report.user) {
       answersFilter = {
-        report: new ObjectId(ctx.params.id)
+        report: new ObjectId(this.params.id)
       };
     } else {
       answersFilter = {
-        user: new ObjectId(ctx.state.loggedUser.id),
-        report: new ObjectId(ctx.params.id)
+        user: new ObjectId(this.state.loggedUser.id),
+        report: new ObjectId(this.params.id)
       };
     }
-    const answers = await AnswersModel.count(answersFilter);
+    const answers = yield AnswersModel.count(answersFilter);
     report.answersCount = answers;
 
-    ctx.body = ReportsSerializer.serialize(report);
+    this.body = ReportsSerializer.serialize(report);
   }
 
-  static async save(ctx) {
-    logger.info("Saving reports", ctx.request.body);
-    const request = ctx.request.body;
+  static *save() {
+    logger.info("Saving reports", this.request.body);
+    const request = this.request.body;
 
-    if (request.public && ctx.state.loggedUser.role !== "ADMIN") {
-      ctx.throw(403, "Admin permissions required to save public templates");
+    if (request.public && this.state.loggedUser.role !== "ADMIN") {
+      this.throw(403, "Admin permissions required to save public templates");
       return;
     }
 
-    const report = await new ReportsModel({
+    const report = yield new ReportsModel({
       name: request.name,
-      user: ctx.state.loggedUser.id,
+      user: this.state.loggedUser.id,
       languages: request.languages,
       defaultLanguage: request.defaultLanguage,
       questions: request.questions,
@@ -140,55 +133,55 @@ class ReportsRouter {
       status: request.status
     }).save();
 
-    ctx.body = ReportsSerializer.serialize(report);
+    this.body = ReportsSerializer.serialize(report);
   }
 
-  static async put(ctx) {
-    logger.info("Updating report", ctx.request.body);
-    const { body } = ctx.request;
+  static *put() {
+    logger.info("Updating report", this.request.body);
+    const { body } = this.request;
 
-    if (ctx.state.loggedUser.role !== "ADMIN") {
-      ctx.throw(403, "Only admins can update reports.");
+    if (this.state.loggedUser.role !== "ADMIN") {
+      this.throw(403, "Only admins can update reports.");
       return;
     }
 
-    const report = await ReportsModel.findOne({
-      _id: new ObjectId(ctx.params.id)
+    const report = yield ReportsModel.findOne({
+      _id: new ObjectId(this.params.id)
     });
 
     if (!report) {
-      ctx.throw(404, "Report not found with these permissions");
+      this.throw(404, "Report not found with these permissions");
       return;
     }
 
     Object.assign(report, body);
 
     // add answers count to return and updated date
-    const answers = await AnswersModel.count({
-      report: new ObjectId(ctx.params.id)
+    const answers = yield AnswersModel.count({
+      report: new ObjectId(this.params.id)
     });
     report.answersCount = answers;
     report.updatedDate = Date.now;
 
-    await report.save();
-    ctx.body = ReportsSerializer.serialize(report);
+    yield report.save();
+    this.body = ReportsSerializer.serialize(report);
   }
 
-  static async patch(ctx) {
-    logger.info(`Updating template with id ${ctx.params.id}...`);
+  static *patch() {
+    logger.info(`Updating template with id ${this.params.id}...`);
 
     const reportFilter = {
-      $and: [{ _id: new ObjectId(ctx.params.id) }]
+      $and: [{ _id: new ObjectId(this.params.id) }]
     };
-    if (ctx.state.loggedUser.role !== "ADMIN") {
-      reportFilter.$and.push({ user: new ObjectId(ctx.state.loggedUser.id) });
+    if (this.state.loggedUser.role !== "ADMIN") {
+      reportFilter.$and.push({ user: new ObjectId(this.state.loggedUser.id) });
     }
-    const report = await ReportsModel.findOne(reportFilter);
-    const request = ctx.request.body;
+    const report = yield ReportsModel.findOne(reportFilter);
+    const request = this.request.body;
 
     // if user did not create then return error
     if (!report) {
-      ctx.throw(404, "Report not found.");
+      this.throw(404, "Report not found.");
       return;
     }
 
@@ -206,73 +199,73 @@ class ReportsRouter {
     }
 
     // if user is an admin, they can make the report public
-    if (ctx.state.loggedUser.role === "ADMIN" && request.public) {
+    if (this.state.loggedUser.role === "ADMIN" && request.public) {
       report.public = request.public;
     }
 
     // add answers count to return and updated date
-    const answers = await AnswersModel.count({
-      report: new ObjectId(ctx.params.id)
+    const answers = yield AnswersModel.count({
+      report: new ObjectId(this.params.id)
     });
     report.answersCount = answers;
     report.updatedDate = Date.now;
 
-    await report.save();
-    ctx.body = ReportsSerializer.serialize(report);
+    yield report.save();
+    this.body = ReportsSerializer.serialize(report);
   }
 
-  static async delete(ctx) {
-    const { role } = ctx.state.loggedUser;
+  static *delete() {
+    const { role } = this.state.loggedUser;
     logger.info(`Checking report for answers...`);
-    const answers = await AnswersModel.count({
-      report: new ObjectId(ctx.params.id)
+    const answers = yield AnswersModel.count({
+      report: new ObjectId(this.params.id)
     });
     if (answers > 0 && role !== "ADMIN") {
-      ctx.throw(403, "This report has answers, you cannot delete. Please unpublish instead.");
+      this.throw(403, "This report has answers, you cannot delete. Please unpublish instead.");
       return;
     }
     logger.info(`Report has no answers.`);
-    logger.info(`Deleting report with id ${ctx.params.id}...`);
+    logger.info(`Deleting report with id ${this.params.id}...`);
 
     // remove all area - template relations
-    await AreaService.deleteTemplateAreaRelations(ctx.params.id);
+    yield AreaService.deleteTemplateAreaRelations(this.params.id);
 
     // finally remove template
     const query = {
-      $and: [{ _id: new ObjectId(ctx.params.id) }]
+      $and: [{ _id: new ObjectId(this.params.id) }]
     };
     if (role !== "ADMIN") {
-      query.$and.push({ user: new ObjectId(ctx.state.loggedUser.id) });
+      query.$and.push({ user: new ObjectId(this.state.loggedUser.id) });
       //query.$and.push({ status: ["draft", "unpublished"] });
     } else if (answers > 0) {
       logger.info("User is admin, removing report answers...");
-      await AnswersModel.remove({ report: new ObjectId(ctx.params.id) });
+      yield AnswersModel.remove({ report: new ObjectId(this.params.id) });
     }
-    const result = await ReportsModel.remove(query);
+    const result = yield ReportsModel.remove(query);
 
     if (!result || !result.result || result.result.ok === 0) {
-      ctx.throw(404, "Report not found with these permissions. You must be the owner to remove.");
+      this.throw(404, "Report not found with these permissions. You must be the owner to remove.");
       return;
     }
-    ctx.statusCode = 204;
+    this.statusCode = 204;
   }
 
-  static async downloadAnswers(ctx) {
-    logger.info(`Downloading answers for report ${ctx.params.id}`);
-    ctx.set("Content-disposition", `attachment; filename=${ctx.params.id}.csv`);
-    ctx.set("Content-type", "text/csv");
-    ctx.body = passThrough();
+  static *downloadAnswers() {
+    logger.info(`Downloading answers for report ${this.params.id}`);
+    this.set("Content-disposition", `attachment; filename=${this.params.id}.csv`);
+    this.set("Content-type", "text/csv");
+    this.body = passThrough();
 
-    let report = await ReportsModel.findOne({
+    let report = yield ReportsModel.findOne({
       $and: [
-        { _id: new ObjectId(ctx.params.id) },
+        { _id: new ObjectId(this.params.id) },
         {
-          $or: [{ public: true }, { user: new ObjectId(ctx.state.loggedUser.id) }]
+          $or: [{ public: true }, { user: new ObjectId(this.state.loggedUser.id) }]
         }
       ]
     });
     if (!report) {
-      ctx.throw(404, "Report not found");
+      this.throw(404, "Report not found");
       return;
     }
 
@@ -303,18 +296,18 @@ class ReportsRouter {
       }
     );
 
-    const team = await TeamService.getTeam(ctx.state.loggedUser.id);
+    const team = yield TeamService.getTeam(this.state.loggedUser.id);
     let teamData = null;
     if (team.data && team.data.attributes) {
       teamData = team.data.attributes;
     }
 
-    const answers = await AnswersService.getAllTemplateAnswers({
+    const answers = yield AnswersService.getAllTemplateAnswers({
       team: teamData,
-      reportId: ctx.params.id,
+      reportId: this.params.id,
       template: report,
       query: null,
-      loggedUser: ctx.state.loggedUser
+      loggedUser: this.state.loggedUser
     });
 
     logger.info("Obtaining data");
@@ -363,37 +356,37 @@ class ReportsRouter {
           };
         }, {});
       });
-    ctx.body.write(CSV.convert(data));
-    ctx.body.end();
+    this.body.write(CSV.convert(data));
+    this.body.end();
   }
 }
 
-async function mapTemplateParamToId(ctx, next) {
-  if (ctx.params.id === config.get("legacyTemplateId") || ctx.params.id === "default") {
-    ctx.params.id = config.get("defaultTemplateId");
+function* mapTemplateParamToId(next) {
+  if (this.params.id === config.get("legacyTemplateId") || this.params.id === "default") {
+    this.params.id = config.get("defaultTemplateId");
   }
-  await next;
+  yield next;
 }
 
-async function loggedUserToState(ctx, next) {
-  if (ctx.query && ctx.query.loggedUser) {
-    ctx.state.loggedUser = JSON.parse(ctx.query.loggedUser);
-    delete ctx.query.loggedUser;
-  } else if (ctx.request.body && ctx.request.body.loggedUser) {
-    ctx.state.loggedUser = ctx.request.body.loggedUser;
-    delete ctx.request.body.loggedUser;
+function* loggedUserToState(next) {
+  if (this.query && this.query.loggedUser) {
+    this.state.loggedUser = JSON.parse(this.query.loggedUser);
+    delete this.query.loggedUser;
+  } else if (this.request.body && this.request.body.loggedUser) {
+    this.state.loggedUser = this.request.body.loggedUser;
+    delete this.request.body.loggedUser;
   } else {
-    ctx.throw(401, "Unauthorized");
+    this.throw(401, "Unauthorized");
     return;
   }
-  await next;
+  yield next;
 }
 
-async function queryToState(ctx, next) {
-  if (ctx.request.query && Object.keys(ctx.request.query).length > 0) {
-    ctx.state.query = ctx.request.query;
+function* queryToState(next) {
+  if (this.request.query && Object.keys(this.request.query).length > 0) {
+    this.state.query = this.request.query;
   }
-  await next;
+  yield next;
 }
 
 // check permission must be added at some point
