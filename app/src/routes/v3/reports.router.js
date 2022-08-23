@@ -72,12 +72,14 @@ class ReportsRouter {
     for await (const answer of answers) {
       const template = await ReportsModel.findOne({ _id: answer.report });
       answer.templateName = template.name;
+      logger.info(template.name)
     }
 
     if (!answers) {
       ctx.throw(404, "Answers not found for this user");
       return;
     }
+    logger.info(answers)
     ctx.body = AnswersSerializer.serialize(answers);
   }
 
