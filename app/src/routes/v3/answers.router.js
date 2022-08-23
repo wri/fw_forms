@@ -241,7 +241,7 @@ class AnswersRouter {
   }
 }
 
-function loggedUserToState(ctx, next) {
+async function loggedUserToState(ctx, next) {
   if (ctx.query && ctx.query.loggedUser) {
     ctx.state.loggedUser = JSON.parse(ctx.query.loggedUser);
     delete ctx.query.loggedUser;
@@ -263,7 +263,7 @@ function loggedUserToState(ctx, next) {
   await next;
 }
 
-function queryToState(ctx, next) {
+async function queryToState(ctx, next) {
   if (ctx.request.query && Object.keys(ctx.request.query).length > 0) {
     ctx.state.query = ctx.request.query;
   }
@@ -316,7 +316,7 @@ async function reportPermissions(ctx, next) {
   await next;
 }
 
-function mapTemplateParamToId(ctx, next) {
+async function mapTemplateParamToId(ctx, next) {
   if (ctx.params.reportId === config.get("legacyTemplateId") || ctx.params.reportId === "default") {
     ctx.params.reportId = config.get("defaultTemplateId");
   }
