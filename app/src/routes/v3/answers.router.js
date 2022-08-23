@@ -4,129 +4,114 @@ const AnswersSerializer = require("serializers/answersSerializer");
 const V3AnswersService = require("services/v3Answer.service");
 const ReportsModel = require("models/reportsModel");
 const AnswersModel = require("../../models/answersModel");
-const AnswersService = require("services/answer.service");
 const { ObjectId } = require("mongoose").Types;
 const config = require("config");
 const AreaService = require("services/area.service");
 const V3TeamService = require("services/v3Team.service");
 const s3Service = require("services/s3Service");
+const AnswersService = require("services/answer.service");
 
 const router = new Router({
   prefix: "/reports/:reportId/answers"
 });
 
 class AnswersRouter {
-  static async getArea(ctx) {
-    logger.info(`Obtaining answers for report ${ctx.params.reportId} for area ${ctx.params.areaId}`);
+  static *getArea() {
+    logger.info(`Obtaining answers for report ${this.params.reportId} for area ${this.params.areaId}`);
 
     // get report template
-    //const template = await ReportsModel.findOne({ _id: ctx.params.reportId });
+    //const template = yield ReportsModel.findOne({ _id: this.params.reportId });
     // get teams the user is part of
-    //const userTeams = await V3TeamService.getUserTeams(ctx.state.loggedUser.id);
+    //const userTeams = yield V3TeamService.getUserTeams(this.state.loggedUser.id);
 
-    /* const answers = await V3AnswersService.filterAnswersByArea({
+    /* const answers = yield V3AnswersService.filterAnswersByArea({
       template,
-      reportId: ctx.params.reportId,
-      loggedUser: ctx.state.loggedUser,
-      teams: ctx.state.userTeams,
-      query: ctx.state.query,
-      areaId: ctx.params.areaId
+      reportId: this.params.reportId,
+      loggedUser: this.state.loggedUser,
+      teams: this.state.userTeams,
+      query: this.state.query,
+      areaId: this.params.areaId
     }); */
 
     let restricted = false;
-    if (ctx.state.query && ctx.state.query.restricted === "true") restricted = true;
+    if (this.state.query && this.state.query.restricted === "true") restricted = true;
 
-    const answers = await V3AnswersService.filterAnswersByArea({
-      reportId: ctx.params.reportId,
-      teams: ctx.state.userTeams,
-      areaId: ctx.params.areaId,
-      loggedUser: ctx.state.loggedUser,
+    const answers = yield V3AnswersService.filterAnswersByArea({
+      reportId: this.params.reportId,
+      teams: this.state.userTeams,
+      areaId: this.params.areaId,
+      loggedUser: this.state.loggedUser,
       restricted
     });
 
     if (!answers) {
-      ctx.throw(404, "Answers not found with these permissions");
+      this.throw(404, "Answers not found with these permissions");
       return;
     }
-    ctx.body = AnswersSerializer.serialize(answers);
+    this.body = AnswersSerializer.serialize(answers);
   }
 
-  static async getAll(ctx) {
-    logger.info(`Obtaining answers for report ${ctx.params.reportId}`);
+  static *getAll() {
+    logger.info(`Obtaining answers for report ${this.params.reportId}`);
 
-    const template = await ReportsModel.findOne({ _id: ctx.params.reportId });
+    const template = yield ReportsModel.findOne({ _id: this.params.reportId });
 
-    const answers = await AnswersService.getAllTemplateAnswers({
+    const answers = yield AnswersService.getAllTemplateAnswers({
       template,
-      reportId: ctx.params.reportId,
-      loggedUser: ctx.state.loggedUser,
-      team: ctx.state.team,
-      query: ctx.state.query
+      reportId: this.params.reportId,
+      loggedUser: this.state.loggedUser,
+      team: this.state.team,
+      query: this.state.query
     });
 
     if (!answers) {
-      ctx.throw(404, "Answers not found with these permissions");
+      this.throw(404, "Answers not found with these permissions");
       return;
     }
-    ctx.body = AnswersSerializer.serialize(answers);
+    this.body = AnswersSerializer.serialize(answers);
   }
 
-  static async get(ctx) {
-    logger.info(`Obtaining answer ${ctx.params.id} for report ${ctx.params.reportId}`);
+  static *get() {
+    logger.info(`Obtaining answer ${this.params.id} for report ${this.params.reportId}`);
     let filter = {};
 
-    // get teams the user is part of
-    const teams = await V3TeamService.getUserTeams(ctx.state.loggedUser.id);
-    let confirmedUsers = [];
-    if (teams.length > 0) {
-      for await (const team of teams) {
-        // get users of each team and add to users array
-        const users = await V3TeamService.getTeamUsers(team.id);
-        confirmedUsers.push(...users.map(user => new ObjectId(user.attributes.userId)));
-      }
-    }
+    const template = yield ReportsModel.findOne({ _id: this.params.reportId });
 
-    // add current user to users array
-    confirmedUsers.push(new ObjectId(ctx.state.loggedUser.id));
-
-    const template = await ReportsModel.findOne({ _id: ctx.params.reportId });
-    logger.info(`Got report`, template);
-
-    if (ctx.state.loggedUser.role === "ADMIN" || ctx.state.loggedUser.id === template.user) {
+    if (this.state.loggedUser.role === "ADMIN" || this.state.loggedUser.id === template.user) {
       filter = {
-        _id: new ObjectId(ctx.params.id),
-        report: new ObjectId(ctx.params.reportId)
+        _id: new ObjectId(this.params.id),
+        report: new ObjectId(this.params.reportId)
       };
     } else {
       filter = {
-        user: { $in: confirmedUsers },
-        _id: new ObjectId(ctx.params.id),
-        report: new ObjectId(ctx.params.reportId)
+        user: new ObjectId(this.state.loggedUser.id),
+        _id: new ObjectId(this.params.id),
+        report: new ObjectId(this.params.reportId)
       };
     }
-    const answer = await AnswersModel.find(filter);
+    const answer = yield AnswersModel.find(filter);
     if (!answer) {
-      ctx.throw(404, "Answer not found with these permissions");
+      this.throw(404, "Answer not found with these permissions");
       return;
     }
-    ctx.body = AnswersSerializer.serialize(answer);
+    this.body = AnswersSerializer.serialize(answer);
   }
 
-  static async save(ctx) {
+  static *save() {
     logger.info("Saving answer");
-    logger.debug(ctx.request.body);
+    logger.debug(this.request.body);
 
-    const fields = ctx.request.body;
+    const fields = this.request.body;
     let userPosition = [];
 
     try {
       userPosition = fields.userPosition ? fields.userPosition.split(",") : [];
     } catch (e) {
-      ctx.throw(400, `Position values must be separated by ','`, e);
+      this.throw(400, `Position values must be separated by ','`, e);
     }
 
     const answer = {
-      report: ctx.params.reportId,
+      report: this.params.reportId,
       reportName: fields.reportName,
       username: fields.username,
       organization: fields.organization,
@@ -138,7 +123,7 @@ class AnswersRouter {
       startDate: fields.startDate,
       endDate: fields.endDate,
       layer: fields.layer,
-      user: new ObjectId(ctx.state.loggedUser.id),
+      user: new ObjectId(this.state.loggedUser.id),
       createdAt: fields.date,
       responses: []
     };
@@ -151,28 +136,28 @@ class AnswersRouter {
     };
 
     const pushError = question => {
-      ctx.throw(400, `${question.label[answer.language]} (${question.name}) required`);
+      this.throw(400, `${question.label[answer.language]} (${question.name}) required`);
     };
 
-    const { questions } = ctx.state.report;
+    const { questions } = this.state.report;
 
     if (!questions || (questions && !questions.length)) {
-      ctx.throw(400, `No question associated with this report`);
+      this.throw(400, `No question associated with this report`);
     }
 
     for (let i = 0; i < questions.length; i++) {
       const question = questions[i];
 
       // handle parent questions
-      const bodyAnswer = ctx.request.body[question.name];
-      const fileAnswer = ctx.request.files[question.name];
+      const bodyAnswer = this.request.body[question.name];
+      const fileAnswer = this.request.files[question.name];
       let response = typeof bodyAnswer !== "undefined" ? bodyAnswer : fileAnswer;
       if (!response && question.required) {
         pushError(question);
       }
       if (response && response.path && response.name && question.type === "blob") {
         // upload file
-        response = await s3Service.uploadFile(response.path, response.name);
+        response = yield s3Service.uploadFile(response.path, response.name);
       }
 
       pushResponse(question, response);
@@ -181,8 +166,8 @@ class AnswersRouter {
       if (question.childQuestions) {
         for (let j = 0; j < question.childQuestions.length; j++) {
           const childQuestion = question.childQuestions[j];
-          const childBodyAnswer = ctx.request.body[childQuestion.name];
-          const childFileAnswer = ctx.request.files[childQuestion.name];
+          const childBodyAnswer = this.request.body[childQuestion.name];
+          const childFileAnswer = this.request.files[childQuestion.name];
           const conditionMatches = typeof bodyAnswer !== "undefined" && childQuestion.conditionalValue === bodyAnswer;
           let childResponse = typeof childBodyAnswer !== "undefined" ? childBodyAnswer : childFileAnswer;
           if (!childResponse && childQuestion.required && conditionMatches) {
@@ -190,30 +175,30 @@ class AnswersRouter {
           }
           if (childResponse && question.type === "blob") {
             // upload file
-            childResponse = await s3Service.uploadFile(response.path, response.name);
+            childResponse = yield s3Service.uploadFile(response.path, response.name);
           }
           pushResponse(childQuestion, childResponse);
         }
       }
     }
 
-    const answerModel = await new AnswersModel(answer).save();
+    const answerModel = yield new AnswersModel(answer).save();
 
-    ctx.body = AnswersSerializer.serialize(answerModel);
+    this.body = AnswersSerializer.serialize(answerModel);
   }
 
-  static async delete(ctx) {
-    logger.info(`Deleting answer with id ${ctx.params.id}`);
+  static *delete() {
+    logger.info(`Deleting answer with id ${this.params.id}`);
     // only the answer creator OR a manager for the area can delete the answer
     let permitted = false;
     // get the answer
-    const answer = await AnswersModel.findById(ctx.params.id);
-    if (answer.user.toString() === ctx.state.loggedUser.id.toString()) permitted = true;
+    const answer = yield AnswersModel.findById(this.params.id);
+    if (answer.user.toString() === this.state.loggedUser.id.toString()) permitted = true;
     else {
       // get associated teams of answer area
-      const areaTeams = await AreaService.getAreaTeams(answer.areaOfInterest);
+      const areaTeams = yield AreaService.getAreaTeams(answer.areaOfInterest);
       // get teams the user is part of
-      const userTeams = await V3TeamService.getUserTeams(ctx.state.loggedUser.id);
+      const userTeams = yield V3TeamService.getUserTeams(this.state.loggedUser.id);
       // create array user is manager of
       const managerTeams = [];
       userTeams.forEach(userTeam => {
@@ -226,59 +211,67 @@ class AnswersRouter {
     }
 
     if (!permitted) {
-      ctx.throw(401, "You are not authorised to delete this record");
+      this.throw(401, "You are not authorised to delete this record");
       return;
     }
 
-    const result = await AnswersModel.findByIdAndRemove(ctx.params.id);
+    const result = yield AnswersModel.findByIdAndRemove(this.params.id);
     if (!result || !result._id) {
-      ctx.throw(404, "Answer not found");
+      this.throw(404, "Answer not found");
       return;
     }
-    ctx.body = "";
-    ctx.status = 204;
+    this.body = "";
+    this.status = 204;
   }
 }
 
-async function loggedUserToState(ctx, next) {
-  if (ctx.query && ctx.query.loggedUser) {
-    ctx.state.loggedUser = JSON.parse(ctx.query.loggedUser);
-    delete ctx.query.loggedUser;
+function* loggedUserToState(next) {
+  if (this.query && this.query.loggedUser) {
+    this.state.loggedUser = JSON.parse(this.query.loggedUser);
+    delete this.query.loggedUser;
   } else if (
-    ctx.request.body &&
-    (ctx.request.body.loggedUser || (ctx.request.body.fields && ctx.request.body.fields.loggedUser))
+    this.request.body &&
+    (this.request.body.loggedUser || (this.request.body.fields && this.request.body.fields.loggedUser))
   ) {
-    if (ctx.request.body.loggedUser) {
-      ctx.state.loggedUser = ctx.request.body.loggedUser;
-      delete ctx.request.body.loggedUser;
-    } else if (ctx.request.body.fields && ctx.request.body.fields.loggedUser) {
-      ctx.state.loggedUser = JSON.parse(ctx.request.body.fields.loggedUser);
-      delete ctx.request.body.fields.loggedUser;
+    if (this.request.body.loggedUser) {
+      this.state.loggedUser = this.request.body.loggedUser;
+      delete this.request.body.loggedUser;
+    } else if (this.request.body.fields && this.request.body.fields.loggedUser) {
+      this.state.loggedUser = JSON.parse(this.request.body.fields.loggedUser);
+      delete this.request.body.fields.loggedUser;
     }
   } else {
-    ctx.throw(401, "Unauthorized");
+    this.throw(401, "Unauthorized");
     return;
   }
+<<<<<<< HEAD
   await next();
+=======
+  yield next;
+>>>>>>> dev
 }
 
-async function queryToState(ctx, next) {
-  if (ctx.request.query && Object.keys(ctx.request.query).length > 0) {
-    ctx.state.query = ctx.request.query;
+function* queryToState(next) {
+  if (this.request.query && Object.keys(this.request.query).length > 0) {
+    this.state.query = this.request.query;
   }
+<<<<<<< HEAD
   await next();
+=======
+  yield next;
+>>>>>>> dev
 }
 
-async function reportPermissions(ctx, next) {
+function* reportPermissions(next) {
   // creates a filter to get the report if the user is allowed to see it
   // looks like a monitor can see reports made by their team manager(s)
   // get the users teams
-  const teams = await V3TeamService.getUserTeams(ctx.state.loggedUser.id);
-  ctx.state.userTeams = teams;
+  const teams = yield V3TeamService.getUserTeams(this.state.loggedUser.id);
+  this.state.userTeams = teams;
   // get managers of those teams
   const managers = [];
   for (const team of teams) {
-    let teamUsers = await V3TeamService.getTeamUsers(team.id);
+    let teamUsers = yield V3TeamService.getTeamUsers(team.id);
     if (!teamUsers) teamUsers = [];
     let teamManagers = teamUsers.filter(
       teamUser => teamUser.attributes.role === "manager" || teamUser.attributes.role === "administrator"
@@ -289,40 +282,51 @@ async function reportPermissions(ctx, next) {
   if (teams.length > 0) {
     filters = {
       $and: [
-        { _id: new ObjectId(ctx.params.reportId) },
+        { _id: new ObjectId(this.params.reportId) },
         {
-          $or: [{ public: true }, { user: new ObjectId(ctx.state.loggedUser.id) }, ...managers]
+          $or: [{ public: true }, { user: new ObjectId(this.state.loggedUser.id) }, ...managers]
         }
       ]
     };
   } else {
     filters = {
       $and: [
-        { _id: new ObjectId(ctx.params.reportId) },
+        { _id: new ObjectId(this.params.reportId) },
         {
-          $or: [{ public: true }, { user: new ObjectId(ctx.state.loggedUser.id) }]
+          $or: [{ public: true }, { user: new ObjectId(this.state.loggedUser.id) }]
         }
       ]
     };
   }
-  const report = await ReportsModel.findOne(filters).populate("questions");
+  const report = yield ReportsModel.findOne(filters).populate("questions");
 
   if (!report) {
-    ctx.throw(404, "Report not found");
+    this.throw(404, "Report not found");
     return;
   }
+<<<<<<< HEAD
   ctx.state.report = report;
   await next();
+=======
+  this.state.report = report;
+  yield next;
+>>>>>>> dev
 }
 
-async function mapTemplateParamToId(ctx, next) {
-  if (ctx.params.reportId === config.get("legacyTemplateId") || ctx.params.reportId === "default") {
-    ctx.params.reportId = config.get("defaultTemplateId");
+function* mapTemplateParamToId(next) {
+  if (this.params.reportId === config.get("legacyTemplateId") || this.params.reportId === "default") {
+    this.params.reportId = config.get("defaultTemplateId");
   }
+<<<<<<< HEAD
   await next();
 }
 
 router.post("/", mapTemplateParamToId, loggedUserToState, reportPermissions, AnswersRouter.save);
+=======
+  yield next;
+}
+
+>>>>>>> dev
 router.get(
   "/area/:areaId",
   mapTemplateParamToId,

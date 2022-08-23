@@ -69,13 +69,6 @@ class ReportsRouter {
       teams: userTeams
     });
 
-    // speed this up
-    for await (const answer of answers) {
-      const id = answer.report;
-      const template = await ReportsModel.findOne({ _id: id });
-      answer.templateName = template.name;
-    }
-
     if (!answers) {
       ctx.throw(404, "Answers not found for this user");
       return;
@@ -367,14 +360,14 @@ class ReportsRouter {
   }
 }
 
-async function mapTemplateParamToId(ctx, next) {
+async function mapTemplateParamToId(ctx,next) {
   if (ctx.params.id === config.get("legacyTemplateId") || ctx.params.id === "default") {
     ctx.params.id = config.get("defaultTemplateId");
   }
   await next();
 }
 
-async function loggedUserToState(ctx, next) {
+async function loggedUserToState(ctx,next) {
   if (ctx.query && ctx.query.loggedUser) {
     ctx.state.loggedUser = JSON.parse(ctx.query.loggedUser);
     delete ctx.query.loggedUser;
@@ -389,7 +382,7 @@ async function loggedUserToState(ctx, next) {
   await next();
 }
 
-async function queryToState(ctx, next) {
+async function queryToState(ctx,next) {
   if (ctx.request.query && Object.keys(ctx.request.query).length > 0) {
     ctx.state.query = ctx.request.query;
   }
