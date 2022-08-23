@@ -4,11 +4,13 @@ const AnswersSerializer = require("serializers/answersSerializer");
 const V3AnswersService = require("services/v3Answer.service");
 const ReportsModel = require("models/reportsModel");
 const AnswersModel = require("../../models/answersModel");
+const AnswersService = require("services/answer.service");
 const { ObjectId } = require("mongoose").Types;
 const config = require("config");
 const convert = require("koa-convert");
 const AreaService = require("services/area.service");
 const V3TeamService = require("services/v3Team.service");
+const s3Service = require("services/s3Service");
 
 const router = new Router({
   prefix: "/reports/:reportId/answers"
@@ -86,7 +88,7 @@ class AnswersRouter {
     }
 
     // add current user to users array
-    confirmedUsers.push(new ObjectId(loggedUser.id));
+    confirmedUsers.push(new ObjectId(this.state.loggedUser.id));
 
     const template = yield ReportsModel.findOne({ _id: this.params.reportId });
     logger.info(`Got report`, template)
