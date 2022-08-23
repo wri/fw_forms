@@ -224,7 +224,7 @@ function* reportPermissions(next) {
       ]
     };
   }
-
+  logger.info("Finding report with filter", filters)
   const report = yield ReportsModel.findOne(filters).populate("questions");
   if (!report) {
     this.throw(404, "Report not found");
