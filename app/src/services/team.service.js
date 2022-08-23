@@ -18,7 +18,7 @@ class TeamService {
         }
       });
       team = response.data;
-      logger.info("Got user teams", team)
+      logger.info("Got user teams for user with id",user, team)
     } catch (e) {
       logger.info("Failed to fetch team");
     }
