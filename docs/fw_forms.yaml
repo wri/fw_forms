@@ -175,6 +175,40 @@ paths:
       description: ''
       tags:
         - Answers
+  '/v3/reports/{reportId}/answers':
+    parameters:
+      - schema:
+          type: string
+        name: reportId
+        in: path
+        required: true
+    get:
+      summary: Get all answers for given report
+      tags:
+        - Answers
+        - v3
+      responses:
+        '200':
+          $ref: '#/components/responses/Answers'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      operationId: get-answers-for-report-v3
+      description: ''
+    post:
+      summary: Save answers for the given report
+      operationId: post-answers-for-report-v3
+      responses:
+        '200':
+          $ref: '#/components/responses/Answers'
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+      description: ''
+      tags:
+        - Answers
   '/v3/reports/{reportId}/answers/area/{areaId}':
     parameters:
       - schema:
@@ -253,6 +287,55 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Answers
+  '/v3/reports/{reportId}/answers/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: reportId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Get the given answers for a given report
+      tags:
+        - Answers
+        - v3
+      responses:
+        '200':
+          $ref: '#/components/responses/Answer'
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      operationId: get-answer-for-report-v3
+      description: ''
+    patch:
+      summary: Update answers for a given report
+      operationId: patch-awnser-for-report-v3
+      responses:
+        '500':
+          $ref: '#/components/responses/Error'
+      description: ''
+      deprecated: true
+      tags:
+        - Answers
+    delete:
+      summary: Delete answer for given report
+      operationId: delete-answer-for-report-v3
+      responses:
+        '204':
+          description: No Content
+        '401':
+          $ref: '#/components/responses/Error'
+        '404':
+          $ref: '#/components/responses/Error'
+      tags:
+        - Answers
+      description: ''
   /v1/questionnaire:
     get:
       summary: Get all questionnaires

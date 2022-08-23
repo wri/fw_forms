@@ -50,6 +50,52 @@ class AnswersRouter {
     this.body = AnswersSerializer.serialize(answers);
   }
 
+  static *getAll() {
+    logger.info(`Obtaining answers for report ${this.params.reportId}`);
+
+    const template = yield ReportsModel.findOne({ _id: this.params.reportId });
+
+    const answers = yield AnswersService.getAllTemplateAnswers({
+      template,
+      reportId: this.params.reportId,
+      loggedUser: this.state.loggedUser,
+      team: this.state.team,
+      query: this.state.query
+    });
+
+    if (!answers) {
+      this.throw(404, "Answers not found with these permissions");
+      return;
+    }
+    this.body = AnswersSerializer.serialize(answers);
+  }
+
+  static *get() {
+    logger.info(`Obtaining answer ${this.params.id} for report ${this.params.reportId}`);
+    let filter = {};
+
+    const template = yield ReportsModel.findOne({ _id: this.params.reportId });
+
+    if (this.state.loggedUser.role === "ADMIN" || this.state.loggedUser.id === template.user) {
+      filter = {
+        _id: new ObjectId(this.params.id),
+        report: new ObjectId(this.params.reportId)
+      };
+    } else {
+      filter = {
+        user: new ObjectId(this.state.loggedUser.id),
+        _id: new ObjectId(this.params.id),
+        report: new ObjectId(this.params.reportId)
+      };
+    }
+    const answer = yield AnswersModel.find(filter);
+    if (!answer) {
+      this.throw(404, "Answer not found with these permissions");
+      return;
+    }
+    this.body = AnswersSerializer.serialize(answer);
+  }
+
   static *save() {
     logger.info("Saving answer");
     logger.debug(this.request.body);
@@ -274,6 +320,21 @@ router.get(
   convert(reportPermissions),
   convert(queryToState),
   convert(AnswersRouter.getArea)
+);
+router.get(
+  "/",
+  convert(mapTemplateParamToId),
+  convert(loggedUserToState),
+  convert(reportPermissions),
+  convert(queryToState),
+  convert(AnswersRouter.getAll)
+);
+router.get(
+  "/:id",
+  convert(mapTemplateParamToId),
+  convert(loggedUserToState),
+  convert(queryToState),
+  convert(AnswersRouter.get)
 );
 
 router.delete("/:id", convert(mapTemplateParamToId), convert(loggedUserToState), convert(AnswersRouter.delete));
