@@ -58,7 +58,7 @@ describe("Get report by id endpoint", function () {
       _id: config.get("defaultTemplateId")
     });
 
-    const response = await requester.get(`/v1/reports/default`).set("Authorization", `Bearer abcd`).send();
+    const response = await requester.get(`/v3/reports/default`).set("Authorization", `Bearer abcd`).send();
 
     response.status.should.equal(200);
     response.body.should.have.property("data").and.instanceOf(Object);
