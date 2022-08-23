@@ -2,18 +2,18 @@ const logger = require("logger");
 const ErrorSerializer = require("serializers/errorSerializer");
 
 class ReportsValidator {
-  static *create(next) {
+  static async create(ctx, next) {
     console.log("*************")
-    const request = this.request.body;
+    const request = ctx.request.body;
     logger.debug("Validating body for create template");
-    this.checkBody("name").notEmpty();
-    this.checkBody("questions").notEmpty();
-    this.checkBody("languages").notEmpty();
-    this.checkBody("status").notEmpty().isIn(["published", "unpublished"]);
+    ctx.checkBody("name").notEmpty();
+    ctx.checkBody("questions").notEmpty();
+    ctx.checkBody("languages").notEmpty();
+    ctx.checkBody("status").notEmpty().isIn(["published", "unpublished"]);
 
-    if (this.errors) {
-      this.body = ErrorSerializer.serializeValidationBodyErrors(this.errors);
-      this.status = 400;
+    if (ctx.errors) {
+      ctx.body = ErrorSerializer.serializeValidationBodyErrors(ctx.errors);
+      ctx.status = 400;
       return;
     }
 
@@ -69,23 +69,23 @@ class ReportsValidator {
     });
 
     if (customErrors.length > 0) {
-      this.body = ErrorSerializer.serializeValidationBodyErrors(customErrors);
-      this.status = 400;
+      ctx.body = ErrorSerializer.serializeValidationBodyErrors(customErrors);
+      ctx.status = 400;
       return;
     }
-    yield next;
+    await next;
   }
 
-  static *patch(next) {
-    const request = this.request.body;
+  static async patch(ctx, next) {
+    const request = ctx.request.body;
     logger.debug("Validating body for create template");
-    this.checkBody("name").notEmpty();
-    this.checkBody("defaultLanguage").notEmpty();
-    this.checkBody("status").notEmpty().isIn(["published", "unpublished"]);
+    ctx.checkBody("name").notEmpty();
+    ctx.checkBody("defaultLanguage").notEmpty();
+    ctx.checkBody("status").notEmpty().isIn(["published", "unpublished"]);
 
-    if (this.errors) {
-      this.body = ErrorSerializer.serializeValidationBodyErrors(this.errors);
-      this.status = 400;
+    if (ctx.errors) {
+      ctx.body = ErrorSerializer.serializeValidationBodyErrors(ctx.errors);
+      ctx.status = 400;
       return;
     }
 
@@ -113,12 +113,12 @@ class ReportsValidator {
     });
 
     if (customErrors.length > 0) {
-      this.body = ErrorSerializer.serializeValidationBodyErrors(customErrors);
-      this.status = 400;
+      ctx.body = ErrorSerializer.serializeValidationBodyErrors(customErrors);
+      ctx.status = 400;
       return;
     }
 
-    yield next;
+    await next;
   }
 }
 

@@ -122,6 +122,7 @@ class ReportsRouter {
   }
 
   static async save(ctx) {
+
     logger.info("Saving reports", ctx.request.body);
     const request = ctx.request.body;
 
@@ -386,6 +387,7 @@ async function loggedUserToState(ctx, next) {
     ctx.throw(401, "Unauthorized");
     return;
   }
+  console.log("finished")
   await next;
 }
 
@@ -409,7 +411,7 @@ router.delete(
   convert(loggedUserToState),
   convert(ReportsRouter.deleteAllAnswers)
 );
-router.post("/", convert(loggedUserToState), convert(ReportsValidator.create), convert(ReportsRouter.save));
+router.post("/", loggedUserToState, ReportsValidator.create, ReportsRouter.save);
 router.patch(
   "/:id",
   convert(mapTemplateParamToId),
