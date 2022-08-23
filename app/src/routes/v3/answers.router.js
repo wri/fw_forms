@@ -72,17 +72,17 @@ class AnswersRouter {
     this.body = AnswersSerializer.serialize(answers);
   }
 
-  static *get() {
+  static async get() {
     logger.info(`Obtaining answer ${this.params.id} for report ${this.params.reportId}`);
     let filter = {};
 
     // get teams the user is part of
-    const teams = yield V3TeamService.getUserTeams(this.state.loggedUser.id);
+    const teams = await V3TeamService.getUserTeams(this.state.loggedUser.id);
     let confirmedUsers = [];
     if (teams.length > 0) {
-      for (const team of teams) {
+      for await (const team of teams) {
         // get users of each team and add to users array
-        const users = yield V3TeamService.getTeamUsers(team.id);
+        const users = await V3TeamService.getTeamUsers(team.id);
         confirmedUsers.push(...users.map(user => new ObjectId(user.attributes.userId)));
       }
     }
@@ -90,7 +90,7 @@ class AnswersRouter {
     // add current user to users array
     confirmedUsers.push(new ObjectId(this.state.loggedUser.id));
 
-    const template = yield ReportsModel.findOne({ _id: this.params.reportId });
+    const template = await ReportsModel.findOne({ _id: this.params.reportId });
     logger.info(`Got report`, template);
 
     if (this.state.loggedUser.role === "ADMIN" || this.state.loggedUser.id === template.user) {
@@ -105,7 +105,7 @@ class AnswersRouter {
         report: new ObjectId(this.params.reportId)
       };
     }
-    const answer = yield AnswersModel.find(filter);
+    const answer = await AnswersModel.find(filter);
     if (!answer) {
       this.throw(404, "Answer not found with these permissions");
       return;

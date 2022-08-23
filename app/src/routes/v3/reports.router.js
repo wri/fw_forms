@@ -59,23 +59,23 @@ class ReportsRouter {
     this.body = ReportsSerializer.serialize(reports);
   }
 
-  static *getAllAnswers() {
+  static async getAllAnswers() {
     logger.info(`Obtaining all answers`);
 
     // get teams the user is part of
-    const userTeams = yield V3TeamService.getUserTeams(this.state.loggedUser.id);
+    const userTeams = await V3TeamService.getUserTeams(this.state.loggedUser.id);
 
-    const answers = yield V3AnswersService.getAllAnswers({
+    const answers = await V3AnswersService.getAllAnswers({
       loggedUser: this.state.loggedUser,
       teams: userTeams
     });
 
     // speed this up
-    answers.forEach(answer => {
-      const id = answer.report
-      const template = yield ReportsModel.findOne({_id: id});
+    for await (const answer of answers) {
+      const id = answer.report;
+      const template = await ReportsModel.findOne({ _id: id });
       answer.templateName = template.name;
-    })
+    }
 
     if (!answers) {
       this.throw(404, "Answers not found for this user");
@@ -84,10 +84,10 @@ class ReportsRouter {
     this.body = AnswersSerializer.serialize(answers);
   }
 
-  static *deleteAllAnswers() {
+  static async deleteAllAnswers() {
     logger.info(`Deleting all answers`);
 
-    yield V3AnswersService.deleteAllAnswers({
+    await V3AnswersService.deleteAllAnswers({
       loggedUser: this.state.loggedUser
     });
 
@@ -95,9 +95,9 @@ class ReportsRouter {
     this.statusCode = 204;
   }
 
-  static *get() {
+  static async get() {
     logger.info(`Obtaining reports with id ${this.params.id}`);
-    const report = yield ReportsModel.findOne({ _id: this.params.id });
+    const report = await ReportsModel.findOne({ _id: this.params.id });
     if (!report) {
       this.throw(404, "Report not found");
       return;
@@ -115,7 +115,7 @@ class ReportsRouter {
         report: new ObjectId(this.params.id)
       };
     }
-    const answers = yield AnswersModel.count(answersFilter);
+    const answers = await AnswersModel.count(answersFilter);
     report.answersCount = answers;
 
     this.body = ReportsSerializer.serialize(report);
