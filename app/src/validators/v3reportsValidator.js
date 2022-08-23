@@ -3,7 +3,6 @@ const ErrorSerializer = require("serializers/errorSerializer");
 
 class ReportsValidator {
   static async create(ctx, next) {
-    console.log("*************")
     const request = ctx.request.body;
     logger.debug("Validating body for create template");
     ctx.checkBody("name").notEmpty();
@@ -73,7 +72,7 @@ class ReportsValidator {
       ctx.status = 400;
       return;
     }
-    await next;
+    await next();
   }
 
   static async patch(ctx, next) {
@@ -118,7 +117,7 @@ class ReportsValidator {
       return;
     }
 
-    await next;
+    await next();
   }
 }
 

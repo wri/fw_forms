@@ -1,9 +1,8 @@
 const Router = require("koa-router");
 const logger = require("logger");
-const convert = require("koa-convert");
 const ReportsSerializer = require("serializers/reportsSerializer");
 const ReportsModel = require("models/reportsModel");
-const ReportsValidator = require("validators/reportsValidator");
+const ReportsValidator = require("validators/v3reportsValidator");
 const AnswersModel = require("models/answersModel");
 const AnswersService = require("services/answer.service");
 const V3AnswersService = require("services/v3Answer.service");
@@ -122,7 +121,6 @@ class ReportsRouter {
   }
 
   static async save(ctx) {
-
     logger.info("Saving reports", ctx.request.body);
     const request = ctx.request.body;
 
@@ -373,7 +371,7 @@ async function mapTemplateParamToId(ctx, next) {
   if (ctx.params.id === config.get("legacyTemplateId") || ctx.params.id === "default") {
     ctx.params.id = config.get("defaultTemplateId");
   }
-  await next;
+  await next();
 }
 
 async function loggedUserToState(ctx, next) {
@@ -387,66 +385,26 @@ async function loggedUserToState(ctx, next) {
     ctx.throw(401, "Unauthorized");
     return;
   }
-  console.log("finished")
-  await next;
+  console.log("finished");
+  await next();
 }
 
 async function queryToState(ctx, next) {
   if (ctx.request.query && Object.keys(ctx.request.query).length > 0) {
     ctx.state.query = ctx.request.query;
   }
-  await next;
+  await next();
 }
 
 // check permission must be added at some point
-router.get(
-  "/getAllAnswersForUser",
-  convert(mapTemplateParamToId),
-  convert(loggedUserToState),
-  convert(ReportsRouter.getAllAnswers)
-);
-router.delete(
-  "/deleteAllAnswersForUser",
-  convert(mapTemplateParamToId),
-  convert(loggedUserToState),
-  convert(ReportsRouter.deleteAllAnswers)
-);
+router.get("/getAllAnswersForUser", mapTemplateParamToId, loggedUserToState, ReportsRouter.getAllAnswers);
+router.delete("/deleteAllAnswersForUser", mapTemplateParamToId, loggedUserToState, ReportsRouter.deleteAllAnswers);
 router.post("/", loggedUserToState, ReportsValidator.create, ReportsRouter.save);
-router.patch(
-  "/:id",
-  convert(mapTemplateParamToId),
-  convert(loggedUserToState),
-  convert(ReportsValidator.patch),
-  convert(ReportsRouter.patch)
-);
-router.get("/", convert(loggedUserToState), convert(queryToState), convert(ReportsRouter.getAll));
-router.get(
-  "/:id",
-  convert(mapTemplateParamToId),
-  convert(loggedUserToState),
-  convert(queryToState),
-  convert(ReportsRouter.get)
-);
-router.put(
-  "/:id",
-  convert(mapTemplateParamToId),
-  convert(loggedUserToState),
-  convert(queryToState),
-  convert(ReportsValidator.create),
-  convert(ReportsRouter.put)
-);
-router.delete(
-  "/:id",
-  convert(mapTemplateParamToId),
-  convert(loggedUserToState),
-  convert(queryToState),
-  convert(ReportsRouter.delete)
-);
-router.get(
-  "/:id/download-answers",
-  convert(mapTemplateParamToId),
-  convert(loggedUserToState),
-  convert(ReportsRouter.downloadAnswers)
-);
+router.patch("/:id", mapTemplateParamToId, loggedUserToState, ReportsValidator.patch, ReportsRouter.patch);
+router.get("/", loggedUserToState, queryToState, ReportsRouter.getAll);
+router.get("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsRouter.get);
+router.put("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsValidator.create, ReportsRouter.put);
+router.delete("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsRouter.delete);
+router.get("/:id/download-answers", mapTemplateParamToId, loggedUserToState, ReportsRouter.downloadAnswers);
 
 module.exports = router;

@@ -7,7 +7,6 @@ const AnswersModel = require("../../models/answersModel");
 const AnswersService = require("services/answer.service");
 const { ObjectId } = require("mongoose").Types;
 const config = require("config");
-const convert = require("koa-convert");
 const AreaService = require("services/area.service");
 const V3TeamService = require("services/v3Team.service");
 const s3Service = require("services/s3Service");
@@ -260,14 +259,14 @@ async function loggedUserToState(ctx, next) {
     ctx.throw(401, "Unauthorized");
     return;
   }
-  await next;
+  await next();
 }
 
 async function queryToState(ctx, next) {
   if (ctx.request.query && Object.keys(ctx.request.query).length > 0) {
     ctx.state.query = ctx.request.query;
   }
-  await next;
+  await next();
 }
 
 async function reportPermissions(ctx, next) {
@@ -313,47 +312,27 @@ async function reportPermissions(ctx, next) {
     return;
   }
   ctx.state.report = report;
-  await next;
+  await next();
 }
 
 async function mapTemplateParamToId(ctx, next) {
   if (ctx.params.reportId === config.get("legacyTemplateId") || ctx.params.reportId === "default") {
     ctx.params.reportId = config.get("defaultTemplateId");
   }
-  await next;
+  await next();
 }
 
-router.post(
-  "/",
-  convert(mapTemplateParamToId),
-  convert(loggedUserToState),
-  convert(reportPermissions),
-  convert(AnswersRouter.save)
-);
+router.post("/", mapTemplateParamToId, loggedUserToState, reportPermissions, AnswersRouter.save);
 router.get(
   "/area/:areaId",
-  convert(mapTemplateParamToId),
-  convert(loggedUserToState),
-  convert(reportPermissions),
-  convert(queryToState),
-  convert(AnswersRouter.getArea)
+  mapTemplateParamToId,
+  loggedUserToState,
+  reportPermissions,
+  queryToState,
+  AnswersRouter.getArea
 );
-router.get(
-  "/",
-  convert(mapTemplateParamToId),
-  convert(loggedUserToState),
-  convert(reportPermissions),
-  convert(queryToState),
-  convert(AnswersRouter.getAll)
-);
-router.get(
-  "/:id",
-  convert(mapTemplateParamToId),
-  convert(loggedUserToState),
-  convert(queryToState),
-  convert(AnswersRouter.get)
-);
-
-router.delete("/:id", convert(mapTemplateParamToId), convert(loggedUserToState), convert(AnswersRouter.delete));
+router.get("/", mapTemplateParamToId, loggedUserToState, reportPermissions, queryToState, AnswersRouter.getAll);
+router.get("/:id", mapTemplateParamToId, loggedUserToState, queryToState, AnswersRouter.get);
+router.delete("/:id", mapTemplateParamToId, loggedUserToState, AnswersRouter.delete);
 
 module.exports = router;

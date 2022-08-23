@@ -3,7 +3,6 @@ const ErrorSerializer = require("serializers/errorSerializer");
 
 class ReportsValidator {
   static *create(next) {
-    console.log("*************")
     const request = this.request.body;
     logger.debug("Validating body for create template");
     this.checkBody("name").notEmpty();
