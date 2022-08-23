@@ -80,9 +80,9 @@ class AnswersRouter {
     const teams = yield V3TeamService.getUserTeams(this.state.loggedUser.id);
     let confirmedUsers = [];
     if (teams.length > 0) {
-      for await (const team of teams) {
+      for (const team of teams) {
         // get users of each team and add to users array
-        const users = await V3TeamService.getTeamUsers(team.id);
+        const users = yield V3TeamService.getTeamUsers(team.id);
         confirmedUsers.push(...users.map(user => new ObjectId(user.attributes.userId)));
       }
     }
@@ -91,7 +91,7 @@ class AnswersRouter {
     confirmedUsers.push(new ObjectId(this.state.loggedUser.id));
 
     const template = yield ReportsModel.findOne({ _id: this.params.reportId });
-    logger.info(`Got report`, template)
+    logger.info(`Got report`, template);
 
     if (this.state.loggedUser.role === "ADMIN" || this.state.loggedUser.id === template.user) {
       filter = {

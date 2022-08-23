@@ -72,8 +72,9 @@ class ReportsRouter {
 
     // speed this up
     answers.forEach(answer => {
-      const template = yield ReportsModel.findOne({_id: answer.report});
-      answer.templateName = template.name
+      const id = answer.report
+      const template = yield ReportsModel.findOne({_id: id});
+      answer.templateName = template.name;
     })
 
     if (!answers) {
