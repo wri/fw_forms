@@ -383,7 +383,6 @@ async function loggedUserToState(ctx, next) {
     ctx.throw(401, "Unauthorized");
     return;
   }
-  console.log("finished");
   await next();
 }
 

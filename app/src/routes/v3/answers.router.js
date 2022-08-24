@@ -151,7 +151,6 @@ class AnswersRouter {
     const pushError = question => {
       ctx.throw(400, `${question.label[answer.language]} (${question.name}) required`);
     };
-
     const { questions } = ctx.state.report;
 
     if (!questions || (questions && !questions.length)) {
@@ -303,8 +302,8 @@ async function reportPermissions(ctx, next) {
       ]
     };
   }
-  const report = await ReportsModel.findOne(filters).populate("questions");
 
+  const report = await ReportsModel.findOne(filters).populate("questions");
   if (!report) {
     ctx.throw(404, "Report not found");
     return;

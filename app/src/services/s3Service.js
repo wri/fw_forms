@@ -21,7 +21,7 @@ class S3Service {
   }
 
   // eslint-disable-next-line require-yield
-  *uploadFile(filePath, name) {
+  async uploadFile(filePath, name) {
     logger.info(`Uploading file ${filePath}`);
     const ext = this.getExtension(name);
     return new Promise((resolve, reject) => {
