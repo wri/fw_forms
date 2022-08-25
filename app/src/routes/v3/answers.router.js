@@ -128,6 +128,7 @@ class AnswersRouter {
       reportName: fields.reportName,
       username: fields.username,
       organization: fields.organization,
+      teamId: fields.teamId,
       areaOfInterest: fields.areaOfInterest,
       areaOfInterestName: fields.areaOfInterestName,
       language: fields.language,

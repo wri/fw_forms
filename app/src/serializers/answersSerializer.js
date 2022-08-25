@@ -7,6 +7,7 @@ const answersSerializer = new JSONAPISerializer("answers", {
     "username",
     "fullName",
     "organization",
+    "teamId",
     "areaOfInterest",
     "areaOfInterestName",
     "language",

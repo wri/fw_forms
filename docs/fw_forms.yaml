@@ -801,6 +801,8 @@ components:
           readOnly: true
         fullName:
           type: string
+        teamId:
+          type: string
       required:
         - report
         - reportName
