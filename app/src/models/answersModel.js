@@ -15,7 +15,7 @@ const Answer = new Schema({
   fullName: { type: String, required: false, trim: true },
   username: { type: String, required: false, trim: true },
   organization: { type: String, required: false, trim: true },
-  teamId: {type: ObjectId, required: false},
+  teamId: { type: ObjectId, required: false },
   areaOfInterest: { type: ObjectId, required: false },
   areaOfInterestName: { type: String, required: false, trim: true },
   language: { type: String, required: true, trim: true },
