@@ -84,7 +84,7 @@ class AnswersRouter {
       for await (const team of teams) {
         // get users of each team and add to users array
         const users = await V3TeamService.getTeamUsers(team.id);
-        confirmedUsers.push(...users.map(user => new ObjectId(user.attributes.userId)));
+        if(users) confirmedUsers.push(...users.map(user => new ObjectId(user.attributes.userId)));
       }
     }
     // add current user to users array
