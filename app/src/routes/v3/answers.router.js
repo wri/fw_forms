@@ -103,7 +103,7 @@ class AnswersRouter {
         report: new ObjectId(ctx.params.reportId)
       };
     }
-    const answer = await AnswersModel.findOne(filter);
+    const answer = await AnswersModel.find(filter);
     if (!answer) {
       ctx.throw(404, "Answer not found with these permissions");
       return;
@@ -111,7 +111,7 @@ class AnswersRouter {
 
     // add full name to answer
     const fullName = await UserService.getNameByIdMICROSERVICE(answer.user);
-    answer.fullName = fullName;
+    answer[0].fullName = fullName;
 
     ctx.body = AnswersSerializer.serialize(answer);
   }
