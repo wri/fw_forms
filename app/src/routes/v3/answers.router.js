@@ -10,6 +10,7 @@ const AreaService = require("services/area.service");
 const V3TeamService = require("services/v3Team.service");
 const s3Service = require("services/s3Service");
 const AnswersService = require("services/answer.service");
+const UserService = require("../../services/user.service")
 
 const router = new Router({
   prefix: "/reports/:reportId/answers"
@@ -102,11 +103,16 @@ class AnswersRouter {
         report: new ObjectId(ctx.params.reportId)
       };
     }
-    const answer = await AnswersModel.find(filter);
+    const answer = await AnswersModel.findOne(filter);
     if (!answer) {
       ctx.throw(404, "Answer not found with these permissions");
       return;
     }
+
+    // add full name to answer
+    const fullName = await UserService.getNameByIdMICROSERVICE(answer.user);
+    answer.fullName = fullName;
+
     ctx.body = AnswersSerializer.serialize(answer);
   }
 

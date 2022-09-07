@@ -394,14 +394,14 @@ async function queryToState(ctx, next) {
 }
 
 // check permission must be added at some point
-router.get("/getAllAnswersForUser", mapTemplateParamToId, loggedUserToState, ReportsRouter.getAllAnswers);
-router.delete("/deleteAllAnswersForUser", mapTemplateParamToId, loggedUserToState, ReportsRouter.deleteAllAnswers);
-router.post("/", loggedUserToState, ReportsValidator.create, ReportsRouter.save);
-router.patch("/:id", mapTemplateParamToId, loggedUserToState, ReportsValidator.patch, ReportsRouter.patch);
-router.get("/", loggedUserToState, queryToState, ReportsRouter.getAll);
-router.get("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsRouter.get);
-router.put("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsValidator.create, ReportsRouter.put);
-router.delete("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsRouter.delete);
-router.get("/:id/download-answers", mapTemplateParamToId, loggedUserToState, ReportsRouter.downloadAnswers);
+router.get("/getAllAnswersForUser", mapTemplateParamToId, loggedUserToState, ReportsRouter.getAllAnswers); // TODO
+router.delete("/deleteAllAnswersForUser", mapTemplateParamToId, loggedUserToState, ReportsRouter.deleteAllAnswers); // TODO
+router.post("/", loggedUserToState, ReportsValidator.create, ReportsRouter.save); // TODO
+router.patch("/:id", mapTemplateParamToId, loggedUserToState, ReportsValidator.patch, ReportsRouter.patch); // TODO
+router.get("/", loggedUserToState, queryToState, ReportsRouter.getAll); // TODO
+router.get("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsRouter.get); // TODO
+router.put("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsValidator.create, ReportsRouter.put); // TODO
+router.delete("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsRouter.delete); // TODO
+router.get("/:id/download-answers", mapTemplateParamToId, loggedUserToState, ReportsRouter.downloadAnswers); // TODO
 
 module.exports = router;
