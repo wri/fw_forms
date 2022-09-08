@@ -118,6 +118,16 @@ class ReportsRouter {
     ctx.body = ReportsSerializer.serialize(report);
   }
 
+  static async getForExport(ctx) {
+    logger.info(`Obtaining report with id ${ctx.params.id}`);
+    const report = await ReportsModel.findOne({ _id: ctx.params.id });
+    if (!report) {
+      ctx.throw(404, "Report not found");
+      return;
+    }
+    ctx.body = ReportsSerializer.serialize(report);
+  }
+
   static async save(ctx) {
     logger.info("Saving reports", ctx.request.body);
     const request = ctx.request.body;
@@ -394,6 +404,7 @@ async function queryToState(ctx, next) {
 }
 
 // check permission must be added at some point
+router.get("/export/:id",ReportsRouter.getForExport);
 router.get("/getAllAnswersForUser", mapTemplateParamToId, loggedUserToState, ReportsRouter.getAllAnswers); // TODO
 router.delete("/deleteAllAnswersForUser", mapTemplateParamToId, loggedUserToState, ReportsRouter.deleteAllAnswers); // TODO
 router.post("/", loggedUserToState, ReportsValidator.create, ReportsRouter.save); // TODO

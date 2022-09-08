@@ -116,6 +116,20 @@ class AnswersRouter {
     ctx.body = AnswersSerializer.serialize(answer);
   }
 
+  static async getForExport(ctx) {
+    logger.info(`Obtaining answer with id ${ctx.params.id}`);
+    const answer = await AnswersModel.find({_id: new ObjectId(ctx.params.id)});
+    if (!answer) {
+      ctx.throw(404, "Answer not found with these permissions");
+      return;
+    }
+
+    // add full name to answer
+    const fullName = await UserService.getNameByIdMICROSERVICE(answer.user);
+    answer[0].fullName = fullName;
+    ctx.body = AnswersSerializer.serialize(answer);
+  }
+
   static async save(ctx) {
     logger.info("Saving answer");
     logger.debug(ctx.request.body);
@@ -336,6 +350,7 @@ router.get(
   queryToState,
   AnswersRouter.getArea
 );
+router.get("/export/:id", AnswersRouter.getForExport);
 router.get("/", mapTemplateParamToId, loggedUserToState, reportPermissions, queryToState, AnswersRouter.getAll);
 router.get("/:id", mapTemplateParamToId, loggedUserToState, queryToState, AnswersRouter.get);
 router.delete("/:id", mapTemplateParamToId, loggedUserToState, AnswersRouter.delete);
