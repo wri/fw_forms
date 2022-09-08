@@ -122,7 +122,7 @@ class AnswersService {
         for await (const team of teamsManaged) {
           // get users of each team and add to users array
           const users = await V3TeamService.getTeamUsers(team.id);
-          if(users) confirmedUsers.push(...users.map(user => new ObjectId(user.attributes.userId)));
+          if (users) confirmedUsers.push(...users.map(user => new ObjectId(user.attributes.userId)));
         }
       }
     }

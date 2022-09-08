@@ -10,7 +10,7 @@ const AreaService = require("services/area.service");
 const V3TeamService = require("services/v3Team.service");
 const s3Service = require("services/s3Service");
 const AnswersService = require("services/answer.service");
-const UserService = require("../../services/user.service")
+const UserService = require("../../services/user.service");
 
 const router = new Router({
   prefix: "/reports/:reportId/answers"
@@ -85,7 +85,7 @@ class AnswersRouter {
       for await (const team of teams) {
         // get users of each team and add to users array
         const users = await V3TeamService.getTeamUsers(team.id);
-        if(users) confirmedUsers.push(...users.map(user => new ObjectId(user.attributes.userId)));
+        if (users) confirmedUsers.push(...users.map(user => new ObjectId(user.attributes.userId)));
       }
     }
     // add current user to users array
@@ -134,7 +134,6 @@ class AnswersRouter {
       reportName: fields.reportName,
       username: fields.username,
       organization: fields.organization,
-      teamId: fields.teamId,
       areaOfInterest: fields.areaOfInterest,
       areaOfInterestName: fields.areaOfInterestName,
       language: fields.language,
@@ -147,6 +146,8 @@ class AnswersRouter {
       createdAt: fields.date,
       responses: []
     };
+
+    if (fields.teamId) answer.teamId = fields.teamId;
 
     const pushResponse = (question, response) => {
       answer.responses.push({
