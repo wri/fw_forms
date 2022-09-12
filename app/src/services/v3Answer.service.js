@@ -141,6 +141,25 @@ class AnswersService {
     logger.info(`${deletedCount} reports deleted`);
     return Promise.resolve();
   }
+
+  static async addUsernameToAnswers(answers) {
+    // hashtable to store usernames
+    let users = {};
+
+    for await (let answer of answers) {
+      let userId = answer.user;
+      if (users[userId]) answer.fullName = users[userId];
+      // get username from hashtable
+      else {
+        // get user name from microservice
+        const fullName = await UserService.getNameByIdMICROSERVICE(userId);
+        answer.fullName = fullName;
+        users[userId] = fullName; // add to hashtable
+      }
+    }
+
+    return answers;
+  }
 }
 
 module.exports = AnswersService;

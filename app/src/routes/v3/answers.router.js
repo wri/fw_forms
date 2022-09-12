@@ -108,17 +108,17 @@ class AnswersRouter {
       ctx.throw(404, "Answer not found with these permissions");
       return;
     }
-
+    /* 
     // add full name to answer
     const fullName = await UserService.getNameByIdMICROSERVICE(answer.user);
-    answer[0].fullName = fullName;
+    answer[0].fullName = fullName; */
 
-    ctx.body = AnswersSerializer.serialize(answer);
+    ctx.body = AnswersSerializer.serialize(await V3AnswersService.addUsernameToAnswers(answer));
   }
 
   static async getForExport(ctx) {
     logger.info(`Obtaining answer with id ${ctx.params.id}`);
-    const answer = await AnswersModel.find({_id: new ObjectId(ctx.params.id)});
+    const answer = await AnswersModel.find({ _id: new ObjectId(ctx.params.id) });
     if (!answer) {
       ctx.throw(404, "Answer not found with these permissions");
       return;

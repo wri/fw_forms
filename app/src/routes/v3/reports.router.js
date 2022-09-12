@@ -404,7 +404,7 @@ async function queryToState(ctx, next) {
 }
 
 // check permission must be added at some point
-router.get("/export/:id",ReportsRouter.getForExport);
+router.get("/export/:id", ReportsRouter.getForExport);
 router.get("/getAllAnswersForUser", mapTemplateParamToId, loggedUserToState, ReportsRouter.getAllAnswers); // TODO
 router.delete("/deleteAllAnswersForUser", mapTemplateParamToId, loggedUserToState, ReportsRouter.deleteAllAnswers); // TODO
 router.post("/", loggedUserToState, ReportsValidator.create, ReportsRouter.save); // TODO
