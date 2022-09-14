@@ -5,7 +5,9 @@ const answersSerializer = new JSONAPISerializer("answers", {
     "report",
     "reportName",
     "username",
+    "fullName",
     "organization",
+    "teamId",
     "areaOfInterest",
     "areaOfInterestName",
     "language",
@@ -16,7 +18,8 @@ const answersSerializer = new JSONAPISerializer("answers", {
     "layer",
     "user",
     "createdAt",
-    "responses"
+    "responses",
+    "templateName"
   ],
   responses: {
     attributes: ["question", "answer"]

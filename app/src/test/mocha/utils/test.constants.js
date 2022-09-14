@@ -1,3 +1,4 @@
+/* eslint-disable */
 const ROLES = {
   USER: {
     id: "1a10d7c6e0a37126611fd7a7",

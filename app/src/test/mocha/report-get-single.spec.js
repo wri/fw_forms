@@ -1,3 +1,4 @@
+/* eslint-disable */
 const nock = require("nock");
 const config = require("config");
 const Report = require("models/reportsModel");

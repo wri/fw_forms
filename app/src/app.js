@@ -43,7 +43,9 @@ const onDbReady = err => {
 
 mongoose.connect(mongoURL, onDbReady);
 
-const app = koa();
+const app = new koa();
+const _use = app.use;
+app.use = x => _use.call(app, convert(x));
 
 /**
  * Sentry
@@ -102,12 +104,10 @@ app.use(function* handleErrors(next) {
   this.response.type = "application/vnd.api+json";
 });
 
-app.use(
-  convert.back(async (ctx, next) => {
-    await loggedInUserService.setLoggedInUser(ctx, logger);
-    await next();
-  })
-);
+app.use(async (ctx, next) => {
+  await loggedInUserService.setLoggedInUser(ctx, logger);
+  await next();
+});
 
 // load routes
 loader.loadRoutes(app);
@@ -116,8 +116,8 @@ loader.loadRoutes(app);
 // In production environment, the port must be declared in environment variable
 const port = config.get("service.port");
 
-const server = app.listen(port, () => {});
-
-logger.info(`Server started in port:${port}`);
+const server = app.listen(port, () => {
+  logger.info(`Server started in port:${port}`);
+});
 
 module.exports = server;

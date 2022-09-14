@@ -13,10 +13,6 @@
       "value" : "${container_port}"
     },
     {
-      "name" : "NODE_PATH",
-      "value" : "${node_path}"
-    },
-    {
       "name" : "NODE_ENV",
       "value" : "${node_env}"
     },
@@ -41,8 +37,20 @@
       "value" : "${teams_api_url}"
     },
     {
+      "name" : "V3_TEAMS_API_URL",
+      "value" : "${v3_teams_api_url}"
+    },
+    {
       "name" : "AREAS_API_URL",
       "value" : "${areas_api_url}"
+    },
+    {
+      "name" : "API_API_URL",
+      "value" : "${api_api_url}"
+    },
+    {
+      "name": "USERS_API_URL",
+      "value": "${USERS_API_URL}"
     },
     {
       "name" : "WRI_MAIL_RECIPIENTS",
@@ -77,6 +85,10 @@
     {
       "name": "GOOGLE_PROJECT_EMAIL",
        "valueFrom": "${google_project_email}"
+    },
+    {
+      "name": "MICROSERVICE_TOKEN",
+      "valueFrom": "${microservice_token_secret}"
     }
   ],
   "portMappings": [

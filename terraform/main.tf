@@ -47,14 +47,15 @@ module "fargate_autoscaling" {
   task_execution_role_policies = [
     data.terraform_remote_state.core.outputs.document_db_secrets_policy_arn,
     module.google_sheets_private_key.read_policy_arn,
-    module.google_sheets_project_email.read_policy_arn
+    module.google_sheets_project_email.read_policy_arn,
+    data.terraform_remote_state.fw_core.outputs.microservice_token_secret_policy_arn
   ]
   container_definition = data.template_file.container_definition.rendered
 
   lb_target_group_arn = module.fargate_autoscaling.lb_target_group_arn
   listener_arn        = data.terraform_remote_state.fw_core.outputs.lb_listener_arn
   project_prefix      = var.project_prefix
-  path_pattern        = ["/v1/fw_forms/healthcheck", "/v1/questionnaire*", "/v1/reports*"]
+  path_pattern        = ["/v1/fw_forms/healthcheck", "/v1/questionnaire*", "/v1/reports*", "/v3/reports*"]
   priority = 1
   health_check_path = "/v1/fw_forms/healthcheck"
 
@@ -70,27 +71,29 @@ module "fargate_autoscaling" {
 data "template_file" "container_definition" {
   template = file("${path.root}/templates/container_definition.json.tmpl")
   vars = {
-    environment    = var.environment
-    aws_region     = var.region
-    image          = "${module.app_docker_image.repository_url}:${local.container_tag}"
-    container_port = var.container_port
-    container_name = var.project_prefix
-    log_group      = aws_cloudwatch_log_group.default.name
-    logger_level   = var.logger_level
-    db_secret_arn  = data.terraform_remote_state.core.outputs.document_db_secrets_arn
-    # data_bucket = data.terraform_remote_state.fw_core.outputs.data_bucket
-    google_private_key   = module.google_sheets_private_key.secret_arn
-    google_project_email = module.google_sheets_project_email.secret_arn
-    target_sheet_id      = var.target_sheet_id
-    wri_mail_recipients  = var.wri_mail_recipients
+    environment                 = var.environment
+    aws_region                  = var.region
+    image                       = "${module.app_docker_image.repository_url}:${local.container_tag}"
+    container_port              = var.container_port
+    container_name              = var.project_prefix
+    log_group                   = aws_cloudwatch_log_group.default.name
+    db_secret_arn               = data.terraform_remote_state.core.outputs.document_db_secrets_arn
+    microservice_token_secret   = data.terraform_remote_state.fw_core.outputs.microservice_token_secret_arn
+    # data_bucket               = data.terraform_remote_state.fw_core.outputs.data_bucket
+    google_private_key          = module.google_sheets_private_key.secret_arn
+    google_project_email        = module.google_sheets_project_email.secret_arn
+    target_sheet_id             = var.target_sheet_id
+    wri_mail_recipients         = var.wri_mail_recipients
 
-    node_path                 = var.node_path
     node_env                  = var.node_env
     mongo_port_27017_tcp_addr = data.terraform_remote_state.core.outputs.document_db_endpoint
     ct_url                    = var.ct_url
     local_url                 = "http://127.0.0.1:${var.container_port}"
     teams_api_url             = "https://${data.terraform_remote_state.fw_core.outputs.public_url}/v1"
+    v3_teams_api_url          = "https://${data.terraform_remote_state.fw_core.outputs.public_url}/v3"
     areas_api_url             = var.areas_api_url
+    USERS_API_URL             = var.USERS_API_URL
+    api_api_url               = "https://${data.terraform_remote_state.fw_core.outputs.public_url}/v3/forest-watcher"    
     s3_access_key_id          = var.s3_access_key_id
     s3_secret_access_key      = var.s3_secret_access_key
     s3_bucket                 = var.s3_bucket

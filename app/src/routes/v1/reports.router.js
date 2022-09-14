@@ -1,16 +1,17 @@
 const axios = require("axios");
 const Router = require("koa-router");
 const logger = require("logger");
+const convert = require("koa-convert");
 const ReportsSerializer = require("serializers/reportsSerializer");
 const ReportsModel = require("models/reportsModel");
 const ReportsValidator = require("validators/reportsValidator");
 const AnswersModel = require("models/answersModel");
-const AnswersService = require("services/answersService");
-const TeamService = require("services/teamService");
+const AnswersService = require("services/answer.service");
+const TeamService = require("services/team.service");
 const passThrough = require("stream").PassThrough;
 const { ObjectId } = require("mongoose").Types;
 const config = require("config");
-const CSV = require("services/csvService");
+const CSV = require("services/csv.service");
 const loggedInUserService = require("services/LoggedInUserService");
 
 const router = new Router({
@@ -373,7 +374,7 @@ class ReportsRouter {
       teamData = team.data.attributes;
     }
 
-    const answers = yield AnswersService.getAllAnswers({
+    const answers = yield AnswersService.getAllTemplateAnswers({
       team: teamData,
       reportId: this.params.id,
       template: report,
@@ -461,13 +462,43 @@ function* queryToState(next) {
 }
 
 // check permission must be added at some point
-router.post("/", loggedUserToState, ReportsValidator.create, ReportsRouter.save);
-router.patch("/:id", mapTemplateParamToId, loggedUserToState, ReportsValidator.patch, ReportsRouter.patch);
-router.get("/", loggedUserToState, queryToState, ReportsRouter.getAll);
-router.get("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsRouter.get);
-router.put("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsValidator.create, ReportsRouter.put);
-router.delete("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsRouter.delete);
-router.get("/:id/download-answers", mapTemplateParamToId, loggedUserToState, ReportsRouter.downloadAnswers);
+router.post("/", convert(loggedUserToState), convert(ReportsValidator.create), convert(ReportsRouter.save));
+router.patch(
+  "/:id",
+  convert(mapTemplateParamToId),
+  convert(loggedUserToState),
+  convert(ReportsValidator.patch),
+  convert(ReportsRouter.patch)
+);
+router.get("/", convert(loggedUserToState), convert(queryToState), convert(ReportsRouter.getAll));
+router.get(
+  "/:id",
+  convert(mapTemplateParamToId),
+  convert(loggedUserToState),
+  convert(queryToState),
+  convert(ReportsRouter.get)
+);
+router.put(
+  "/:id",
+  convert(mapTemplateParamToId),
+  convert(loggedUserToState),
+  convert(queryToState),
+  convert(ReportsValidator.create),
+  convert(ReportsRouter.put)
+);
+router.delete(
+  "/:id",
+  convert(mapTemplateParamToId),
+  convert(loggedUserToState),
+  convert(queryToState),
+  convert(ReportsRouter.delete)
+);
+router.get(
+  "/:id/download-answers",
+  convert(mapTemplateParamToId),
+  convert(loggedUserToState),
+  convert(ReportsRouter.downloadAnswers)
+);
 router.get("/fail", function () {
   this.throw(500, "Test Fail");
 });
