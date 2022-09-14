@@ -612,6 +612,7 @@ components:
         public:
           type: boolean
           default: false
+          deprecated: true
         createdAt:
           type: string
           format: date-time
