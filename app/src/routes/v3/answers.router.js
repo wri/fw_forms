@@ -124,7 +124,7 @@ class AnswersRouter {
       return;
     }
 
-/*     // add full name to answer
+    /*     // add full name to answer
     const fullName = await UserService.getNameByIdMICROSERVICE(answer.user);
     answer[0].fullName = fullName; */
     ctx.body = AnswersSerializer.serialize(await V3AnswersService.addUsernameToAnswers(answer));

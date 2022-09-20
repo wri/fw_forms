@@ -84,7 +84,7 @@ data "template_file" "container_definition" {
     google_project_email        = module.google_sheets_project_email.secret_arn
     target_sheet_id             = var.target_sheet_id
     wri_mail_recipients         = var.wri_mail_recipients
-
+    logger_level              = var.logger_level
     node_env                  = var.node_env
     mongo_port_27017_tcp_addr = data.terraform_remote_state.core.outputs.document_db_endpoint
     ct_url                    = var.ct_url
