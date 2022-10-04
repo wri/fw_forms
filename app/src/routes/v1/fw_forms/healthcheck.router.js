@@ -1,11 +1,23 @@
 const Router = require("koa-router");
-const convert = require("koa-convert");
 const koaSimpleHealthCheck = require("koa-simple-healthcheck");
+const mongoose = require("mongoose");
+const logger = require("logger");
 
 const router = new Router({
   prefix: "/healthcheck"
 });
 
-router.get("/", convert.back(koaSimpleHealthCheck()));
+router.get(
+  "/",
+  koaSimpleHealthCheck({
+    test: function () {
+      if (mongoose.connection.readyState !== 1) {
+        const error = new Error(`Not connected to the database ${mongoose.connection.readyState}`);
+        logger.error(error);
+        return { error: error.message };
+      }
+    }
+  })
+);
 
 module.exports = router;

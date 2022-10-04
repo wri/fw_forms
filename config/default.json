@@ -8,7 +8,8 @@
     "service": {
         "id": "gfw-forms-1.0.0",
         "name": "GFW Forms",
-        "port": "PORT"
+        "port": "PORT",
+        "token": "MICROSERVICE_TOKEN"
     },
     "wriMail": {
         "recipients": "",

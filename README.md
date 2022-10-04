@@ -31,6 +31,7 @@ After that, follow one of the instructions below:
 ```shell
 make up-and-build   # First time building Docker or you've made changes to the Dockerfile
 make up             # When Docker has already been built and you're starting from where you left off
+make logs           # To view the logs for the app
 ```
 
 The endpoints provided by this microservice should now be available: 
@@ -49,13 +50,12 @@ make lint
 make down
 ```
 
-## Testing
+### Testing
 
-### Using Docker
-
-Follow the instruction above for setting up the runtime environment for Docker execution, then run:
+Follow the instruction above for setting up the runtime environment for Docker execution, then run the following to view the test logs:
 ```shell
-make test-and-build
+make up
+make tests
 ```
 
 ## Docs
