@@ -71,7 +71,7 @@ class ReportsRouter {
 
     for await (const answer of answers) {
       const template = await ReportsModel.findOne({ _id: answer.report });
-      answer.templateName = template.name[answer.language];
+      answer.templateName = template.name[answer.language] || template.name[template.defaultLanguage];
     }
 
     if (!answers) {
