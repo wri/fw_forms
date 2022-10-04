@@ -405,11 +405,11 @@ async function queryToState(ctx, next) {
 
 // check permission must be added at some point
 router.get("/export/:id", ReportsRouter.getForExport);
-router.get("/getAllAnswersForUser", mapTemplateParamToId, loggedUserToState, ReportsRouter.getAllAnswers); // TODO
+router.get("/getAllAnswersForUser", mapTemplateParamToId, loggedUserToState, ReportsRouter.getAllAnswers); // DONE
 router.delete("/deleteAllAnswersForUser", mapTemplateParamToId, loggedUserToState, ReportsRouter.deleteAllAnswers); // TODO
 router.post("/", loggedUserToState, ReportsValidator.create, ReportsRouter.save); // TODO
 router.patch("/:id", mapTemplateParamToId, loggedUserToState, ReportsValidator.patch, ReportsRouter.patch); // TODO
-router.get("/", loggedUserToState, queryToState, ReportsRouter.getAll); // TODO
+router.get("/", loggedUserToState, queryToState, ReportsRouter.getAll); // DONE
 router.get("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsRouter.get); // TODO
 router.put("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsValidator.create, ReportsRouter.put); // TODO
 router.delete("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsRouter.delete); // TODO
