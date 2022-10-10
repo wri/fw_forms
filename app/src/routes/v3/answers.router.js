@@ -174,7 +174,7 @@ class AnswersRouter {
       ctx.throw(400, `${question.label[answer.language]} (${question.name}) required`);
     };
 
-    const isFileQuestionType = question => question.type === 'blob' || question.type === 'audio';
+    const isFileQuestionType = question => question.type === "blob" || question.type === "audio";
 
     const { questions } = ctx.state.report;
 
