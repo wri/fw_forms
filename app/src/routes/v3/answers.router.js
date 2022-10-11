@@ -173,9 +173,6 @@ class AnswersRouter {
     const pushError = question => {
       ctx.throw(400, `${question.label[answer.language]} (${question.name}) required`);
     };
-
-    const isFileQuestionType = question => question.type === "blob" || question.type === "audio";
-
     const { questions } = ctx.state.report;
 
     if (!questions || (questions && !questions.length)) {
@@ -192,7 +189,7 @@ class AnswersRouter {
       if (!response && question.required) {
         pushError(question);
       }
-      if (response && response.path && response.name && isFileQuestionType(question)) {
+      if (response && response.path && response.name && question.type === "blob") {
         // upload file
         response = await s3Service.uploadFile(response.path, response.name);
       }
@@ -210,7 +207,7 @@ class AnswersRouter {
           if (!childResponse && childQuestion.required && conditionMatches) {
             pushError(childQuestion);
           }
-          if (childResponse && isFileQuestionType(question)) {
+          if (childResponse && question.type === "blob") {
             // upload file
             childResponse = await s3Service.uploadFile(response.path, response.name);
           }
