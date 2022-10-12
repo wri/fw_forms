@@ -58,6 +58,46 @@ class ReportsRouter {
     ctx.body = ReportsSerializer.serialize(reports);
   }
 
+  static async getAllPublic(ctx) {
+    logger.info("Obtaining all public reports");
+
+    const filter = {
+      $and: [
+        {public: true},
+        {status: "published"},
+      ],
+    };
+
+    if (ctx.state.query) {
+      Object.keys(ctx.state.query).forEach(key => {
+        filter.$and.push({ [key]: ctx.state.query[key] });
+      });
+    }
+    const reports = await ReportsModel.find(filter);
+
+    const reportAnswerCountPromises = reports.map(async (report) => {
+      const filter = {
+        report: new ObjectId(report.id)
+      };
+
+      const isUserAdmin = ctx.state.loggedUser.role === "ADMIN";
+      const isUserReportOwner = ctx.state.loggedUser.id === report.user;
+
+      if (!isUserAdmin && !isUserReportOwner) {
+        filter.user = new ObjectId(ctx.state.loggedUser.id);
+      }
+
+      const answerCount = await AnswersModel.count(answersFilter);
+      report.answersCount = answerCount || 0;
+
+      return report;
+    });
+
+    const reportsWithAnswerCounts = await Promise.all(reportAnswerCountPromises);
+
+    ctx.body = ReportsSerializer.serialize(reportsWithAnswerCounts);
+  }
+
   static async getAllAnswers(ctx) {
     logger.info(`Obtaining all answers`);
 
@@ -410,6 +450,7 @@ router.delete("/deleteAllAnswersForUser", mapTemplateParamToId, loggedUserToStat
 router.post("/", loggedUserToState, ReportsValidator.create, ReportsRouter.save); // TODO
 router.patch("/:id", mapTemplateParamToId, loggedUserToState, ReportsValidator.patch, ReportsRouter.patch); // TODO
 router.get("/", loggedUserToState, queryToState, ReportsRouter.getAll); // DONE
+router.get("/public", loggedUserToState, queryToState, ReportsRouter.getAllPublic);
 router.get("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsRouter.get); // TODO
 router.put("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsValidator.create, ReportsRouter.put); // TODO
 router.delete("/:id", mapTemplateParamToId, loggedUserToState, queryToState, ReportsRouter.delete); // TODO
