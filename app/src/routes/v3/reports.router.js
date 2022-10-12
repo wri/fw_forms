@@ -87,7 +87,7 @@ class ReportsRouter {
         filter.user = new ObjectId(ctx.state.loggedUser.id);
       }
 
-      const answerCount = await AnswersModel.count(answersFilter);
+      const answerCount = await AnswersModel.count(filter);
       report.answersCount = answerCount || 0;
 
       return report;
