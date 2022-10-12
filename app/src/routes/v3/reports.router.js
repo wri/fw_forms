@@ -62,10 +62,7 @@ class ReportsRouter {
     logger.info("Obtaining all public reports");
 
     const filter = {
-      $and: [
-        {public: true},
-        {status: "published"},
-      ],
+      $and: [{ public: true }, { status: "published" }]
     };
 
     if (ctx.state.query) {
@@ -75,7 +72,7 @@ class ReportsRouter {
     }
     const reports = await ReportsModel.find(filter);
 
-    const reportAnswerCountPromises = reports.map(async (report) => {
+    const reportAnswerCountPromises = reports.map(async report => {
       const filter = {
         report: new ObjectId(report.id)
       };
