@@ -306,7 +306,7 @@ paths:
         - v3
       responses:
         '200':
-          $ref: '#/components/responses/Answer'
+          $ref: '#/components/responses/Answers'
         '401':
           $ref: '#/components/responses/Error'
         '404':
