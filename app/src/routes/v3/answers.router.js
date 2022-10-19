@@ -210,7 +210,7 @@ class AnswersRouter {
           if (!childResponse && childQuestion.required && conditionMatches) {
             pushError(childQuestion);
           }
-          if (childResponse && isFileQuestionType(question)) {
+          if (childResponse && isFileQuestionType(childQuestion)) {
             // upload file
             childResponse = await s3Service.uploadFile(response.path, response.name);
           }
