@@ -18,7 +18,7 @@
         "template": "data-contribution-confirmation"
     },
     "legacyTemplateId": "597b0f55856351000b087c9c",
-    "defaultTemplateId": "59b6a26b138f260012e9fdeb",
+    "defaultTemplateId": "63e4e9646f78ab25e9e481c3",
     "contactEmail": {
         "template": "contact-form",
         "templateConfirm": "contact-form-confirmation",
