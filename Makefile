@@ -4,7 +4,7 @@ up-and-build:
 	docker-compose -f docker-compose-develop.yml up -d --build
 
 up:
-	docker-compose -f docker-compose-develop.yml up
+	docker-compose -f docker-compose-develop.yml up -d
 
 down:
 	docker-compose -f docker-compose-develop.yml down
@@ -12,5 +12,8 @@ down:
 lint:
 	docker-compose -f docker-compose-develop.yml run develop yarn run lint
 
-test-and-build:
-	docker-compose -f docker-compose-test.yml up --build --abort-on-container-exit
+logs:
+	docker logs -f fw-forms-develop
+    
+tests:
+	docker logs -f fw-forms-test

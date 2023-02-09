@@ -4,6 +4,7 @@ const AnswerSerializer = require("serializers/answerSerializer");
 const AnswerModel = require("models/answerModel");
 const QuestionnaireModel = require("models/questionnaireModel");
 const s3Service = require("services/s3Service");
+const convert = require("koa-convert");
 
 const router = new Router({
   prefix: "/questionnaire/:questionnaireId/answer"
@@ -137,10 +138,10 @@ function* checkExistQuestionnaire(next) {
   yield next;
 }
 
-router.post("/", loggedUserToState, checkExistQuestionnaire, AnswerRouter.save);
-router.patch("/:id", loggedUserToState, checkExistQuestionnaire, AnswerRouter.update);
-router.get("/", loggedUserToState, checkExistQuestionnaire, AnswerRouter.getAll);
-router.get("/:id", loggedUserToState, checkExistQuestionnaire, AnswerRouter.get);
-router.delete("/:id", loggedUserToState, checkExistQuestionnaire, AnswerRouter.delete);
+router.post("/", convert(loggedUserToState), convert(checkExistQuestionnaire), convert(AnswerRouter.save));
+router.patch("/:id", convert(loggedUserToState), convert(checkExistQuestionnaire), convert(AnswerRouter.update));
+router.get("/", convert(loggedUserToState), convert(checkExistQuestionnaire), convert(AnswerRouter.getAll));
+router.get("/:id", convert(loggedUserToState), convert(checkExistQuestionnaire), convert(AnswerRouter.get));
+router.delete("/:id", convert(loggedUserToState), convert(checkExistQuestionnaire), convert(AnswerRouter.delete));
 
 module.exports = router;

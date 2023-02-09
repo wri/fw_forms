@@ -1,6 +1,7 @@
 {
   "service": {
-    "port": "PORT"
+    "port": "PORT",
+    "token": "MICROSERVICE_TOKEN"
   },
   "legacyTemplateId": "LEGACY_TEMPLATE_ID",
   "defaultTemplateId": "DEFAULT_TEMPLATE_ID",
@@ -24,7 +25,16 @@
   "teamsAPI": {
     "url": "TEAMS_API_URL"
   },
+  "v3teamsAPI": {
+    "url": "V3_TEAMS_API_URL"
+  },
   "areaAPI": {
     "url": "AREAS_API_URL"
+  },
+  "apiAPI": {
+    "url": "API_API_URL"
+  },
+  "usersApi": {
+    "url": "USERS_API_URL"
   }
 }

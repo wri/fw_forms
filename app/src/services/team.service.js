@@ -7,6 +7,7 @@ class TeamService {
   static *getTeam(user) {
     let team = {};
     try {
+      logger.info("Getting teams for user", user);
       const baseURL = config.get("teamsAPI.url");
       const response = yield axios.default({
         baseURL,
@@ -17,6 +18,7 @@ class TeamService {
         }
       });
       team = response.data;
+      logger.info("Got user teams for user with id", user, team);
     } catch (e) {
       logger.info("Failed to fetch team");
     }

@@ -2,12 +2,13 @@ const Router = require("koa-router");
 const logger = require("logger");
 const AnswersSerializer = require("serializers/answersSerializer");
 const AnswersModel = require("models/answersModel");
-const AnswersService = require("services/answersService");
-const TeamService = require("services/teamService");
+const AnswersService = require("services/answer.service");
+const TeamService = require("services/team.service");
 const ReportsModel = require("models/reportsModel");
 const s3Service = require("services/s3Service");
 const { ObjectId } = require("mongoose").Types;
 const config = require("config");
+const convert = require("koa-convert");
 
 const router = new Router({
   prefix: "/reports/:reportId/answers"
@@ -19,7 +20,7 @@ class AnswersRouter {
 
     const template = yield ReportsModel.findOne({ _id: this.params.reportId });
 
-    const answers = yield AnswersService.getAllAnswers({
+    const answers = yield AnswersService.getAllTemplateAnswers({
       template,
       reportId: this.params.reportId,
       loggedUser: this.state.loggedUser,
@@ -64,13 +65,13 @@ class AnswersRouter {
     logger.info("Saving answer");
     logger.debug(this.request.body);
 
-    const { fields } = this.request.body;
+    const fields = this.request.body;
     let userPosition = [];
 
     try {
       userPosition = fields.userPosition ? fields.userPosition.split(",") : [];
     } catch (e) {
-      this.throw(400, `Position values must be separated by ','`);
+      this.throw(400, `Position values must be separated by ','`, e);
     }
 
     const answer = {
@@ -112,8 +113,8 @@ class AnswersRouter {
       const question = questions[i];
 
       // handle parent questions
-      const bodyAnswer = this.request.body.fields[question.name];
-      const fileAnswer = this.request.body.files[question.name];
+      const bodyAnswer = this.request.body[question.name];
+      const fileAnswer = this.request.files[question.name];
       let response = typeof bodyAnswer !== "undefined" ? bodyAnswer : fileAnswer;
       if (!response && question.required) {
         pushError(question);
@@ -129,8 +130,8 @@ class AnswersRouter {
       if (question.childQuestions) {
         for (let j = 0; j < question.childQuestions.length; j++) {
           const childQuestion = question.childQuestions[j];
-          const childBodyAnswer = this.request.body.fields[childQuestion.name];
-          const childFileAnswer = this.request.body.files[childQuestion.name];
+          const childBodyAnswer = this.request.body[childQuestion.name];
+          const childFileAnswer = this.request.files[childQuestion.name];
           const conditionMatches = typeof bodyAnswer !== "undefined" && childQuestion.conditionalValue === bodyAnswer;
           let childResponse = typeof childBodyAnswer !== "undefined" ? childBodyAnswer : childFileAnswer;
           if (!childResponse && childQuestion.required && conditionMatches) {
@@ -223,7 +224,7 @@ function* reportPermissions(next) {
       ]
     };
   }
-
+  logger.info("Finding report with filter", filters);
   const report = yield ReportsModel.findOne(filters).populate("questions");
   if (!report) {
     this.throw(404, "Report not found");
@@ -240,10 +241,29 @@ function* mapTemplateParamToId(next) {
   yield next;
 }
 
-router.post("/", mapTemplateParamToId, loggedUserToState, reportPermissions, AnswersRouter.save);
-router.patch("/:id", mapTemplateParamToId, loggedUserToState, AnswersRouter.update);
-router.get("/", mapTemplateParamToId, loggedUserToState, reportPermissions, queryToState, AnswersRouter.getAll);
-router.get("/:id", mapTemplateParamToId, loggedUserToState, queryToState, AnswersRouter.get);
-router.delete("/:id", mapTemplateParamToId, loggedUserToState, AnswersRouter.delete);
+router.post(
+  "/",
+  convert(mapTemplateParamToId),
+  convert(loggedUserToState),
+  convert(reportPermissions),
+  convert(AnswersRouter.save)
+);
+router.patch("/:id", convert(mapTemplateParamToId), convert(loggedUserToState), convert(AnswersRouter.update));
+router.get(
+  "/",
+  convert(mapTemplateParamToId),
+  convert(loggedUserToState),
+  convert(reportPermissions),
+  convert(queryToState),
+  convert(AnswersRouter.getAll)
+);
+router.get(
+  "/:id",
+  convert(mapTemplateParamToId),
+  convert(loggedUserToState),
+  convert(queryToState),
+  convert(AnswersRouter.get)
+);
+router.delete("/:id", convert(mapTemplateParamToId), convert(loggedUserToState), convert(AnswersRouter.delete));
 
 module.exports = router;
